@@ -12,7 +12,7 @@ class Function0Ext {
 
 class Function1Ext {
     public inline static function lazy<A, R>(func: A -> R, v: A): Void -> R {
-        var r = null;
+        var r: Null<R> = null;
         return () -> if(r == null) r = func(v) else r;
     }
 
@@ -31,7 +31,7 @@ class Function2Ext {
         return (b, a) -> func(a, b);
 
     public inline static function lazy<A, B, R>(func: A -> B -> R, a: A, b: B): Void -> R {
-        var r = null;
+        var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b) else r;
     }
 
@@ -47,7 +47,7 @@ class Function3Ext {
         return (a, b, c) -> func(a)(b)(c);
 
     public inline static function lazy<A, B, C, R>(func: A -> B -> C -> R, a: A, b: B, c: C): Void -> R {
-        var r = null;
+        var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c) else r;
     }
 
@@ -63,7 +63,7 @@ class Function4Ext {
         return (a, b, c, d) -> func(a)(b)(c)(d);
 
     public inline static function lazy<A, B, C, D, R>(func: A -> B -> C -> D -> R, a: A, b: B, c: C, d: D): Void -> R {
-        var r = null;
+        var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c, d) else r;
     }
 
@@ -79,7 +79,7 @@ class Function5Ext {
         return (a, b, c, d, e) -> func(a)(b)(c)(d)(e);
 
     public inline static function lazy<A, B, C, D, E, R>(func: A -> B -> C -> D -> E -> R, a: A, b: B, c: C, d: D, e: E): Void -> R {
-        var r = null;
+        var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c, d, e) else r;
     }
 
@@ -95,7 +95,7 @@ class Function6Ext {
         return (a, b, c, d, e, f) -> func(a)(b)(c)(d)(e)(f);
 
     public inline static function lazy<A, B, C, D, E, F, R>(func: A -> B -> C -> D -> E -> F -> R, a: A, b: B, c: C, d: D, e: E, f: F): Void -> R {
-        var r = null;
+        var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c, d, e, f) else r;
     }
 
