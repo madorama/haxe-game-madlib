@@ -32,6 +32,10 @@ class IterableExt {
         IteratorExt.each(self.iterator(), action);
     }
 
+    public inline static function eachi<T>(self: Iterable<T>, action: Int -> T -> Void) {
+        IteratorExt.eachi(self.iterator(), action);
+    }
+
     public inline static function map<T, R>(self: Iterable<T>, f: T -> R): Array<R>
         return IteratorExt.map(self.iterator(), f);
 
