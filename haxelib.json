@@ -1,0 +1,24 @@
+{
+    "name": "madlib",
+    "url": "https://github.com/madorama/haxe-game-madlib",
+    "license": "MIT",
+    "tags": ["Heaps", "game", "package"],
+    "description": "",
+    "version": "0.0.1",
+    "releasenote": "",
+    "contributors": ["madorama"],
+    "dependencies": {
+        "parsihax": "",
+        "crypto": "",
+        "seedyrng": "",
+        "polygonal-ds": "",
+        "differ": "",
+        "hxmath": "",
+        "thx.core": "",
+        "tink_core": "",
+        "tink_lang": "",
+        "tweenxcore": "",
+        "haxe-strings": "",
+        "littleBigInt": ""
+    }
+}

@@ -1,0 +1,39 @@
+--macro nullSafety("madlib", Strict)
+
+-lib crypto
+-lib seedyrng
+-lib polygonal-ds
+-lib differ
+-lib hxmath
+-lib thx.core
+-lib tink_core
+-lib tink_lang
+-lib tweenxcore
+-lib haxe-strings
+-lib littleBigInt
+-lib parsihax
+
+-lib heaps
+-lib heaps-aseprite
+-lib castle
+-lib domkit
+-lib ldtk-haxe-api
+
+-D analyzer-optimize
+
+--debug
+-D test
+
+-lib utest
+-D UTEST_PRINT_TESTS
+
+-lib instrument
+
+--macro instrument.Instrumentation.coverage(["tests"], ["tests"], [])
+-D coverage-console-file-summary-reporter
+
+-main tests.MadlibTests
+
+-hl tests/bin/test.dat
+
+-cmd hl tests/bin/test.dat
