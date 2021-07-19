@@ -32,12 +32,3 @@ class TestUtil extends utest.Test {
         Assert.same(Util.range(5, 5), [5]);
     }
 }
-//         describe("Test range", {
-//             it("指定した範囲の整数配列を返す", {
-//                 Util.range(-2, 2).should.same([-2, -1, 0, 1, 2]);
-//                 Util.range(2, -2).should.same([2, 1, 0, -1, -2]);
-//                 Util.range(5, 5).should.same([5]);
-//             });
-//         });
-//     });
-// }
