@@ -36,7 +36,7 @@ class Paginate<T> {
         reflesh();
     }
 
-    inline function pageAt(n: Int) {
+    public inline function pageAt(n: Int) {
         changePage(currentPage + n);
     }
 
