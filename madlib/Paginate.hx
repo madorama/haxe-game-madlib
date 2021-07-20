@@ -31,10 +31,13 @@ class Paginate<T> {
         maxPage = if(onePageItemCount == 0) 0 else Math.max(0, Math.floor((items.length - 1) / onePageItemCount));
     }
 
-    inline function pageAt(n: Int) {
-        final nextPage = currentPage + n;
-        currentPage = if(pageLoop) Math.posMod(nextPage, maxPage + 1) else Math.clamp(nextPage, 0, maxPage);
+    public inline function changePage(n: Int) {
+        currentPage = if(pageLoop) Math.posMod(n, maxPage + 1) else Math.clamp(n, 0, maxPage);
         reflesh();
+    }
+
+    inline function pageAt(n: Int) {
+        changePage(currentPage + n);
     }
 
     public inline function nextPage() {
