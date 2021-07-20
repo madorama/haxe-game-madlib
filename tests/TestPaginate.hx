@@ -7,20 +7,6 @@ import utest.Assert;
 
 @:noCompletion
 class TestPaginate extends utest.Test {
-    function testPageAt() {
-        final p = new Paginate(Util.range(0, 20), 8);
-        Assert.same(p.currentPage, 0);
-        Assert.same(p.currentPageItems, [0, 1, 2, 3, 4, 5, 6, 7]);
-
-        p.nextPage();
-        Assert.same(p.currentPage, 1);
-        Assert.same(p.currentPageItems, [8, 9, 10, 11, 12, 13, 14, 15]);
-
-        p.nextPage();
-        Assert.same(p.currentPage, 2);
-        Assert.same(p.currentPageItems, [16, 17, 18, 19, 20]);
-    }
-
     function testLoop() {
         final p = new Paginate(Util.range(0, 8), 5);
         Assert.same(p.currentPage, 0);
@@ -82,5 +68,43 @@ class TestPaginate extends utest.Test {
 
         p.onePageItemCount = 5;
         Assert.same(p.maxPage, 2);
+    }
+
+    function testChangePage() {
+        final p = new Paginate(Util.range(0, 10), 3);
+
+        Assert.same(p.currentPage, 0);
+        Assert.same(p.currentPageItems, [0, 1, 2]);
+
+        p.changePage(2);
+        Assert.same(p.currentPage, 2);
+        Assert.same(p.currentPageItems, [6, 7, 8]);
+
+        p.changePage(5);
+        Assert.same(p.currentPage, 1);
+        Assert.same(p.currentPageItems, [3, 4, 5]);
+
+        p.changePage(-2);
+        Assert.same(p.currentPage, 2);
+        Assert.same(p.currentPageItems, [6, 7, 8]);
+    }
+
+    function testPageAt() {
+        final p = new Paginate(Util.range(0, 10), 3);
+
+        Assert.same(p.currentPage, 0);
+        Assert.same(p.currentPageItems, [0, 1, 2]);
+
+        p.pageAt(2);
+        Assert.same(p.currentPage, 2);
+        Assert.same(p.currentPageItems, [6, 7, 8]);
+
+        p.pageAt(2);
+        Assert.same(p.currentPage, 0);
+        Assert.same(p.currentPageItems, [0, 1, 2]);
+
+        p.pageAt(-2);
+        Assert.same(p.currentPage, 2);
+        Assert.same(p.currentPageItems, [6, 7, 8]);
     }
 }
