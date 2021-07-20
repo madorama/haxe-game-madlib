@@ -8,6 +8,7 @@ class MadlibTests {
         final tests = [
             new TestProperty(),
             new TestVersion(),
+            new TestPaginate(),
             new TestUtil(),
             new TestNullExt(),
             new TestOptionExt(),
