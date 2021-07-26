@@ -77,6 +77,9 @@ class Tuple3<T0, T1, T2> {
         this._2 = _2;
     }
 
+    public inline static function of<T0, T1, T2>(_0: T0, _1: T1, _2: T2): Tuple3<T0, T1, T2>
+        return new Tuple3(_0, _1, _2);
+
     public inline function flip(): Tuple3<T2, T1, T0>
         return new Tuple3(_2, _1, _0);
 
