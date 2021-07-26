@@ -13,6 +13,12 @@ class Tuple1<T0> {
     public inline static function of<T0>(_0: T0): Tuple1<T0>
         return new Tuple1(_0);
 
+    public inline function map<X>(f: T0 -> X): Tuple1<X>
+        return new Tuple1(f(_0));
+
+    public inline function apply<R>(f: T0 -> R): R
+        return f(_0);
+
     public inline function toString()
         return 'Tuple1($_0)';
 }
@@ -43,6 +49,18 @@ class Tuple1<T0> {
     public inline function dropRight(): Tuple1<T0>
         return new Tuple1(_0);
 
+    public inline function mapFirst<X>(f: T0 -> X): Tuple2<X, T1>
+        return new Tuple2(f(_0), _1);
+
+    public inline function mapSecond<X>(f: T1 -> X): Tuple2<T0, X>
+        return new Tuple2(_0, f(_1));
+
+    public inline function mapPair<X, Y>(f0: T0 -> X, f1: T1 -> Y): Tuple2<X, Y>
+        return new Tuple2(f0(_0), f1(_1));
+
+    public inline function apply<R>(f: T0 -> T1 -> R): R
+        return f(_0, _1);
+
     public inline function toString()
         return 'Tuple2($_0, $_1)';
 }
@@ -67,6 +85,21 @@ class Tuple3<T0, T1, T2> {
 
     public inline function dropRight(): Tuple2<T0, T1>
         return new Tuple2(_0, _1);
+
+    public inline function mapFirst<X>(f: T0 -> X): Tuple3<X, T1, T2>
+        return new Tuple3(f(_0), _1, _2);
+
+    public inline function mapSecond<X>(f: T1 -> X): Tuple3<T0, X, T2>
+        return new Tuple3(_0, f(_1), _2);
+
+    public inline function mapThird<X>(f: T2 -> X): Tuple3<T0, T1, X>
+        return new Tuple3(_0, _1, f(_2));
+
+    public inline function mapAll<X, Y, Z>(f0: T0 -> X, f1: T1 -> Y, f2: T2 -> Z): Tuple3<X, Y, Z>
+        return new Tuple3(f0(_0), f1(_1), f2(_2));
+
+    public inline function apply<R>(f: T0 -> T1 -> T2 -> R): R
+        return f(_0, _1, _2);
 
     public inline function toString()
         return 'Tuple3($_0, $_1, $_2)';
