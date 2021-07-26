@@ -57,7 +57,7 @@ class Math {
     }
 
     public inline static function percentToValue(p: Float, min: Float, max: Float)
-        return min + (max - min) * p;
+        return min + (max - min) * clamp(p, 0, 1);
 
     public inline static function sign(a: Float): Int
         return if(a > 0.) 1 else if(a < 0.) -1 else 0;
