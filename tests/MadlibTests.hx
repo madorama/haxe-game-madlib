@@ -1,5 +1,6 @@
 package tests;
 
+import tests.TestTuple;
 import utest.Runner;
 import utest.ui.Report;
 
@@ -11,6 +12,9 @@ class MadlibTests {
             new TestPaginate(),
             new TestUtil(),
             new TestNullExt(),
+            new TestTuple1(),
+            new TestTuple2(),
+            new TestTuple3(),
             new TestOptionExt(),
             new TestIteratorExt(),
             new TestArrayExt(),
