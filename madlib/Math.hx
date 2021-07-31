@@ -150,7 +150,7 @@ class Math {
         return #if heaps hxd.Math.floor(v) #else std.Math.floor(v) #end;
 
     public inline static function pow(v: Float, exp: Float): Float
-        return #if heaps hxd.Math.pow(v, exp) #else std.Math.pow(v) #end;
+        return #if heaps hxd.Math.pow(v, exp) #else std.Math.pow(v, exp) #end;
 
     public inline static function lerp(a: Float, b: Float, t: Float): Float
         return (1 - t) * a + t * b;
