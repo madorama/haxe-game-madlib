@@ -216,6 +216,9 @@ class ArrayExt {
         else
             Random.gen.shuffle(self);
 
+    public inline static function take<T>(self: Array<T>, n: Int): Array<T>
+        return self.slice(0, n);
+
     public inline static function takeUntil<T>(self: Array<T>, f: T -> Bool): Array<T> {
         final result = [];
         for(v in self) {
@@ -225,6 +228,9 @@ class ArrayExt {
         }
         return result;
     }
+
+    public inline static function drop<T>(self: Array<T>, n: Int): Array<T>
+        return if(n >= self.length) [] else self.slice(n, self.length);
 
     public inline static function dropUntil<T>(self: Array<T>, f: T -> Bool): Array<T> {
         var done = false;
