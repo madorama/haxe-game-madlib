@@ -19,6 +19,7 @@ class MadlibTests {
             new TestIteratorExt(),
             new TestArrayExt(),
             new TestFunctionExt(),
+            new TestStringExt(),
         ];
         final runner = new Runner();
         for(test in tests)
