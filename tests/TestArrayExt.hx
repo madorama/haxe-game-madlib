@@ -175,8 +175,18 @@ class TestArrayExt extends utest.Test {
         Assert.same([0, 1, 2].shuffle(new Random(Int64.ofInt(42))), [1, 2, 0]);
     }
 
+    function testTake() {
+        Assert.same([0, 1, 2, 3, 4, 5].take(3), [0, 1, 2]);
+        Assert.same([].take(3), []);
+    }
+
     function testTakeUntil() {
         Assert.same([0, 1, 2, 3, 4, 5].takeUntil(x -> x < 3), [0, 1, 2]);
+    }
+
+    function testDrop() {
+        Assert.same([0, 1, 2, 3, 4, 5].drop(3), [3, 4, 5]);
+        Assert.same([].drop(3), []);
     }
 
     function testDropUntil() {
