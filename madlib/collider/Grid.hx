@@ -16,10 +16,10 @@ class Grid extends Collider {
     public var cellsHeight(get, never): Int;
 
     function get_cellsWidth()
-        return data.length;
+        return data[0].length;
 
     function get_cellsHeight()
-        return data[0].length;
+        return data.length;
 
     public function new(cellsWidth: Int, cellsHeight: Int, cellWidth: Float, cellHeight: Float) {
         super();
