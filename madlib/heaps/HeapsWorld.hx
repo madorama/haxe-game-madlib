@@ -20,7 +20,7 @@ private typedef RenderableLayer = {
 
 typedef WorldData<LevelType : ldtk.Level> = {
     var levels: Array<LevelType>;
-    public function resolveLevelUid(uid: Int): Null<LevelType>;
+    public function getLevel(?uid: Int, ?id: String): Null<LevelType>;
 }
 
 @:structInit
