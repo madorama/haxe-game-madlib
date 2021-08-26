@@ -77,7 +77,7 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
     }
 
     public function load(uid: Int) {
-        final level = levels.resolveLevelUid(uid);
+        final level = levels.getLevel(uid);
         if(level == null)
             throw new thx.Error('undefined level: ${uid}');
 
@@ -89,7 +89,7 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
     function makeNeighbours() {
         neighbours.resize(0);
         for(n in currentLevel.neighbours) {
-            switch levels.resolveLevelUid(n.levelUid) {
+            switch levels.getLevel(n.levelUid) {
                 case final l if(l != null):
                     neighbours.push({
                         bounds: new Bounds(l.worldX - currentLevel.worldX, l.worldY - currentLevel.worldY, l.pxWid, l.pxHei),
