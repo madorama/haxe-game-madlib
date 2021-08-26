@@ -52,13 +52,14 @@ class AsepriteExt {
         }
     }
 
-    public static function getCollision(ase: Aseprite, sliceName: String, flipX: Bool = false, flipY: Bool = false): Option<Bounds> {
+    public static function getCollision(ase: Aseprite, sliceName: String, postfixCollision = "_Col", flipX: Bool = false,
+            flipY: Bool = false): Option<Bounds> {
         if(!ase.slices.exists(sliceName))
             return None;
 
         final baseSlice = ase.getSlice(sliceName);
         final baseTile = baseSlice.tile;
-        final colName = sliceName + "_Col";
+        final colName = sliceName + postfixCollision;
         return if(ase.slices.exists(colName)) {
             final colSlice = ase.getSlice(colName);
             final col = colSlice.tile;
