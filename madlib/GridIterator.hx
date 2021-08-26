@@ -11,11 +11,11 @@ class GridIterator {
     }
 
     public inline function hasNext() {
-        return i < gridWidth * gridHeight;
+        return i < width * height;
     }
 
     public inline function next() {
-        return new GridIteratorObject(i++, gridWidth);
+        return new GridIteratorObject(i++, width);
     }
 }
 
