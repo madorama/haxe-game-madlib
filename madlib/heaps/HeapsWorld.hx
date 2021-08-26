@@ -12,7 +12,7 @@ using madlib.extensions.ArrayExt;
 using madlib.extensions.LdtkExt;
 
 private typedef RenderableLayer = {
-    function render(tilesetAtlasTile: h2d.Tile, ?parent: h2d.Object): Null<h2d.Object>;
+    function render(?target: h2d.TileGroup): Null<h2d.Object>;
 
     public var identifier(default, never): String;
     public var opacity(default, never): Float;
@@ -133,7 +133,7 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
         if(isClear)
             tg.clear();
 
-        layer.render(tile, tg);
+        layer.render(tg);
         tg.alpha = layer.opacity;
         tg.setPosition(x, y);
     }
