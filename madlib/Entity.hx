@@ -213,7 +213,7 @@ class Entity {
         return Collide.checksAt(this, es, dx, dy);
 
     public function checkType<T: Entity>(type: Class<T>): Bool
-        return if(scene != null) false else scene.findEntities(type).any(e -> Collide.check(this, e));
+        return if(scene == null) false else scene.findEntities(type).any(e -> Collide.check(this, e));
 
     public inline function checkTypeAt<T: Entity>(type: Class<T>, dx: Float, dy: Float): Bool {
         x += dx;
@@ -237,7 +237,7 @@ class Entity {
     }
 
     public function collides(es: Iterable<Entity>): Option<Entity>
-        return if(scene != null) None else es.findOption(e -> Collide.check(this, e));
+        return if(scene == null) None else es.findOption(e -> Collide.check(this, e));
 
     public inline function collidesAt(es: Iterable<Entity>, dx: Float, dy: Float): Option<Entity> {
         x += dx;
