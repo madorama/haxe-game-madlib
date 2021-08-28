@@ -189,9 +189,9 @@ class GameScene {
         var ret = [];
         for(ix in l...r + 1) {
             for(iy in t...b + 1) {
-                final es = worldGrid.get('$ix,$iy').filter(e -> e.existTag(tag));
+                final es = worldGrid.get('$ix,$iy');
                 if(es != null)
-                    ret = ret.concat(es);
+                    ret = ret.concat(es.filter(e -> e.existTag(tag)));
             }
         }
         return ret;
