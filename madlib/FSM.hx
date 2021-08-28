@@ -62,8 +62,9 @@ class FSM<T> {
                     return;
                 final currentClassName = stateClass.map(Type.getClassName).withDefault("");
                 final newClassName = Type.getClassName(newStateClass);
+                final oldState = state;
                 setState(states.getAltSet(newClassName, Type.createInstance(newStateClass, [])));
-                switch state {
+                switch oldState {
                     case None:
                     case Some(v):
                         if(states.exists(currentClassName))
