@@ -5,8 +5,8 @@ using madlib.extensions.OptionExt;
 using thx.Maps;
 
 class CdbExt {
-    public inline static function safeGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): T {
-        final value = @:nullSafety(Off) indexId.get(kind);
+    public static function safeGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): T {
+        final value = indexId.get(kind);
         return if(value == null) indexId.all[0] else value;
     }
 
