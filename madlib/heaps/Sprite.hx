@@ -30,18 +30,14 @@ using thx.Maps;
     public var pixelPerfect = true;
 
     var oldAnim: Option<AseAnim> = None;
-    var oldX = Math.NaN;
-    var oldY = Math.NaN;
     var oldPivotX = Math.NaN;
     var oldPivotY = Math.NaN;
-    var oldRotation = Math.NaN;
     var oldTimeScale = Math.NaN;
     var oldXFlip = false;
     var oldYFlip = false;
 
     inline function isChange()
-        return x != oldX || y != oldY || pivotX != oldPivotX || pivotY != oldPivotY || rotation != oldRotation || timeScale != oldTimeScale
-            || xFlip != oldXFlip || yFlip != oldYFlip;
+        return posChanged || pivotX != oldPivotX || pivotY != oldPivotY || timeScale != oldTimeScale || xFlip != oldXFlip || yFlip != oldYFlip;
 
     public var pivotX = 0.;
     public var pivotY = 0.;
@@ -111,8 +107,9 @@ using thx.Maps;
 
     function syncAnimations(ctx: RenderContext) {
         for(anim in animations) {
-            anim.setPosition(x, y);
-            anim.rotation = rotation;
+            if(posChanged)
+                anim.calcAbsPos();
+
             anim.timeScale = timeScale;
             for(frame in anim.frames) {
                 frame.tile.xFlip = xFlip;
@@ -122,11 +119,8 @@ using thx.Maps;
             anim.sync(ctx);
         }
 
-        oldX = x;
-        oldY = y;
         oldPivotX = pivotX;
         oldPivotY = pivotY;
-        oldRotation = rotation;
         oldTimeScale = timeScale;
         oldXFlip = xFlip;
         oldYFlip = yFlip;
