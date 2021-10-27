@@ -85,6 +85,7 @@ using thx.Maps;
 
     public inline function addAnim(name: String, newAnim: AseAnim) {
         newAnim.onAnimEnd = () -> _animEndTrigger.trigger(Noise);
+        newAnim.parent = this;
         animations.set(name, newAnim);
     }
 
@@ -110,10 +111,7 @@ using thx.Maps;
 
     function syncAnimations(ctx: RenderContext) {
         for(anim in animations) {
-            if(pixelPerfect)
-                anim.setPosition(Math.round(x), Math.round(y));
-            else
-                anim.setPosition(x, y);
+            anim.setPosition(x, y);
             anim.rotation = rotation;
             anim.timeScale = timeScale;
             for(frame in anim.frames) {
@@ -136,6 +134,9 @@ using thx.Maps;
 
     override function sync(ctx: RenderContext) {
         super.sync(ctx);
+        if(pixelPerfect)
+            setPosition(Math.round(x), Math.round(y));
+
         if(isChange())
             syncAnimations(ctx);
         else
