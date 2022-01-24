@@ -62,8 +62,8 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
     public final layer: Array<Array<TileGroupData>> = [];
 
     var animFrame = 0;
-    var animFrameCount = 0;
-    var animDuration = 6;
+    var animFrameCount = 0.0;
+    var animDuration = 6.;
 
     public function new(?scene: GameScene) {
         layer = [];
@@ -165,11 +165,11 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
         layer.resize(0);
     }
 
-    public function update() {
-        animFrameCount++;
+    public function update(dt: Float) {
+        animFrameCount += 1 * dt;
         if(animFrameCount > animDuration) {
             animFrame++;
-            animFrameCount = 0;
+            animFrameCount -= animDuration;
         }
     }
 
