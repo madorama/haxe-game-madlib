@@ -24,6 +24,12 @@ class AsepriteExt {
         return anim;
     }
 
+    public inline static function getAnimationFromTag(aseprite: Aseprite, tag: String, loop: Bool = false): AseAnim {
+        final anim = new AseAnim(aseprite.getTag(tag));
+        anim.loop = loop;
+        return anim;
+    }
+
     public static function getCollisions(ase: Aseprite, sliceName: String, postfixCollision = "_Col", flipX: Bool = false,
             flipY: Bool = false): Array<Bounds> {
         if(!ase.slices.exists(sliceName))
