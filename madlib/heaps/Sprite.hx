@@ -25,6 +25,11 @@ using thx.Maps;
     inline function get_height()
         return anim.map(anim -> anim.getFrame().tile.height).withDefault(0.);
 
+    public var currentAnimationFrame(get, never): Int;
+
+    inline function get_currentAnimationFrame()
+        return anim.map(anim -> anim.currentFrame).withDefault(0);
+
     public var timeScale = 1.;
 
     public var pixelPerfect = true;
