@@ -30,14 +30,14 @@ class AsepriteExt {
         return anim;
     }
 
-    public static function getCollisions(ase: Aseprite, sliceName: String, postfixCollision = "_Col", flipX: Bool = false,
+    public static function getCollisions(ase: Aseprite, sliceName: String, prefix: String = "", suffix: String = "_Col", flipX: Bool = false,
             flipY: Bool = false): Array<Bounds> {
         if(!ase.slices.exists(sliceName))
             return [];
 
         final baseSlice = ase.getSlice(sliceName);
         final baseTile = baseSlice.tile;
-        final colName = sliceName + postfixCollision;
+        final colName = '$prefix$sliceName$suffix';
         final colNames = ase.slices.keys().filter(k -> k.indexOf(colName) == 0);
         return if(colNames.length == 0) {
             [new Bounds(baseTile.dx, baseTile.dy, baseTile.width, baseTile.height)];
@@ -58,14 +58,14 @@ class AsepriteExt {
         }
     }
 
-    public static function getCollision(ase: Aseprite, sliceName: String, postfixCollision = "_Col", flipX: Bool = false,
+    public static function getCollision(ase: Aseprite, sliceName: String, prefix: String = "", suffix: String = "_Col", flipX: Bool = false,
             flipY: Bool = false): Option<Bounds> {
         if(!ase.slices.exists(sliceName))
             return None;
 
         final baseSlice = ase.getSlice(sliceName);
         final baseTile = baseSlice.tile;
-        final colName = sliceName + postfixCollision;
+        final colName = '$prefix$sliceName$suffix';
         return if(ase.slices.exists(colName)) {
             final colSlice = ase.getSlice(colName);
             final col = colSlice.tile;
