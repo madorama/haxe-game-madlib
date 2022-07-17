@@ -56,12 +56,14 @@ class IteratorExt {
         }
     }
 
-    public inline static function filter<T>(self: Iterator<T>, predicate: T -> Bool): Array<T>
-        return reduce(self, [], (acc, x) -> {
+    public inline static function filter<T>(self: Iterator<T>, predicate: T -> Bool): Array<T> {
+        final result: Array<T> = [];
+        for(x in self) {
             if(predicate(x))
-                acc.push(x);
-            return acc;
-        });
+                result.push(x);
+        }
+        return result;
+    }
 
     public inline static function filterNull<T>(self: Iterator<Null<T>>): Array<T> {
         final result: Array<T> = [];
@@ -117,7 +119,9 @@ class IteratorExt {
     }
 
     public inline static function reducei<T, Acc>(self: Iterator<T>, init: Acc, callback: Acc -> Int -> T -> Acc): Acc {
-        mapi(self, (i, x) -> init = callback(init, i, x));
+        var i = 0;
+        while(self.hasNext())
+            init = callback(init, i++, self.next());
         return init;
     }
 
@@ -191,10 +195,10 @@ class IteratorExt {
 
     public inline static function unzip<T1, T2>(self: Iterator<Tuple2<T1, T2>>): Tuple2<Array<T1>, Array<T2>> {
         final r1 = [], r2 = [];
-        each(self, x -> {
+        for(x in self) {
             r1.push(x._0);
             r2.push(x._1);
-        });
+        }
         return new Tuple2(r1, r2);
     }
 
