@@ -19,6 +19,11 @@
         "tink_lang": "",
         "tweenxcore": "",
         "haxe-strings": "",
-        "littleBigInt": ""
+        "littleBigInt": "",
+        "heaps": "",
+        "heaps-aseprite": "",
+        "castle": "",
+        "domkit": "",
+        "ldtk-haxe-api": ""
     }
 }
