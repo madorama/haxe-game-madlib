@@ -1,6 +1,7 @@
 package tests;
 
 import haxe.ds.Option;
+import madlib.extensions.AssertExt;
 import utest.Assert;
 
 using madlib.extensions.OptionExt;
@@ -8,25 +9,25 @@ using madlib.extensions.OptionExt;
 @:noCompletion
 class TestOptionExt extends utest.Test {
     function testWithDefault() {
-        Assert.equals(Some(42).withDefault(0), 42);
-        Assert.equals(None.withDefault(0), 0);
+        Assert.equals(42, Some(42).withDefault(0));
+        Assert.equals(0, None.withDefault(0));
     }
 
     function testWithDefaultLazy() {
-        Assert.equals(Some(42).withDefaultLazy(() -> 0), 42);
-        Assert.equals(None.withDefaultLazy(() -> 0), 0);
+        Assert.equals(42, Some(42).withDefaultLazy(() -> 0));
+        Assert.equals(0, None.withDefaultLazy(() -> 0));
     }
 
     function testMap() {
-        Assert.same(Some(42).map(x -> x * 2), Some(84));
-        Assert.same(None.map(x -> x * 2), None);
+        Assert.same(Some(84), Some(42).map(x -> x * 2));
+        AssertExt.isNone(None.map(x -> x * 2));
     }
 
     function testFlatten() {
-        Assert.same(Some(Some(42)).flatten(), Some(42));
-        Assert.same(Some(Some(Some(42))).flatten().flatten(), Some(42));
-        Assert.same(Some(None).flatten(), None);
-        Assert.same(None.flatten(), None);
+        Assert.same(Some(42), Some(Some(42)).flatten());
+        Assert.same(Some(42), Some(Some(Some(42))).flatten().flatten());
+        AssertExt.isNone(Some(None).flatten());
+        AssertExt.isNone(None.flatten());
     }
 
     function testFlatMap() {
@@ -34,9 +35,9 @@ class TestOptionExt extends utest.Test {
             return if(x == "") None else Some(x);
         final username = Some("test");
         final password = Some("");
-        Assert.same(username.flatMap(action), Some("test"));
-        Assert.same(password.flatMap(action), None);
-        Assert.same(None.flatMap(x -> x), None);
+        Assert.same(Some("test"), username.flatMap(action));
+        AssertExt.isNone(password.flatMap(action));
+        AssertExt.isNone(None.flatMap(x -> x));
     }
 
     function specIsNone() {
@@ -65,20 +66,20 @@ class TestOptionExt extends utest.Test {
         }
 
         Some([0, 1, 2]).each(action);
-        Assert.same(arr, [0, 2, 4]);
+        Assert.same([0, 2, 4], arr);
 
         arr.resize(0);
         None.each(action);
-        Assert.same(arr, []);
+        Assert.same([], arr);
     }
 
     function testOfValue() {
-        Assert.same(Std.parseInt("foobar").ofValue(), None);
-        Assert.same(Std.parseInt("42").ofValue(), Some(42));
+        Assert.same(None, Std.parseInt("foobar").ofValue());
+        Assert.same(Some(42), Std.parseInt("42").ofValue());
     }
 
     function testToArray() {
-        Assert.same(Some(42).toArray(), [42]);
-        Assert.same(None.toArray(), []);
+        Assert.same([42], Some(42).toArray());
+        Assert.same([], None.toArray());
     }
 }

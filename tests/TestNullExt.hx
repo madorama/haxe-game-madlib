@@ -1,6 +1,7 @@
 package tests;
 
 import haxe.ds.Option;
+import madlib.extensions.AssertExt;
 import utest.Assert;
 
 using madlib.extensions.NullExt;
@@ -8,18 +9,18 @@ using madlib.extensions.NullExt;
 @:noCompletion
 class TestNullExt extends utest.Test {
     function testWithDefault() {
-        Assert.equals(Std.parseInt("42").withDefault(0), 42);
-        Assert.equals(Std.parseInt("foobar").withDefault(0), 0);
+        Assert.equals(42, Std.parseInt("42").withDefault(0));
+        Assert.equals(0, Std.parseInt("foobar").withDefault(0));
     }
 
     function testWithDefaultLazy() {
-        Assert.equals(Std.parseInt("42").withDefaultLazy(() -> 0), 42);
-        Assert.equals(Std.parseInt("foobar").withDefaultLazy(() -> 0), 0);
+        Assert.equals(42, Std.parseInt("42").withDefaultLazy(() -> 0));
+        Assert.equals(0, Std.parseInt("foobar").withDefaultLazy(() -> 0));
     }
 
     function testToOption() {
-        Assert.same(Std.parseInt("foobar").toOption(), None);
-        Assert.same(Std.parseInt("42").toOption(), Some(42));
+        AssertExt.isNone(Std.parseInt("foobar").toOption());
+        Assert.same(Some(42), Std.parseInt("42").toOption());
     }
 
     function testIsNull() {
@@ -30,16 +31,16 @@ class TestNullExt extends utest.Test {
     function testEach() {
         var x = 0;
         Std.parseInt("42").each(a -> x = a);
-        Assert.equals(x, 42);
+        Assert.equals(42, x);
 
         x = 0;
         Std.parseInt("foobar").each(a -> x = a);
-        Assert.equals(x, 0);
+        Assert.equals(0, x);
     }
 
     function testMap() {
         var x = Std.parseInt("42").map(x -> x);
-        Assert.equals(x, 42);
+        Assert.equals(42, x);
 
         x = Std.parseInt("foobar").map(x -> x);
         Assert.isNull(x);

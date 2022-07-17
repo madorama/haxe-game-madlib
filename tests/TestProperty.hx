@@ -19,14 +19,14 @@ class TestProperty extends utest.Test {
     }
 
     function testValueChange() {
-        Assert.equals(mul2, 0);
+        Assert.equals(0, mul2);
         property.value = 42;
-        Assert.equals(mul2, 84);
+        Assert.equals(84, mul2);
     }
 
     function testSilently() {
-        Assert.equals(mul2, 0);
+        Assert.equals(0, mul2);
         property.setSilently(42);
-        Assert.equals(mul2, 0);
+        Assert.equals(0, mul2);
     }
 }

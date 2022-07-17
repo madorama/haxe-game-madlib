@@ -21,11 +21,11 @@ class TestVersion extends utest.Test {
     }
 
     function testVersionOf() {
-        Assert.same(Version.of("1.0.0"), Right(new Version(1, 0, 0)));
-        Assert.same(Version.of("0.0.1-foo"), Right(new Version(0, 0, 1, ["foo"])));
-        Assert.same(Version.of("0.0.1-foo-bar"), Right(new Version(0, 0, 1, ["foo", "bar"])));
-        Assert.same(Version.of("0.0."), Left(Invalid("0.0.")));
-        Assert.same(Version.of("0.0.1--"), Left(Invalid("0.0.1--")));
+        Assert.same(Right(new Version(1, 0, 0)), Version.of("1.0.0"));
+        Assert.same(Right(new Version(0, 0, 1, ["foo"])), Version.of("0.0.1-foo"));
+        Assert.same(Right(new Version(0, 0, 1, ["foo", "bar"])), Version.of("0.0.1-foo-bar"));
+        Assert.same(Left(Invalid("0.0.")), Version.of("0.0."));
+        Assert.same(Left(Invalid("0.0.1--")), Version.of("0.0.1--"));
     }
 
     function specCompatible() {

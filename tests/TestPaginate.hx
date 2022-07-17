@@ -43,9 +43,9 @@ class TestPaginate extends utest.Test {
     function testGetPageItems() {
         final p = new Paginate(Util.range(0, 10), 3);
 
-        Assert.same(p.getPageItems(1), [3, 4, 5]);
-        Assert.same(p.getPageItems(4), []);
-        Assert.same(p.getPageItems(-1), []);
+        Assert.same([3, 4, 5], p.getPageItems(1));
+        AssertExt.isEmpty(p.getPageItems(4));
+        AssertExt.isEmpty(p.getPageItems(-1));
     }
 
     function specChangeOnePageItemCount() {
@@ -60,10 +60,10 @@ class TestPaginate extends utest.Test {
     function testChangeOnePageItemCount() {
         final p = new Paginate(Util.range(0, 10), 3);
 
-        Assert.same(p.currentPageItems, [0, 1, 2]);
+        Assert.same([0, 1, 2], p.currentPageItems);
 
         p.onePageItemCount = 5;
-        Assert.same(p.currentPageItems, [0, 1, 2, 3, 4]);
+        Assert.same([0, 1, 2, 3, 4], p.currentPageItems);
     }
 
     function specChangePage() {
@@ -84,16 +84,16 @@ class TestPaginate extends utest.Test {
     function testChangePage() {
         final p = new Paginate(Util.range(0, 10), 3);
 
-        Assert.same(p.currentPageItems, [0, 1, 2]);
+        Assert.same([0, 1, 2], p.currentPageItems);
 
         p.changePage(2);
-        Assert.same(p.currentPageItems, [6, 7, 8]);
+        Assert.same([6, 7, 8], p.currentPageItems);
 
         p.changePage(5);
-        Assert.same(p.currentPageItems, [3, 4, 5]);
+        Assert.same([3, 4, 5], p.currentPageItems);
 
         p.changePage(-2);
-        Assert.same(p.currentPageItems, [6, 7, 8]);
+        Assert.same([6, 7, 8], p.currentPageItems);
     }
 
     function specPageAt() {
@@ -114,15 +114,15 @@ class TestPaginate extends utest.Test {
     function testPageAt() {
         final p = new Paginate(Util.range(0, 10), 3);
 
-        Assert.same(p.currentPageItems, [0, 1, 2]);
+        Assert.same([0, 1, 2], p.currentPageItems);
 
         p.pageAt(2);
-        Assert.same(p.currentPageItems, [6, 7, 8]);
+        Assert.same([6, 7, 8], p.currentPageItems);
 
         p.pageAt(2);
-        Assert.same(p.currentPageItems, [0, 1, 2]);
+        Assert.same([0, 1, 2], p.currentPageItems);
 
         p.pageAt(-2);
-        Assert.same(p.currentPageItems, [6, 7, 8]);
+        Assert.same([6, 7, 8], p.currentPageItems);
     }
 }

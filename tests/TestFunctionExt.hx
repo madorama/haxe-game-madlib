@@ -8,15 +8,15 @@ using madlib.extensions.FunctionExt;
 @:noCompletion
 class TestFunctionExt extends utest.Test {
     function testIdentity() {
-        Assert.same([0, 1, 2].map(FunctionExt.identity), [0, 1, 2]);
+        Assert.same([0, 1, 2], [0, 1, 2].map(FunctionExt.identity));
     }
 
     function testToEffect0() {
         var x = 0;
         final effect = (() -> x = 42).toEffect();
-        Assert.same(x, 0);
+        Assert.same(0, x);
         effect();
-        Assert.same(x, 42);
+        Assert.same(42, x);
     }
 
     function testLazy() {
@@ -26,38 +26,38 @@ class TestFunctionExt extends utest.Test {
             return x;
         }
         final f = heavyCalc.lazy(42);
-        Assert.equals(a, 0);
-        Assert.same(f(), 42);
-        Assert.equals(a, 42);
-        Assert.same(f(), 42);
-        Assert.equals(a, 42);
+        Assert.equals(0, a);
+        Assert.same(42, f());
+        Assert.equals(42, a);
+        Assert.same(42, f());
+        Assert.equals(42, a);
     }
 
     function testToEffect1() {
         var sum = 0;
         final effect = ((x) -> sum += x).toEffect();
-        Assert.same(sum, 0);
+        Assert.same(0, sum);
         effect(42);
-        Assert.same(sum, 42);
+        Assert.same(42, sum);
         effect(9);
-        Assert.same(sum, 51);
+        Assert.same(51, sum);
     }
 
     function testCurry() {
         final sum = ((x, y) -> x + y).curry();
         final add42 = sum(42);
-        Assert.same(add42(9), 51);
+        Assert.same(51, add42(9));
     }
 
     function testUncurry() {
         final sum = ((x, y) -> x + y).curry();
-        Assert.same(sum.uncurry()(42, 9), 51);
+        Assert.same(51, sum.uncurry()(42, 9));
     }
 
     function testFlip() {
         final div = (x, y) -> x / y;
 
-        Assert.same(div(4, 2), 2);
-        Assert.same(div.flip()(2, 4), 2);
+        Assert.same(2, div(4, 2));
+        Assert.same(2, div.flip()(2, 4));
     }
 }

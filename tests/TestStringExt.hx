@@ -6,11 +6,11 @@ using madlib.extensions.StringExt;
 
 class TestStringExt extends utest.Test {
     function testToArray() {
-        Assert.same("Hello".toArray(), ["H", "e", "l", "l", "o"]);
+        Assert.same(["H", "e", "l", "l", "o"], "Hello".toArray());
     }
 
     function testMap() {
-        Assert.same("abcde".map(x -> x + 1), "bcdef");
+        Assert.same("bcdef", "abcde".map(x -> x + 1));
     }
 
     function specIsLower() {
@@ -43,15 +43,15 @@ class TestStringExt extends utest.Test {
     }
 
     function testLines() {
-        Assert.same("Lorem ipsum\ndolor".lines(), ["Lorem ipsum", "dolor"]);
+        Assert.same(["Lorem ipsum", "dolor"], "Lorem ipsum\ndolor".lines());
     }
 
     function testWords() {
-        Assert.same("Lorem ipsum\ndolor".words(), ["Lorem", "ipsum", "dolor"]);
+        Assert.same(["Lorem", "ipsum", "dolor"], "Lorem ipsum\ndolor".words());
     }
 
     function testUnwords() {
-        Assert.same(["Lorem", "ipsum", "dolor"].unwords(), "Lorem ipsum dolor");
+        Assert.same("Lorem ipsum dolor", ["Lorem", "ipsum", "dolor"].unwords());
     }
 
     function testAny() {
@@ -67,7 +67,7 @@ class TestStringExt extends utest.Test {
     }
 
     function testCapitalize() {
-        Assert.same("The qUicK BRoWn fOx jumps OVeR THE lAZy dOG".capitalize(), "The quick brown fox jumps over the lazy dog");
+        Assert.same("The quick brown fox jumps over the lazy dog", "The qUicK BRoWn fOx jumps OVeR THE lAZy dOG".capitalize());
     }
 
     function testContains() {
@@ -75,25 +75,24 @@ class TestStringExt extends utest.Test {
     }
 
     function testRepeat() {
-        Assert.same("x".repeat(10), "xxxxxxxxxx");
+        Assert.same("xxxxxxxxxx", "x".repeat(10));
     }
 
     function testLpad() {
-        Assert.same("1101".lpad("0", 8), "00001101");
-        Assert.same("10101101".lpad("0", 8), "10101101");
-        Assert.same("1110101101".lpad("0", 8), "1110101101");
+        Assert.same("00001101", "1101".lpad("0", 8));
+        Assert.same("10101101", "10101101".lpad("0", 8));
+        Assert.same("1110101101", "1110101101".lpad("0", 8));
     }
 
     function testRpad() {
-        Assert.same("0100".rpad("1", 8), "01001111");
-        Assert.same("01001101".rpad("1", 8), "01001101");
-        Assert.same("0100110101".rpad("1", 8), "0100110101");
+        Assert.same("01001111", "0100".rpad("1", 8));
+        Assert.same("01001101", "01001101".rpad("1", 8));
+        Assert.same("0100110101", "0100110101".rpad("1", 8));
     }
 
     function testReverse() {
-        Assert.same("Hello, World!".reverse(), "!dlroW ,olleH");
-        Assert.same("".reverse(), "");
-        Assert.same("a".reverse(), "a");
-        Assert.same("ab".reverse(), "ba");
+        Assert.same("", "".reverse());
+        Assert.same("a", "a".reverse());
+        Assert.same("!dlroW ,olleH", "Hello, World!".reverse());
     }
 }

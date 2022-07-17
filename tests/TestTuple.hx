@@ -8,11 +8,11 @@ class TestTuple1 extends utest.Test {
     final x = Tuple1.of(42);
 
     function testMap() {
-        Assert.same(x.map(x -> x * 2), Tuple1.of(84));
+        Assert.same(Tuple1.of(84), x.map(x -> x * 2));
     }
 
     function testApply() {
-        Assert.same(x.apply(x -> x * 2), 84);
+        Assert.same(84, x.apply(x -> x * 2));
     }
 }
 
@@ -26,14 +26,12 @@ class TestTuple2 extends utest.Test {
     }
 
     function testMaps() {
-        Assert.same(x.mapFirst(x -> x + ", World!"), Tuple.of("Hello, World!", 42));
-        Assert.same(x.mapSecond(x -> x * 2), Tuple.of("Hello", 84));
-        x.flip() == Tuple.of(42, "Hello");
-        x == Tuple.of("Hello", 42);
+        Assert.same(Tuple.of("Hello, World!", 42), x.mapFirst(x -> x + ", World!"));
+        Assert.same(Tuple.of("Hello", 84), x.mapSecond(x -> x * 2));
     }
 
     function testApply() {
-        Assert.same(x.apply((x, y) -> '${x},${y}'), "Hello,42");
+        Assert.same("Hello,42", x.apply((x, y) -> '${x},${y}'));
     }
 }
 
@@ -52,13 +50,13 @@ class TestTuple3 extends utest.Test {
     }
 
     function testMaps() {
-        Assert.same(x.mapFirst(x -> x + ", World!"), Tuple3.of("Hello, World!", 42, 3.14));
-        Assert.same(x.mapSecond(x -> x * 2), Tuple3.of("Hello", 84, 3.14));
-        Assert.same(x.mapThird(x -> x * 0.5), Tuple3.of("Hello", 42, 1.57));
-        Assert.same(x.mapAll(x -> x + ", World!", x -> x * 2, x -> x * 0.5), Tuple3.of("Hello, World!", 84, 1.57));
+        Assert.same(Tuple3.of("Hello, World!", 42, 3.14), x.mapFirst(x -> x + ", World!"));
+        Assert.same(Tuple3.of("Hello", 84, 3.14), x.mapSecond(x -> x * 2));
+        Assert.same(Tuple3.of("Hello", 42, 1.57), x.mapThird(x -> x * 0.5));
+        Assert.same(Tuple3.of("Hello, World!", 84, 1.57), x.mapAll(x -> x + ", World!", x -> x * 2, x -> x * 0.5));
     }
 
     function testApply() {
-        Assert.same(x.apply((x, y, z) -> '${x},${y + z}'), "Hello,45.14");
+        Assert.same("Hello,45.14", x.apply((x, y, z) -> '${x},${y + z}'));
     }
 }
