@@ -11,6 +11,7 @@ class Function0Ext {
 }
 
 class Function1Ext {
+    @:nullSafety(Off)
     public inline static function lazy<A, R>(func: A -> R, v: A): Void -> R {
         var r: Null<R> = null;
         return () -> if(r == null) r = func(v) else r;
@@ -30,6 +31,7 @@ class Function2Ext {
     public inline static function flip<A, B, R>(func: A -> B -> R): B -> A -> R
         return (b, a) -> func(a, b);
 
+    @:nullSafety(Off)
     public inline static function lazy<A, B, R>(func: A -> B -> R, a: A, b: B): Void -> R {
         var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b) else r;
@@ -46,6 +48,7 @@ class Function3Ext {
     public inline static function uncurry<A, B, C, R>(func: A -> (B -> (C -> R))): A -> B -> C -> R
         return (a, b, c) -> func(a)(b)(c);
 
+    @:nullSafety(Off)
     public inline static function lazy<A, B, C, R>(func: A -> B -> C -> R, a: A, b: B, c: C): Void -> R {
         var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c) else r;
@@ -62,6 +65,7 @@ class Function4Ext {
     public inline static function uncurry<A, B, C, D, R>(func: A -> (B -> (C -> (D -> R)))): A -> B -> C -> D -> R
         return (a, b, c, d) -> func(a)(b)(c)(d);
 
+    @:nullSafety(Off)
     public inline static function lazy<A, B, C, D, R>(func: A -> B -> C -> D -> R, a: A, b: B, c: C, d: D): Void -> R {
         var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c, d) else r;
@@ -78,6 +82,7 @@ class Function5Ext {
     public inline static function uncurry<A, B, C, D, E, R>(func: A -> (B -> (C -> (D -> (E -> R))))): A -> B -> C -> D -> E -> R
         return (a, b, c, d, e) -> func(a)(b)(c)(d)(e);
 
+    @:nullSafety(Off)
     public inline static function lazy<A, B, C, D, E, R>(func: A -> B -> C -> D -> E -> R, a: A, b: B, c: C, d: D, e: E): Void -> R {
         var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c, d, e) else r;
@@ -94,6 +99,7 @@ class Function6Ext {
     public inline static function uncurry<A, B, C, D, E, F, R>(func: A -> (B -> (C -> (D -> (E -> (F -> R)))))): A -> B -> C -> D -> E -> F -> R
         return (a, b, c, d, e, f) -> func(a)(b)(c)(d)(e)(f);
 
+    @:nullSafety(Off)
     public inline static function lazy<A, B, C, D, E, F, R>(func: A -> B -> C -> D -> E -> F -> R, a: A, b: B, c: C, d: D, e: E, f: F): Void -> R {
         var r: Null<R> = null;
         return () -> if(r == null) r = func(a, b, c, d, e, f) else r;

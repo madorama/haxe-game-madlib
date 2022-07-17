@@ -8,8 +8,11 @@ class StringExt {
 
     public inline static function map(self: String, f: Int -> Int): String {
         var result = "";
-        for(i in 0...self.length)
-            result += String.fromCharCode(f(self.charCodeAt(i)));
+        for(i in 0...self.length) {
+            final c = self.charCodeAt(i);
+            if(c == null) continue;
+            result += String.fromCharCode(f(c));
+        }
         return result;
     }
 
