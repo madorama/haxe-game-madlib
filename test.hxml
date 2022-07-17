@@ -27,11 +27,6 @@
 -lib utest
 -D UTEST_PRINT_TESTS
 
--lib instrument
-
---macro instrument.Instrumentation.coverage(["tests"], ["tests"], [])
--D coverage-console-file-summary-reporter
-
 -main tests.MadlibTests
 
 -hl tests/bin/test.dat
