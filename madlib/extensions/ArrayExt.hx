@@ -254,9 +254,6 @@ class ArrayExt {
         return result;
     }
 
-    public inline static function findBestValue<T>(self: Array<T>, scoreElement: T -> Float): Option<T>
-        return if(self.length == 0) None; else Some(self.toScoredArray(scoreElement).scoreSort()[self.length - 1].item);
-
     inline static function scoreSort<T: {score: Float}>(self: Array<T>, isAscend: Bool = true): Array<T>
         return self.sorted((x, y) -> if(isAscend) thx.Floats.compare(x.score, y.score) else thx.Floats.compare(y.score, x.score));
 
@@ -265,6 +262,9 @@ class ArrayExt {
             item: x,
             score: scoreElement(x),
         });
+
+    public inline static function findBestValue<T>(self: Array<T>, scoreElement: T -> Float): Option<T>
+        return if(self.length == 0) None; else Some(self.toScoredArray(scoreElement).scoreSort()[self.length - 1].item);
 
     public inline static function findNearestValue<T>(self: Array<T>, targetScore: Float, scoreElement: T -> Float): Option<T>
         return if(self.length == 0) None else Some(self.toScoredArray(x -> Math.abs(scoreElement(x) - targetScore)).scoreSort()[0].item);
