@@ -63,7 +63,7 @@ enum TweenEvent {
         return this;
     }
 
-    inline function run(): TweenEvent {
+    inline function run(dt: Float): TweenEvent {
         if(delay > 0) {
             delay -= 1;
             return Delayed;
@@ -73,7 +73,7 @@ enum TweenEvent {
             _onStart.dispose();
         }
 
-        factor += speed;
+        factor += speed * dt;
         if(factor >= 1) {
             factor = 1;
             done = true;
@@ -97,9 +97,9 @@ class Tween {
 
     public function new() {}
 
-    public function update() {
+    public function update(dt: Float) {
         for(t in tweens) {
-            if(t.run() == Complete)
+            if(t.run(dt) == Complete)
                 tweens.remove(t);
         }
     }

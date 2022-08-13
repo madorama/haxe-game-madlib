@@ -8,7 +8,7 @@ using thx.Maps;
 
 @:allow(madlib.heaps.App)
 class GameScene {
-    public static var FIXED_UPDATE_FPS = 60;
+    public static var FIXED_UPDATE_FPS = 30;
 
     public var paused(default, null): Bool = false;
     public var destroyed(default, null): Bool = false;
@@ -19,26 +19,8 @@ class GameScene {
 
     final entities = new Dll<Entity>(16);
 
-    var fixedUpdateAccum = 0.;
-
-    inline function getDefaultFrameRate(): Float #if heaps return hxd.Timer.wantedFPS; #else return 60; #end
-
-    public inline function getFixedUpdateAccumRatio(): Float
-        return fixedUpdateAccum / (getDefaultFrameRate() / FIXED_UPDATE_FPS);
-
-    var utmod = 1.;
-    var ftime = 0.;
-    var uftime = 0.;
-
-    var baseTimeMul = 1.0;
-
-    public var tmod(get, never): Float;
-
-    inline function get_tmod(): Float
-        return utmod * getComputedTimeMultiplier();
-
-    inline function getComputedTimeMultiplier(): Float
-        return Math.max(0., baseTimeMul);
+    public inline function getDefaultFrameRate(): Float
+        return #if heaps hxd.Timer.wantedFPS #else 60 #end;
 
     public function new() {}
 
@@ -46,50 +28,50 @@ class GameScene {
 
     public function initOnceBeforeUpdate() {}
 
-    public function beforeUpdate() {
+    public function beforeUpdate(dt: Float) {
         resetWorldGrid();
     }
 
-    public function update() {}
+    public function update(dt: Float) {}
 
-    public function fixedUpdate() {}
+    public function fixedUpdate(dt: Float) {}
 
-    public function afterUpdate() {}
+    public function afterUpdate(dt: Float) {}
 
-    inline function entityBeforeUpdate(e: Entity) {
+    inline function entityBeforeUpdate(e: Entity, dt: Float) {
         if(!e.isStarted) {
             e.started();
             e.isStarted = true;
         }
         if(e.active && e.isStarted)
-            e.beforeUpdate();
+            e.beforeUpdate(dt);
     }
 
-    inline function entityUpdate(e: Entity) {
+    inline function entityUpdate(e: Entity, dt: Float) {
         if(!e.isStarted) {
             e.started();
             e.isStarted = true;
         }
         if(e.active && e.isStarted)
-            e.update();
+            e.update(dt);
     }
 
-    inline function entityAfterUpdate(e: Entity) {
+    inline function entityAfterUpdate(e: Entity, dt: Float) {
         if(!e.isStarted) {
             e.started();
             e.isStarted = true;
         }
         if(e.active && e.isStarted)
-            e.afterUpdate();
+            e.afterUpdate(dt);
     }
 
-    inline function entityFixedUpdate(e: Entity) {
+    inline function entityFixedUpdate(e: Entity, dt: Float) {
         if(!e.isStarted) {
             e.started();
             e.isStarted = true;
         }
         if(e.active && e.isStarted)
-            e.fixedUpdate();
+            e.fixedUpdate(dt);
     }
 
     public function onResize() {}
@@ -200,42 +182,40 @@ class GameScene {
     static inline function canRun(scene: GameScene)
         return !(scene.paused || scene.destroyed);
 
+    var fixedUpdateAccum = 0.;
+
     static inline function doUpdate(scene: GameScene, dt: Float) {
         if(!canRun(scene))
             return;
 
-        scene.utmod = dt;
-        scene.ftime += scene.tmod;
-        scene.uftime += scene.utmod;
-
         // Before Update
         if(canRun(scene))
-            scene.tw.update();
+            scene.tw.update(dt);
 
         if(canRun(scene)) {
             if(!scene.initDone) {
                 scene.initOnceBeforeUpdate();
                 scene.initDone = true;
             }
-            scene.beforeUpdate();
+            scene.beforeUpdate(dt);
         }
 
         // Update
         if(canRun(scene))
-            scene.update();
+            scene.update(dt);
 
         // FixedUpdate
         if(canRun(scene)) {
-            scene.fixedUpdateAccum += scene.tmod;
+            scene.fixedUpdateAccum += dt;
             while(scene.fixedUpdateAccum >= scene.getDefaultFrameRate() / FIXED_UPDATE_FPS) {
                 scene.fixedUpdateAccum -= scene.getDefaultFrameRate() / FIXED_UPDATE_FPS;
 
-                scene.fixedUpdate();
+                scene.fixedUpdate(dt);
             }
         }
 
         // AfterUpdate
         if(canRun(scene))
-            scene.afterUpdate();
+            scene.afterUpdate(dt);
     }
 }

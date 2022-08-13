@@ -136,13 +136,13 @@ class Entity {
             resume();
     }
 
-    public function beforeUpdate() {}
+    public function beforeUpdate(dt: Float) {}
 
-    public function update() {}
+    public function update(dt: Float) {}
 
-    public function fixedUpdate() {}
+    public function fixedUpdate(dt: Float) {}
 
-    public function afterUpdate() {}
+    public function afterUpdate(dt: Float) {}
 
     public function draw(layers: Layers) {}
 

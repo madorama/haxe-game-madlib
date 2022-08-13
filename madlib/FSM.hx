@@ -9,7 +9,7 @@ using thx.Maps;
 abstract class StateBase<T> {
     public function new() {}
 
-    public function update(owner: T) {}
+    public function update(owner: T, dt: Float) {}
 
     public function enter(owner: T) {}
 
@@ -49,8 +49,8 @@ class FSM<T> {
         }
     }
 
-    public inline function update() {
-        state.each(s -> s.update(owner));
+    public inline function update(dt: Float) {
+        state.each(s -> s.update(owner, dt));
         transition();
     }
 
