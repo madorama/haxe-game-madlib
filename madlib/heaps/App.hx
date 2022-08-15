@@ -46,7 +46,7 @@ enum abstract LayerId(Int) to Int {
         @:privateAccess Input.mouseY = s2d.mouseY;
 
         GamePad.update();
-        Tween.inst.update(hxd.Timer.tmod);
+        Tween.inst.update(dt);
     }
 
     inline function gc() {
