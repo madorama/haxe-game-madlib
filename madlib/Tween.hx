@@ -98,9 +98,14 @@ class Tween {
     public function new() {}
 
     public function update(dt: Float) {
-        for(t in tweens) {
-            if(t.run(dt) == Complete)
-                tweens.remove(t);
+        var i = 0;
+        while(i < tweens.length) {
+            final tween = tweens[i];
+            if(tween.run(dt) == Complete) {
+                tweens.splice(i, 1);
+                continue;
+            }
+            i += 1;
         }
     }
 
