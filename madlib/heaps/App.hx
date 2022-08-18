@@ -17,14 +17,14 @@ enum abstract LayerId(Int) to Int {
 
     public final uiCamera = new h2d.Camera();
 
-    public function new(width: Int, height: Int, fullscreen: Bool = false) {
+    public function new() {
         super();
         window = Window.getInstance();
-        window.resize(width, height);
+    }
 
-        if(fullscreen)
-            window.displayMode = Fullscreen;
-
+    public inline function setWindow(?width: Int, ?height: Int, displayMode: DisplayMode = DisplayMode.Windowed) {
+        window.displayMode = displayMode;
+        window.resize(width != null ? width : window.width, height != null ? height : window.height);
         #if(hldx || hlsdl)
         @:privateAccess window.window.center();
         #end
