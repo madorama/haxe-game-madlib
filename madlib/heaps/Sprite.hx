@@ -62,8 +62,6 @@ using thx.Maps;
 
     public var pause(get, set): Bool;
 
-    @:signal private var animEndTrigger: Noise;
-
     inline function get_pause()
         return switch anim {
             default:
@@ -85,7 +83,6 @@ using thx.Maps;
     }
 
     public inline function addAnim(name: String, newAnim: AseAnim) {
-        newAnim.onAnimEnd = () -> _animEndTrigger.trigger(Noise);
         newAnim.parent = this;
         animations.set(name, newAnim);
     }
@@ -147,7 +144,6 @@ using thx.Maps;
     }
 
     public function onAnimEnd(?f: () -> Void) {
-        _animEndTrigger.clear();
-        animEndTrigger.handle(if(f != null) f else() -> {});
+        anim.each(anim -> anim.onAnimEnd = if(f != null) f else() -> {});
     }
 }
