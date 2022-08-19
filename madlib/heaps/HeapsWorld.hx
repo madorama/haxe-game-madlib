@@ -89,7 +89,7 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
     function makeNeighbours() {
         neighbours.resize(0);
         for(n in currentLevel.neighbours) {
-            switch levels.getLevel(n.levelUid) {
+            switch levels.getLevel(n.levelIid) {
                 case final l if(l != null):
                     neighbours.push({
                         bounds: new Bounds(l.worldX - currentLevel.worldX, l.worldY - currentLevel.worldY, l.pxWid, l.pxHei),
@@ -128,7 +128,7 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
         }
     }
 
-    public function render(tile: h2d.Tile, layer: RenderableLayer, x: Float, y: Float, isClear: Bool = false, layerId: Int) {
+    public function render(layer: RenderableLayer, x: Float, y: Float, isClear: Bool = false, layerId: Int) {
         final tg = getTileGroup(layer.identifier, layerId);
         if(isClear)
             tg.clear();
