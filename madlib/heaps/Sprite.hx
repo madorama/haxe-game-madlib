@@ -90,7 +90,7 @@ using thx.Maps;
         animations.set(name, newAnim);
     }
 
-    public function changeAnim(name: String, loop: Bool = false, ?startFrame = 0) {
+    public function changeAnim(name: String, ?loop: Bool, ?startFrame = 0) {
         if(name == currentAnimationName)
             return;
 
@@ -99,7 +99,7 @@ using thx.Maps;
                 trace('Animation "$name" is not exists');
             case Some(v):
                 anim = Some(v);
-                v.loop = loop;
+                v.loop = if(loop != null) loop else v.loop;
                 v.currentFrame = if(startFrame != null) startFrame else 0;
                 currentAnimationName = name;
         }
