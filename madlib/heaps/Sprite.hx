@@ -147,6 +147,7 @@ using thx.Maps;
     }
 
     public function onAnimEnd(?f: () -> Void) {
+        _animEndTrigger.clear();
         animEndTrigger.handle(if(f != null) f else() -> {});
     }
 }

@@ -29,6 +29,7 @@ package madlib;
     }
 
     public inline function onValueChange(action: T -> Void) {
+        _trigger.clear();
         trigger.handle(action);
     }
 

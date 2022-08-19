@@ -49,16 +49,19 @@ enum TweenEvent {
     }
 
     public inline function start(cb: Void -> Void): Tw {
+        this._onStart.clear();
         this.onStart.handle(cb);
         return this;
     }
 
     public inline function update(cb: Float -> Void): Tw {
+        this._onUpdate.clear();
         this.onUpdate.handle(cb);
         return this;
     }
 
     public inline function complete(cb: Void -> Void): Tw {
+        this._onComplete.clear();
         this.onComplete.handle(cb);
         return this;
     }
@@ -111,8 +114,10 @@ class Tween {
 
     public function timer(frames: Float, ?onComplete: Void -> Void): Tw {
         final tween = new Tw(0, 1, 1 / frames);
-        if(onComplete != null)
+        if(onComplete != null) {
+            tween._onComplete.clear();
             tween.onComplete.handle(onComplete);
+        }
 
         tweens.push(tween);
         return tween;
@@ -121,8 +126,10 @@ class Tween {
     public function tween(start: Float, end: Float, frames: Float, delay: Int = 0, ?onUpdate: Float -> Void): Tw {
         final tween = new Tw(start, end, 1 / frames);
 
-        if(onUpdate != null)
+        if(onUpdate != null) {
+            tween._onUpdate.clear();
             tween.onUpdate.handle(onUpdate);
+        }
 
         tween.setDelay(delay);
         tweens.push(tween);
