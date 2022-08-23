@@ -28,6 +28,7 @@ enum abstract LayerId(Int) to Int {
         #if(hldx || hlsdl)
         @:privateAccess window.window.center();
         #end
+        h3d.Engine.getCurrent().resize(width, height);
     }
 
     override function init() {
