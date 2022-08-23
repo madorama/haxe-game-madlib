@@ -10,6 +10,7 @@ import madlib.geom.Bounds;
 
 using madlib.extensions.ArrayExt;
 using madlib.extensions.LdtkExt;
+using madlib.extensions.OptionExt;
 
 private typedef RenderableLayer = {
     function render(?target: h2d.TileGroup): Null<h2d.Object>;
@@ -89,14 +90,13 @@ class HeapsWorld<LevelType : ldtk.Level, T : haxe.Constraints.Constructible<Null
     function makeNeighbours() {
         neighbours.resize(0);
         for(n in currentLevel.neighbours) {
-            switch levels.getLevel(n.levelIid) {
-                case final l if(l != null):
-                    neighbours.push({
-                        bounds: new Bounds(l.worldX - currentLevel.worldX, l.worldY - currentLevel.worldY, l.pxWid, l.pxHei),
-                        dir: n.dir,
-                        level: l
-                    });
-            }
+            levels.levels.findOption(l -> l.iid == n.levelIid).each(l -> {
+                neighbours.push({
+                    bounds: new Bounds(l.worldX - currentLevel.worldX, l.worldY - currentLevel.worldY, l.pxWid, l.pxHei),
+                    dir: n.dir,
+                    level: l
+                });
+            });
         }
     }
 
