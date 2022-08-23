@@ -149,8 +149,8 @@ class Grid extends Collider {
             for(ix in 0...cellsWidth) {
                 if(!get(ix, iy))
                     continue;
-                final x = (absoluteLeft + ix) * cellWidth;
-                final y = (absoluteTop + iy) * cellHeight;
+                final x = absoluteLeft + ix * cellWidth;
+                final y = absoluteTop + iy * cellHeight;
                 graphics.drawRect(x, y, cellWidth, cellHeight);
             }
         }
