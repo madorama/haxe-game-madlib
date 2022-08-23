@@ -89,6 +89,8 @@ class Collider {
 
     public var absoluteX(get, never): Float;
     public var absoluteY(get, never): Float;
+    public var absoluteCenterX(get, never): Float;
+    public var absoluteCenterY(get, never): Float;
     public var absoluteTop(get, never): Float;
     public var absoluteBottom(get, never): Float;
     public var absoluteLeft(get, never): Float;
@@ -99,6 +101,12 @@ class Collider {
 
     function get_absoluteY()
         return if(entity != null) entity.pivotedY + position.y else position.y;
+
+    function get_absoluteCenterX()
+        return if(entity != null) absoluteX + width * .5 else position.x;
+
+    function get_absoluteCenterY()
+        return if(entity != null) absoluteY + height * .5 else position.y;
 
     function get_absoluteTop()
         return if(entity != null) entity.pivotedY + top else top;
