@@ -1,13 +1,14 @@
 package madlib.extensions;
 
+import haxe.ds.Option;
+
 using madlib.extensions.CdbExt;
 using madlib.extensions.OptionExt;
-using thx.Maps;
 
 class CdbExt {
-    public static function safeGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): T {
+    public static function safeGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): Option<T> {
         final value = indexId.get(kind);
-        return if(value == null) indexId.all[0] else value;
+        return value.ofValue();
     }
 
     #if heaps
