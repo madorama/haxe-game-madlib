@@ -29,7 +29,7 @@ class GameKey {
     }
 
     public inline function setKey(key: Int): GameKey {
-        keys.push(key);
+        if(!keys.contains(key)) keys.push(key);
         return this;
     }
 
@@ -39,7 +39,7 @@ class GameKey {
     }
 
     public inline function setPad(pad: PadKey): GameKey {
-        pads.push(pad);
+        if(!pads.contains(pad)) pads.push(pad);
         return this;
     }
 
