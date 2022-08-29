@@ -188,6 +188,19 @@ class GameScene {
         if(!canRun(scene))
             return;
 
+        // Remove destroyed entities
+        if(canRun(scene)) {
+            var next = scene.entities.head;
+            while(next.hasNext()) {
+                final n = next.next;
+                if(next.val.destroyed) {
+                    next.unlink();
+                    next.free();
+                }
+                next = n;
+            }
+        }
+
         // Before Update
         if(canRun(scene))
             scene.tw.update(dt);
