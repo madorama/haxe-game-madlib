@@ -191,7 +191,7 @@ class GameScene {
         // Remove destroyed entities
         if(canRun(scene)) {
             var next = scene.entities.head;
-            while(next.hasNext()) {
+            while(next != null && next.hasNext()) {
                 final n = next.next;
                 if(next.val.destroyed) {
                     next.unlink();
