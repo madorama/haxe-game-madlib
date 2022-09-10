@@ -71,7 +71,7 @@ enum TweenEvent {
             delay -= 1;
             return Delayed;
         }
-        if(_onStart.disposed) {
+        if(!_onStart.disposed) {
             _onStart.trigger(Noise);
             _onStart.dispose();
         }
