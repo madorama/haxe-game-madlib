@@ -182,19 +182,6 @@ class Entity {
     // Collider
     public var collider(default, null) = new Collider();
 
-    public inline function setHitbox(bounds: Bounds) {
-        if(Std.isOfType(collider, Hitbox))
-            collider = new Hitbox(bounds.width, bounds.height, bounds.left, bounds.top);
-
-        final collider = this.collider;
-        collider.left = bounds.left;
-        collider.top = bounds.top;
-        collider.width = bounds.width;
-        collider.height = bounds.height;
-
-        collider.added(this);
-    }
-
     public inline function setCollider(collider: Collider) {
         this.collider = collider;
         collider.added(this);
