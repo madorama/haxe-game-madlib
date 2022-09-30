@@ -41,16 +41,18 @@ class LdtkExt {
     public inline static function isFlipXY(self: AutoTile): Bool
         return self.flips == 3;
 
-    function getAutotileFromTiles(self: Layer_Tiles, x: Int, y: Int, stackId: Int): Null<AutoTile> {
-        final gridSize = self.gridSize;
+    public inline static function getAutotileFromTiles(self: Layer_Tiles, x: Int, y: Int, stackId: Int): Option<AutoTile> {
         final tile = @:nullSafety(Off) self.getTileStackAt(x, y)[stackId];
-        if(tile == null)
-            return null;
-        return {
-            renderX: x * gridSize,
-            renderY: y * gridSize,
-            flips: tile.flipBits,
-            tileId: tile.tileId,
+        return if(tile == null) {
+            None;
+        } else {
+            final gridSize = self.gridSize;
+            Some({
+                renderX: x * gridSize,
+                renderY: y * gridSize,
+                flips: tile.flipBits,
+                tileId: tile.tileId,
+            });
         }
     }
 
