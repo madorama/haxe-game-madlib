@@ -4,9 +4,19 @@ import hxmath.math.Vector2;
 import madlib.geom.Bounds;
 import thx.error.NotImplemented;
 
+enum ColliderType {
+    Circle;
+    Grid;
+    Hitbox;
+    List;
+    Polygon;
+}
+
 class Collider {
     public var entity(default, null): Null<Entity> = null;
     public var position = Vector2.zero;
+
+    var type = Circle;
 
     @:isVar public var rotation(get, set): Float;
 
@@ -154,19 +164,18 @@ class Collider {
     public inline function collideEntity(entity: Entity): Bool
         return if(entity.collider == null) false else collide(entity.collider);
 
-    public function collide<T: Collider>(c: T): Bool
-        return if(Std.isOfType(c, Circle)) {
-            collideCircle(cast c);
-        } else if(Std.isOfType(c, Grid)) {
-            collideGrid(cast c);
-        } else if(Std.isOfType(c, Hitbox)) {
-            collideHitbox(cast c);
-        } else if(Std.isOfType(c, List)) {
-            collideList(cast c);
-        } else if(Std.isOfType(c, Polygon)) {
-            collidePolygon(cast c);
-        } else {
-            throw new NotImplemented();
+    public function collide(c: Collider): Bool
+        return switch c.type {
+            case Circle:
+                collideCircle(cast c);
+            case Grid:
+                collideGrid(cast c);
+            case Hitbox:
+                collideHitbox(cast c);
+            case List:
+                collideList(cast c);
+            case Polygon:
+                collidePolygon(cast c);
         }
 
     public function collidePoint(p: Vector2): Bool

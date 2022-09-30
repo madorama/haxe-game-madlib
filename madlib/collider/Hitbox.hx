@@ -9,6 +9,7 @@ class Hitbox extends Collider {
         this.width = width;
         this.height = height;
         position.set(x, y);
+        type = Hitbox;
     }
 
     override function get_left(): Float

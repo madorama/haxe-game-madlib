@@ -12,6 +12,7 @@ class ColliderList extends Collider {
     public function new(colliders: Array<Collider>) {
         super();
         this.colliders = colliders;
+        type = List;
     }
 
     public function add(adds: Array<Collider>) {

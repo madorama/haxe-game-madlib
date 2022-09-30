@@ -40,6 +40,8 @@ class Polygon extends Collider {
         calcBounds();
 
         position.set(x, y);
+
+        type = Polygon;
     }
 
     function calcBounds() {
