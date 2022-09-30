@@ -12,8 +12,6 @@ class GameScene {
 
     public var paused(default, null): Bool = false;
     public var destroyed(default, null): Bool = false;
-    public final gridSize = 16;
-    public final worldGrid: Map<String, Array<Entity>> = [];
 
     final tw = new Tween();
 
@@ -28,9 +26,7 @@ class GameScene {
 
     public function initOnceBeforeUpdate() {}
 
-    public function beforeUpdate(dt: Float) {
-        resetWorldGrid();
-    }
+    public function beforeUpdate(dt: Float) {}
 
     public function update(dt: Float) {}
 
@@ -124,57 +120,25 @@ class GameScene {
 
     public function clear() {
         entities.clear(true);
-        worldGrid.clear();
     }
 
     public inline function findEntities<T: Entity>(type: Class<T>): Array<T>
         return entities.filter(e -> Std.isOfType(e, type)).map(e -> cast e).toArray();
 
-    public function resetWorldGrid() {
-        worldGrid.clear();
-
+    public function getEntitiesInBounds(bounds: Bounds): Array<Entity> {
+        final ret = [];
         for(e in entities) {
-            final l = Math.floor(e.collider.bounds.left / gridSize);
-            final t = Math.floor(e.collider.bounds.top / gridSize);
-            final r = Math.floor(e.collider.bounds.right / gridSize);
-            final b = Math.floor(e.collider.bounds.bottom / gridSize);
-            for(x in l...r + 1) {
-                for(y in t...b + 1) {
-                    final es = worldGrid.getAltSet('$x,$y', []);
-                    es.push(e);
-                }
-            }
-        }
-    }
-
-    public function getWorldGridEntitiesInBounds(bounds: Bounds): Array<Entity> {
-        final l = Math.floor(bounds.left / gridSize);
-        final t = Math.floor(bounds.top / gridSize);
-        final r = Math.floor(bounds.right / gridSize);
-        final b = Math.floor(bounds.bottom / gridSize);
-        var ret = [];
-        for(ix in l...r + 1) {
-            for(iy in t...b + 1) {
-                final es = worldGrid.get('$ix,$iy');
-                if(es != null)
-                    ret = ret.concat(es);
-            }
+            if(e.collider.collideBounds(bounds))
+                ret.push(e);
         }
         return ret;
     }
 
-    public function getWorldGridEntitiesInTag(tag: String, bounds: Bounds): Array<Entity> {
-        final l = Math.floor(bounds.left / gridSize);
-        final t = Math.floor(bounds.top / gridSize);
-        final r = Math.floor(bounds.right / gridSize);
-        final b = Math.floor(bounds.bottom / gridSize);
-        var ret = [];
-        for(ix in l...r + 1) {
-            for(iy in t...b + 1) {
-                final es = worldGrid.get('$ix,$iy');
-                if(es != null)
-                    ret = ret.concat(es.filter(e -> e.existTag(tag)));
-            }
+    public function getEntitiesInTag(tag: String, bounds: Bounds): Array<Entity> {
+        final ret = [];
+        for(e in entities) {
+            if(e.existTag(tag))
+                ret.push(e);
         }
         return ret;
     }

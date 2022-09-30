@@ -182,19 +182,6 @@ class Entity {
     // Collider
     public var collider(default, null) = new Collider();
 
-    public inline function setHitbox(bounds: Bounds) {
-        if(Std.isOfType(collider, Hitbox))
-            collider = new Hitbox(bounds.width, bounds.height, bounds.left, bounds.top);
-
-        final collider = this.collider;
-        collider.left = bounds.left;
-        collider.top = bounds.top;
-        collider.width = bounds.width;
-        collider.height = bounds.height;
-
-        collider.added(this);
-    }
-
     public inline function setCollider(collider: Collider) {
         this.collider = collider;
         collider.added(this);
@@ -225,7 +212,7 @@ class Entity {
     }
 
     public function checkTag(tag: String): Bool
-        return if(scene == null) false else scene.getWorldGridEntitiesInTag(tag, collider.bounds).any(e -> Collide.check(this, e));
+        return if(scene == null) false else scene.getEntitiesInTag(tag, collider.bounds).any(e -> Collide.check(this, e));
 
     public inline function checkTagAt(tag: String, dx: Float, dy: Float): Bool {
         x += dx;
@@ -249,7 +236,7 @@ class Entity {
     }
 
     public function collideTag(tag: String): Option<Entity>
-        return if(scene == null) None else scene.getWorldGridEntitiesInTag(tag, collider.bounds).findOption(e -> Collide.check(this, e));
+        return if(scene == null) None else scene.getEntitiesInTag(tag, collider.bounds).findOption(e -> Collide.check(this, e));
 
     public inline function collideTagAt(tag: String, dx: Float, dy: Float): Option<Entity> {
         x += dx;
