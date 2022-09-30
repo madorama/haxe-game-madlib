@@ -30,7 +30,6 @@ class Grid extends Collider {
         }
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
-        type = Grid;
     }
 
     public static function create(cellWidth: Float, cellHeight: Float, data: Array<Array<Bool>>): Grid {
@@ -228,4 +227,7 @@ class Grid extends Collider {
     override function collideList(list: ColliderList): Bool {
         return list.collideGrid(this);
     }
+
+    override function collidePolygon(polygon: Polygon): Bool
+        return polygon.collideGrid(this);
 }

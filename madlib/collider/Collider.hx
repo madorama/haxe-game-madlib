@@ -2,18 +2,19 @@ package madlib.collider;
 
 import hxmath.math.Vector2;
 import madlib.geom.Bounds;
-
-enum ColliderType {
-    Circle;
-    Grid;
-    Hitbox;
-    List;
-}
+import thx.error.NotImplemented;
 
 class Collider {
     public var entity(default, null): Null<Entity> = null;
     public var position = Vector2.zero;
-    public var type(default, null) = Circle;
+
+    @:isVar public var rotation(get, set): Float;
+
+    inline function get_rotation(): Float
+        return rotation;
+
+    function set_rotation(v: Float): Float
+        return rotation = v;
 
     @:isVar public var width(get, set): Float = 0;
     @:isVar public var height(get, set): Float = 0;
@@ -127,8 +128,8 @@ class Collider {
     inline function get_bounds() {
         innerBounds.x = absoluteLeft;
         innerBounds.y = absoluteTop;
-        innerBounds.width = width;
-        innerBounds.height = height;
+        innerBounds.width = absoluteRight - absoluteLeft;
+        innerBounds.height = absoluteBottom - absoluteTop;
         return innerBounds;
     }
 
@@ -153,16 +154,19 @@ class Collider {
     public inline function collideEntity(entity: Entity): Bool
         return if(entity.collider == null) false else collide(entity.collider);
 
-    public function collide(c: Collider): Bool
-        return switch c.type {
-            case Circle:
-                collideCircle(cast c);
-            case Grid:
-                collideGrid(cast c);
-            case Hitbox:
-                collideHitbox(cast c);
-            case List:
-                collideList(cast c);
+    public function collide<T: Collider>(c: T): Bool
+        return if(Std.isOfType(c, Circle)) {
+            collideCircle(cast c);
+        } else if(Std.isOfType(c, Grid)) {
+            collideGrid(cast c);
+        } else if(Std.isOfType(c, Hitbox)) {
+            collideHitbox(cast c);
+        } else if(Std.isOfType(c, List)) {
+            collideList(cast c);
+        } else if(Std.isOfType(c, Polygon)) {
+            collidePolygon(cast c);
+        } else {
+            throw new NotImplemented();
         }
 
     public function collidePoint(p: Vector2): Bool
@@ -184,6 +188,9 @@ class Collider {
         return false;
 
     public function collideList(list: ColliderList): Bool
+        return false;
+
+    public function collidePolygon(polygon: Polygon): Bool
         return false;
 
     public function clone(): Collider

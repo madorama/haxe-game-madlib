@@ -63,7 +63,7 @@ class Circle extends Collider {
         return Collide.circleVsPoint(absolutePosition, radius, p);
 
     override function collideBounds(bounds: Bounds): Bool
-        return Collide.circleVsBounds(absolutePosition, radius, bounds);
+        return Collide.boundsVsCircle(bounds, absolutePosition, radius);
 
     override function collideLine(from: Vector2, to: Vector2): Bool
         return Collide.circleVsLine(absolutePosition, radius, from, to);
@@ -80,4 +80,7 @@ class Circle extends Collider {
 
     override function collideList(list: ColliderList): Bool
         return list.collideCircle(this);
+
+    override function collidePolygon(polygon: Polygon): Bool
+        return polygon.collideCircle(this);
 }

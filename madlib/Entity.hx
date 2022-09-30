@@ -183,7 +183,7 @@ class Entity {
     public var collider(default, null) = new Collider();
 
     public inline function setHitbox(bounds: Bounds) {
-        if(collider.type != Hitbox)
+        if(Std.isOfType(collider, Hitbox))
             collider = new Hitbox(bounds.width, bounds.height, bounds.left, bounds.top);
 
         final collider = this.collider;

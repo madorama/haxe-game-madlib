@@ -118,32 +118,74 @@ class Collide {
     public inline static function circleVsCircle(p1: Vector2, r1: Float, p2: Vector2, r2: Float): Bool
         return Math.distanceSquared(p1.x, p1.y, p2.x, p2.y) < (r1 + r2) * (r1 + r2);
 
-    public inline static function circleVsRect(pos: Vector2, radius: Float, x: Float, y: Float, w: Float, h: Float): Bool
-        return rectVsCircle(x, y, w, h, pos, radius);
-
-    public inline static function circleVsBounds(pos: Vector2, radius: Float, bounds: Bounds): Bool
-        return boundsVsCircle(bounds, pos, radius);
-
-    public inline static function rectVsCircle(x: Float, y: Float, w: Float, h: Float, pos: Vector2, radius: Float): Bool {
-        final rect = differ.shapes.Polygon.rectangle(x, y, w, h, false);
+    public inline static function boundsVsCircle(bounds: Bounds, pos: Vector2, radius: Float): Bool {
+        final rect = differ.shapes.Polygon.rectangle(bounds.left, bounds.top, bounds.width, bounds.height, false);
         return rect.test(pos.toCircle(radius)) != null;
     }
 
-    public inline static function boundsVsCircle(bounds: Bounds, pos: Vector2, radius: Float): Bool
-        return rectVsCircle(bounds.left, bounds.top, bounds.width, bounds.height, pos, radius);
-
-    public inline static function rectVsLine(x: Float, y: Float, w: Float, h: Float, from: Vector2, to: Vector2): Bool {
-        final rect = differ.shapes.Polygon.rectangle(x, y, w, h, false);
+    public inline static function boundsVsLine(bounds: Bounds, from: Vector2, to: Vector2): Bool {
+        final rect = differ.shapes.Polygon.rectangle(bounds.left, bounds.top, bounds.width, bounds.height, false);
         final ray = from.createRayFromVector(to);
         return rect.testRay(ray) != null;
     }
 
-    public inline static function boundsVsLine(bounds: Bounds, from: Vector2, to: Vector2): Bool
-        return rectVsLine(bounds.left, bounds.top, bounds.width, bounds.height, from, to);
-
-    public inline static function rectVsPoint(x: Float, y: Float, w: Float, h: Float, point: Vector2): Bool
-        return boundsVsPoint(new Bounds(x, y, w, h), point);
-
     public inline static function boundsVsPoint(bounds: Bounds, point: Vector2): Bool
         return bounds.contains(point);
+
+    public inline static function polyVsPoint(pos: Vector2, polygon: differ.shapes.Polygon, p: Vector2) {
+        final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
+        return differ.Collision.pointInPoly(p.x, p.y, newPoly);
+    }
+
+    public inline static function polyVsLine(pos: Vector2, polygon: differ.shapes.Polygon, from: Vector2, to: Vector2): Bool {
+        final ray = from.createRayFromVector(to);
+        final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
+        final test = differ.Collision.rayWithShape(ray, newPoly);
+        return test != null;
+    }
+
+    public inline static function polyVsCircle(pos: Vector2, polygon: differ.shapes.Polygon, circlePos: Vector2, radius: Float): Bool {
+        final circle = new differ.shapes.Circle(circlePos.x, circlePos.y, radius);
+        final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
+        final test = newPoly.testCircle(circle);
+        return test != null;
+    }
+
+    public inline static function polyVsRect(pos: Vector2, polygon: differ.shapes.Polygon, x: Float, y: Float, w: Float, h: Float, rotation: Float): Bool {
+        final rect = differ.shapes.Polygon.rectangle(x, y, w, h);
+        rect.rotation = rotation;
+        final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
+        final test = differ.Collision.shapeWithShape(newPoly, rect);
+        return test != null;
+    }
+
+    public inline static function polyVsPoly(posA: Vector2, a: differ.shapes.Polygon, posB: Vector2, b: differ.shapes.Polygon): Bool {
+        final newA = new differ.shapes.Polygon(posA.x, posA.y, a.transformedVertices);
+        final newB = new differ.shapes.Polygon(posB.x, posB.y, b.transformedVertices);
+        final test = differ.Collision.shapeWithShape(newA, newB);
+        return test != null;
+    }
+
+    inline static function verticesToPolygon(vertices: Array<Vector2>): differ.shapes.Polygon {
+        final vs = vertices.map(v -> new differ.math.Vector(v.x, v.y));
+        return new differ.shapes.Polygon(0, 0, vs);
+    }
+
+    public inline static function vertsVsPoint(vertices: Array<Vector2>, p: Vector2): Bool
+        return polyVsPoint(Vector2.zero, verticesToPolygon(vertices), p);
+
+    public inline static function vertsVsCircle(vertices: Array<Vector2>, pos: Vector2, radius: Float): Bool
+        return polyVsCircle(Vector2.zero, verticesToPolygon(vertices), pos, radius);
+
+    public inline static function vertsVsLine(vertices: Array<Vector2>, from: Vector2, to: Vector2): Bool
+        return polyVsLine(Vector2.zero, verticesToPolygon(vertices), from, to);
+
+    public inline static function vertsVsRect(vertices: Array<Vector2>, x: Float, y: Float, w: Float, h: Float, rotation: Float): Bool
+        return polyVsRect(Vector2.zero, verticesToPolygon(vertices), x, y, w, h, rotation);
+
+    public inline static function vertsVsPoly(vertices: Array<Vector2>, pos: Vector2, polygon: differ.shapes.Polygon): Bool
+        return polyVsPoly(Vector2.zero, verticesToPolygon(vertices), pos, polygon);
+
+    public inline static function vertsVsVerts(a: Array<Vector2>, b: Array<Vector2>): Bool
+        return vertsVsPoly(a, Vector2.zero, verticesToPolygon(b));
 }

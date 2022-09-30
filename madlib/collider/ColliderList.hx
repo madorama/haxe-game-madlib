@@ -12,7 +12,6 @@ class ColliderList extends Collider {
     public function new(colliders: Array<Collider>) {
         super();
         this.colliders = colliders;
-        type = List;
     }
 
     public function add(adds: Array<Collider>) {
@@ -183,4 +182,7 @@ class ColliderList extends Collider {
         }
         return false;
     }
+
+    override function collidePolygon(polygon: Polygon): Bool
+        return colliders.any(c -> c.collidePolygon(polygon));
 }

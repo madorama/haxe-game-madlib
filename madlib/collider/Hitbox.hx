@@ -9,7 +9,6 @@ class Hitbox extends Collider {
         this.width = width;
         this.height = height;
         position.set(x, y);
-        type = Hitbox;
     }
 
     override function get_left(): Float
@@ -83,16 +82,16 @@ class Hitbox extends Collider {
         }
 
     override function collidePoint(p: Vector2): Bool
-        return Collide.rectVsPoint(absoluteLeft, absoluteTop, width, height, p);
+        return Collide.boundsVsPoint(bounds, p);
 
     override function collideBounds(bounds: Bounds): Bool
         return absoluteRight > bounds.left && absoluteBottom > bounds.top && absoluteLeft < bounds.right && absoluteTop < bounds.bottom;
 
     override function collideLine(from: Vector2, to: Vector2): Bool
-        return Collide.rectVsLine(absoluteLeft, absoluteTop, width, height, from, to);
+        return Collide.boundsVsLine(bounds, from, to);
 
     override function collideCircle(circle: Circle): Bool
-        return Collide.rectVsCircle(absoluteLeft, absoluteTop, width, height, circle.absolutePosition, circle.radius);
+        return Collide.boundsVsCircle(bounds, circle.absolutePosition, circle.radius);
 
     override function collideGrid(grid: Grid): Bool
         return grid.collideBounds(bounds);
@@ -102,4 +101,8 @@ class Hitbox extends Collider {
 
     override function collideList(collider: ColliderList): Bool
         return collider.collideHitbox(this);
+
+    override function collidePolygon(polygon: Polygon): Bool {
+        return polygon.collideBounds(bounds);
+    }
 }
