@@ -69,12 +69,9 @@ abstract Version(VersionData) from VersionData to VersionData {
         patch: data[2]
     });
 
-    static final tagsParser = hyphen.then(~/[a-zA-Z0-9]+/.regexp()).many1();
+    static final tagsParser = hyphen.then(~/[a-zA-Z0-9]+/.regexp()).many();
 
-    static final versionParser = Parser.alt([
-        numsParser.flatMap(nums -> tagsParser.skip(eof()).map(tags -> VersionData(nums.major, nums.minor, nums.patch, tags))),
-        numsParser.skip(eof()).map(nums -> VersionData(nums.major, nums.minor, nums.patch, [])),
-    ]);
+    static final versionParser = numsParser.flatMap(nums -> tagsParser.map(tags -> VersionData(nums.major, nums.minor, nums.patch, tags))).skip(eof());
 
     public function new(major: Int = 0, minor: Int = 0, patch: Int = 0, ?tags: Array<String>) {
         if(major < 0)
