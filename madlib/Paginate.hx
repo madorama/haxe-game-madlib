@@ -2,9 +2,15 @@ package madlib;
 
 @:structInit
 class Paginate<T> {
-    var items: Array<T>;
+    @:isVar public var items(default, set): Array<T> = [];
 
-    @:isVar public var onePageItemCount(default, set): Int;
+    inline function set_items(v: Array<T>): Array<T> {
+        items = v;
+        reflesh();
+        return v;
+    }
+
+    @:isVar public var onePageItemCount(default, set): Int = 0;
 
     inline function set_onePageItemCount(v: Int): Int {
         onePageItemCount = v;

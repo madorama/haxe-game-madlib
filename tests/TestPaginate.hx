@@ -125,4 +125,12 @@ class TestPaginate extends utest.Test {
         p.pageAt(-2);
         Assert.same([6, 7, 8], p.currentPageItems);
     }
+
+    function testSetItems() {
+        final p = new Paginate(Util.range(0, 5), 2);
+        Assert.same([0, 1], p.currentPageItems);
+
+        p.items = Util.range(5, 5);
+        Assert.same([5], p.currentPageItems);
+    }
 }
