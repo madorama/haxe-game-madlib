@@ -6,7 +6,7 @@ class Paginate<T> {
 
     inline function set_items(v: Array<T>): Array<T> {
         items = v;
-        reflesh();
+        refresh();
         return v;
     }
 
@@ -14,7 +14,7 @@ class Paginate<T> {
 
     inline function set_onePageItemCount(v: Int): Int {
         onePageItemCount = v;
-        reflesh();
+        refresh();
         return onePageItemCount;
     }
 
@@ -29,17 +29,17 @@ class Paginate<T> {
     public function new(items: Array<T>, onePageItemCount: Int = 10) {
         this.items = items;
         this.onePageItemCount = onePageItemCount;
-        reflesh();
+        refresh();
     }
 
-    inline function reflesh() {
+    inline function refresh() {
         currentPageItems = getPageItems(currentPage);
         maxPage = if(onePageItemCount == 0) 0 else Math.max(0, Math.floor((items.length - 1) / onePageItemCount));
     }
 
     public inline function changePage(n: Int) {
         currentPage = if(pageLoop) Math.posMod(n, maxPage + 1) else Math.clamp(n, 0, maxPage);
-        reflesh();
+        refresh();
     }
 
     public inline function pageAt(n: Int) {
