@@ -80,7 +80,7 @@ class GameKey {
                 repeatTimer = 0;
                 repeatCount++;
             } else
-                repeatTimer += hxd.Timer.dt;
+                repeatTimer += hxd.Timer.tmod;
             result;
         } else {
             repeatTimer = 0.;
@@ -92,19 +92,19 @@ class GameKey {
     var holdTimer = 0.;
     var completeHold = false;
 
-    public inline function indicateHoldProgress(?decisionMs: Float): Float {
-        if(decisionMs == null) decisionMs = 30 / hxd.Timer.wantedFPS;
+    public inline function indicateHoldProgress(?decisionFrame: Float): Float {
+        if(decisionFrame == null) decisionFrame = 30;
         if(isDown())
-            holdTimer = Math.clamp(holdTimer + hxd.Timer.dt, 0, decisionMs);
+            holdTimer = Math.clamp(holdTimer + hxd.Timer.tmod, 0, decisionFrame);
         else
             holdTimer = 0;
-        return holdTimer / decisionMs;
+        return holdTimer / decisionFrame;
     }
 
-    public inline function isHold(?decisionMs: Float): Bool {
+    public inline function isHold(?decisionFrame: Float): Bool {
         return if(holdTimer > 0.)
             if(!completeHold)
-                completeHold = indicateHoldProgress(decisionMs) >= 1;
+                completeHold = indicateHoldProgress(decisionFrame) >= 1;
             else
                 false;
         else
@@ -115,12 +115,8 @@ class GameKey {
 class Controller {
     @:nullSafety(Off) public static var pad: GamePad;
 
-    public static var repeatInterval(default, null) = 4 / hxd.Timer.wantedFPS;
-    public static var firstRepeatInterval(default, null) = 16 / hxd.Timer.wantedFPS;
-
-    public inline static function setRepeatInterval(frame: Float) {
-        repeatInterval = frame / hxd.Timer.wantedFPS;
-    }
+    public static var repeatInterval(default, default) = 4.;
+    public static var firstRepeatInterval(default, default) = 16.;
 
     public static final a = new GameKey();
     public static final b = new GameKey();
