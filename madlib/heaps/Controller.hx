@@ -74,7 +74,7 @@ class GameKey {
         if(firstRepeatInterval == null) firstRepeatInterval = Controller.firstRepeatInterval;
         if(repeatInterval == null) repeatInterval = Controller.repeatInterval;
         return if(isDown()) {
-            var result = if(repeatTimer > 0.) false else true;
+            final result = if(repeatTimer > 0.) false else true;
             final interval = if(repeatCount == 0) firstRepeatInterval else repeatInterval;
             if(repeatTimer >= interval) {
                 repeatTimer = 0;
