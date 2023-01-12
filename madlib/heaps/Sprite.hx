@@ -32,7 +32,7 @@ using thx.Maps;
 
     public var timeScale = 1.;
 
-    public var pixelPerfect = true;
+    public var pixelPerfect = false;
 
     var oldAnim: Option<AseAnim> = None;
     var oldPivotX = Math.NaN;
@@ -130,8 +130,12 @@ using thx.Maps;
 
     override function sync(ctx: RenderContext) {
         super.sync(ctx);
-        if(pixelPerfect)
+
+        if(pixelPerfect) {
             setPosition(Math.round(x), Math.round(y));
+        } else {
+            setPosition(x, y);
+        }
 
         if(isChange())
             syncAnimations(ctx);

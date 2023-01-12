@@ -70,10 +70,10 @@ class Entity {
     public var pivotedY(get, never): Float;
 
     inline function get_pivotedX()
-        return Math.round(x - pivotX * width);
+        return x - pivotX * width;
 
     inline function get_pivotedY()
-        return Math.round(y - pivotY * height);
+        return y - pivotY * height;
 
     public var centerX(get, never): Float;
     public var centerY(get, never): Float;
