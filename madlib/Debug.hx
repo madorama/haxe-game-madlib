@@ -28,7 +28,7 @@ class Debug {
     }
 
     @:nullSafety(Off)
-    public inline static function errorLog(value: T, ?pos: PosInfos): T {
+    public inline static function errorLog<T>(value: T, ?pos: PosInfos): T {
         #if hl
         hl.UI.dialog("Error log", '${value}\n${pos.fileName}:${pos.lineNumber}', EnumFlags.ofInt(2));
         #else
