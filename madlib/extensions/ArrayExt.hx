@@ -3,6 +3,7 @@ package madlib.extensions;
 import haxe.ds.Option;
 import madlib.Tuple.Tuple2;
 import thx.Ord;
+import thx.Set;
 
 using madlib.extensions.ArrayExt;
 
@@ -325,6 +326,15 @@ class IntArrayExt {
 
     public inline static function min(self: Array<Int>): Option<Int>
         return self.minBy(thx.Ints.order);
+
+    public inline static function unique<T>(self: Array<T>): Array<T> {
+        final result = [];
+        for(x in self) {
+            if(result.find((y) -> thx.Dynamics.compare(x, y) == 0) == null)
+                result.push(x);
+        }
+        return result;
+    }
 }
 
 class FloatArrayExt {
@@ -342,4 +352,36 @@ class FloatArrayExt {
 
     public inline static function min(self: Array<Float>): Option<Float>
         return self.minBy(thx.Floats.order);
+}
+
+class GroupByExt {
+    public inline static function groupBy<K: {}, V>(self: Array<V>, f: V -> K): Map<K, Array<V>> {
+        final map = new Map<K, Array<V>>();
+        for(x in self) {
+            final key = f(x);
+            final value = map.get(key);
+            if(value != null) {
+                value.push(x);
+            } else {
+                map.set(key, [x]);
+            }
+        }
+        return map;
+    }
+}
+
+class GroupByIntExt {
+    public inline static function groupBy<V>(self: Array<V>, f: V -> Int): Map<Int, Array<V>> {
+        final map = new Map<Int, Array<V>>();
+        for(x in self) {
+            final key = f(x);
+            final value = map.get(key);
+            if(value != null) {
+                value.push(x);
+            } else {
+                map.set(key, [x]);
+            }
+        }
+        return map;
+    }
 }
