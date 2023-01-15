@@ -53,11 +53,11 @@ class Math {
     public inline static function percent(v: Float, min: Float, max: Float): Float {
         if(max - min == 0)
             throw new thx.Error("divide by zero");
-        return clamp((v - min) / (max - min), 0, 1);
+        return (v - min) / (max - min);
     }
 
     public inline static function percentToValue(p: Float, min: Float, max: Float)
-        return min + (max - min) * clamp(p, 0, 1);
+        return min + (max - min) * p;
 
     public inline static function sign(a: Float): Int
         return if(a > 0.) 1 else if(a < 0.) -1 else 0;
