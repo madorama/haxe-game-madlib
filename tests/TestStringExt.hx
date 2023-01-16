@@ -48,6 +48,8 @@ class TestStringExt extends utest.Test {
 
     function testWords() {
         Assert.same(["Lorem", "ipsum", "dolor"], "Lorem ipsum\ndolor".words());
+        Assert.same(["Lorem", "ipsum", "", "dolor"], "Lorem ipsum\n\ndolor".words());
+        Assert.same(["", "Lorem", "ipsum", "dolor"], " Lorem ipsum\ndolor".words());
     }
 
     function testUnwords() {

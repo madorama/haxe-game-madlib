@@ -36,17 +36,18 @@ class StringExt {
 
     public inline static function words(self: String): Array<String> {
         final result = [];
-        var temp = "";
-        for(x in toArray(self)) {
-            if(isSpace(x)) {
-                result.push(temp);
-                temp = "";
-                continue;
+        var start = 0;
+        var length = 0;
+        var i = 0;
+        while(i < self.length) {
+            if(isSpace(self.charAt(i))) {
+                length = i - start;
+                result.push(self.substr(start, length));
+                start = i + 1;
             }
-            temp += x;
+            i++;
         }
-        if(temp != "")
-            result.push(temp);
+        result.push(self.substr(start, self.length));
         return result;
     }
 
