@@ -335,6 +335,18 @@ class IntArrayExt {
         }
         return result;
     }
+
+    public inline static function removeAt<T>(self: Array<T>, index: Int): Array<T> {
+        return if(index == 0) {
+            self.drop(1);
+        } else if(index == self.length - 1) {
+            self.take(self.length - 1);
+        } else if(Math.inRange(index, 0, self.length - 1)) {
+            self.take(index).concat(self.drop(index + 1));
+        } else {
+            self.copy();
+        }
+    }
 }
 
 class FloatArrayExt {
