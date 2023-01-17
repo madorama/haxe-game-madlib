@@ -80,7 +80,7 @@ class GameKey {
                 repeatTimer = 0;
                 repeatCount++;
             } else
-                repeatTimer += hxd.Timer.tmod;
+                repeatTimer += App.tmod;
             result;
         } else {
             repeatTimer = 0.;
@@ -95,7 +95,7 @@ class GameKey {
     public inline function indicateHoldProgress(?decisionFrame: Float): Float {
         if(decisionFrame == null) decisionFrame = 30;
         if(isDown())
-            holdTimer = Math.clamp(holdTimer + hxd.Timer.tmod, 0, decisionFrame);
+            holdTimer = Math.clamp(holdTimer + App.tmod, 0, decisionFrame);
         else
             holdTimer = 0;
         return holdTimer / decisionFrame;

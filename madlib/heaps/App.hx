@@ -17,6 +17,8 @@ enum abstract LayerId(Int) to Int {
 
     public final uiCamera = new h2d.Camera();
 
+    public static var tmod: Float = 1 / 60;
+
     public function new() {
         super();
         window = Window.getInstance();
@@ -45,6 +47,8 @@ enum abstract LayerId(Int) to Int {
         super.update(dt);
         @:privateAccess Input.mouseX = s2d.mouseX;
         @:privateAccess Input.mouseY = s2d.mouseY;
+
+        App.tmod = hxd.Timer.tmod;
 
         GamePad.update();
     }
