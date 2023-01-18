@@ -170,8 +170,8 @@ class Grid extends Collider {
         if(bounds.overlaps(this.bounds)) {
             final x = Std.int((bounds.left - absoluteLeft) / cellWidth);
             final y = Std.int((bounds.top - absoluteTop) / cellHeight);
-            final w = Std.int((bounds.right - absoluteLeft - 1) / cellWidth) - x + 1;
-            final h = Std.int((bounds.bottom - absoluteTop - 1) / cellHeight) - y + 1;
+            final w = Std.int(Math.ceil(bounds.right - absoluteLeft - 1) / cellWidth) - x + 1;
+            final h = Std.int(Math.ceil(bounds.bottom - absoluteTop - 1) / cellHeight) - y + 1;
             return checkRect(x, y, w, h);
         }
         return false;
