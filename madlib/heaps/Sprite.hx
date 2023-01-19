@@ -1,12 +1,14 @@
 package madlib.heaps;
 
 import aseprite.AseAnim;
+import aseprite.Aseprite;
 import h2d.Object;
 import h2d.RenderContext;
 import h2d.col.Bounds;
 import haxe.ds.Option;
 import tink.core.Noise;
 
+using madlib.extensions.AsepriteExt;
 using madlib.extensions.OptionExt;
 using thx.Maps;
 
@@ -85,6 +87,10 @@ using thx.Maps;
     public inline function addAnim(name: String, newAnim: AseAnim) {
         newAnim.parent = this;
         animations.set(name, newAnim);
+    }
+
+    public inline function addAnimWithAseprite(ase: Aseprite, name: String, loop = false) {
+        addAnim(name, ase.getAnimationFromTag(name, loop));
     }
 
     public function changeAnim(name: String, ?loop: Bool, ?startFrame = 0) {
