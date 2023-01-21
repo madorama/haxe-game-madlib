@@ -65,7 +65,7 @@ class Paginate<T> {
         return index % onePageItemCount + currentPage * onePageItemCount;
 
     public inline function getItemInPage(index: Int): Option<T> {
-        final item = currentPageItems[calcInPageIndex(index)];
+        final item = currentPageItems[index];
         return if(item != null) Some(item) else None;
     }
 }
