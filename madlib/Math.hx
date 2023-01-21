@@ -122,17 +122,23 @@ class Math {
     public inline static function exp(a: Float): Float
         return std.Math.exp(a);
 
-    public inline static function round(v: Float): Int
+    public inline static function fround(v: Float): Float
+        return std.Math.fround(v);
+
+    public inline static function round(v: Float): Float
         return #if heaps hxd.Math.round(v) #else std.Math.round(v) #end;
 
     public inline static function roundTo(a: Float, decimals: Int): Float {
         return if(decimals <= 0) {
-            round(a);
+            fround(a);
         } else {
             final x = pow(10, decimals);
             std.Math.fround(a * x) / x;
         }
     }
+
+    public inline static function fceil(v: Float): Float
+        return std.Math.fceil(v);
 
     public inline static function ceil(v: Float): Int
         return #if heaps hxd.Math.ceil(v) #else std.Math.ceil(v) #end;
@@ -145,6 +151,9 @@ class Math {
             std.Math.fceil(a * x) / x;
         }
     }
+
+    public inline static function ffloor(v: Float): Float
+        return std.Math.ffloor(v);
 
     public inline static function floor(v: Float): Int
         return #if heaps hxd.Math.floor(v) #else std.Math.floor(v) #end;
