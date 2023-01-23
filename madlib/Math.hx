@@ -125,7 +125,7 @@ class Math {
     public inline static function fround(v: Float): Float
         return std.Math.fround(v);
 
-    public inline static function round(v: Float): Float
+    public inline static function round(v: Float): Int
         return #if heaps hxd.Math.round(v) #else std.Math.round(v) #end;
 
     public inline static function roundTo(a: Float, decimals: Int): Float {
