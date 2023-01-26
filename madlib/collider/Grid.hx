@@ -180,44 +180,21 @@ class Grid extends Collider {
     }
 
     override function intersectLine(from: Vector2, to: Vector2): Option<HitPosition> {
-        final baseFrom = from;
-        final baseTo = to;
+        final baseFrom = from.clone();
+        final baseTo = to.clone();
         var from = from - absolutePosition;
         var to = to - absolutePosition;
-        from = new Vector2(from.x / cellWidth, from.y / cellHeight);
-        to = new Vector2(to.x / cellWidth, to.y / cellHeight);
-
-        var x0 = Std.int(from.x);
-        var y0 = Std.int(from.y);
-        var x1 = Std.int(to.x);
-        var y1 = Std.int(to.y);
-        final dx = Math.abs(x1 - x0);
-        final dy = Math.abs(y1 - y0);
-        final sx = if(x0 < x1) 1 else -1;
-        final sy = if(y0 < y1) 1 else -1;
-
-        var err = dx - dy;
-
-        while(true) {
-            if(get(x0, y0)) {
-                return Collide.intersectBoundsVsLine(new Bounds(absoluteX + x0 * cellWidth, absoluteY + y0 * cellHeight, cellWidth, cellHeight), baseFrom,
-                    baseTo);
-            }
-
-            if(x0 == x1 && y0 == y1)
-                break;
-
-            final e2 = 2 * err;
-            if(e2 > -dy) {
-                err -= dy;
-                x0 += sx;
-            }
-            if(e2 < dx) {
-                err += dx;
-                y0 += sy;
+        from = new Vector2(Math.floor(from.x / cellWidth), Math.floor(from.y / cellHeight));
+        to = new Vector2(Math.floor(to.x / cellWidth), Math.floor(to.y / cellHeight));
+        final lines = dn.Bresenham.getThickLine(Std.int(from.x), Std.int(from.y), Std.int(to.x), Std.int(to.y), true);
+        for(p in lines) {
+            if(!get(p.x, p.y)) continue;
+            switch Collide.intersectBoundsVsLine(new Bounds(p.x * cellWidth, p.y * cellHeight, cellWidth, cellHeight), baseFrom, baseTo) {
+                case None:
+                case Some(hit):
+                    return Some(hit);
             }
         }
-
         return None;
     }
 
