@@ -1,7 +1,11 @@
 package madlib.collider;
 
+import differ.Collision;
+import differ.data.RayCollision.RayCollisionHelper;
+import differ.data.RayCollision;
 import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 
 using madlib.extensions.DifferExt;
@@ -106,6 +110,26 @@ class Collide {
         return if(test != null) Some(new Vector2(test.u1, test.u2)) else None;
     }
 
+    inline static function createHitPosition(?test: RayCollision): Option<HitPosition> {
+        return if(test != null) {
+            final sx = RayCollisionHelper.hitStartX(test);
+            final sy = RayCollisionHelper.hitStartY(test);
+            final hitEnd = if(test.end <= 1) {
+                final ex = RayCollisionHelper.hitEndX(test);
+                final ey = RayCollisionHelper.hitEndY(test);
+                Some(new Vector2(ex, ey));
+            } else {
+                None;
+            }
+            Some({ hitStart: new Vector2(sx, sy), hitEnd: hitEnd });
+        } else {
+            None;
+        }
+    }
+
+    public inline static function intersectCircleVsLine(pos: Vector2, radius: Float, from: Vector2, to: Vector2): Option<HitPosition>
+        return createHitPosition(Collision.rayWithShape(from.createRayFromVector(to), pos.toCircle(radius)));
+
     public inline static function circleVsLine(pos: Vector2, radius: Float, from: Vector2, to: Vector2): Bool {
         final ray = from.createRayFromVector(to);
         final circle = pos.toCircle(radius);
@@ -123,6 +147,11 @@ class Collide {
         return rect.test(pos.toCircle(radius)) != null;
     }
 
+    public inline static function intersectBoundsVsLine(bounds: Bounds, from: Vector2, to: Vector2): Option<HitPosition> {
+        final rect = differ.shapes.Polygon.rectangle(bounds.left, bounds.top, bounds.width, bounds.height, false);
+        return createHitPosition(rect.testRay(from.createRayFromVector(to)));
+    }
+
     public inline static function boundsVsLine(bounds: Bounds, from: Vector2, to: Vector2): Bool {
         final rect = differ.shapes.Polygon.rectangle(bounds.left, bounds.top, bounds.width, bounds.height, false);
         final ray = from.createRayFromVector(to);
@@ -135,6 +164,12 @@ class Collide {
     public inline static function polyVsPoint(pos: Vector2, polygon: differ.shapes.Polygon, p: Vector2) {
         final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
         return differ.Collision.pointInPoly(p.x, p.y, newPoly);
+    }
+
+    public inline static function intersectPolyVsLine(pos: Vector2, polygon: differ.shapes.Polygon, from: Vector2, to: Vector2): Option<HitPosition> {
+        final ray = from.createRayFromVector(to);
+        final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
+        return createHitPosition(differ.Collision.rayWithShape(ray, newPoly));
     }
 
     public inline static function polyVsLine(pos: Vector2, polygon: differ.shapes.Polygon, from: Vector2, to: Vector2): Bool {
@@ -176,6 +211,9 @@ class Collide {
 
     public inline static function vertsVsCircle(vertices: Array<Vector2>, pos: Vector2, radius: Float): Bool
         return polyVsCircle(Vector2.zero, verticesToPolygon(vertices), pos, radius);
+
+    public inline static function intersectVertsVsLine(vertices: Array<Vector2>, from: Vector2, to: Vector2): Option<HitPosition>
+        return intersectPolyVsLine(Vector2.zero, verticesToPolygon(vertices), from, to);
 
     public inline static function vertsVsLine(vertices: Array<Vector2>, from: Vector2, to: Vector2): Bool
         return polyVsLine(Vector2.zero, verticesToPolygon(vertices), from, to);

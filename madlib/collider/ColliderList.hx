@@ -1,6 +1,8 @@
 package madlib.collider;
 
+import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 import thx.error.NotImplemented;
 
@@ -142,6 +144,23 @@ class ColliderList extends Collider {
                 return true;
         }
         return false;
+    }
+
+    override function intersectLine(from: Vector2, to: Vector2): Option<HitPosition> {
+        var minPosition = None;
+        var minLength = Math.FLOAT_MAX;
+        for(c in colliders) {
+            switch c.intersectLine(from, to) {
+                case None:
+                case Some(hit):
+                    final length = Math.abs(from.length - hit.hitStart.length);
+                    minLength = Math.min(minLength, length);
+                    if(minLength >= length) {
+                        minPosition = Some(hit);
+                    }
+            }
+        }
+        return minPosition;
     }
 
     override function collideLine(from: Vector2, to: Vector2): Bool {

@@ -1,5 +1,6 @@
 package madlib.collider;
 
+import haxe.ds.Option;
 import hxmath.math.Vector2;
 import madlib.geom.Bounds;
 import thx.error.NotImplemented;
@@ -10,6 +11,11 @@ enum ColliderType {
     Hitbox;
     List;
     Polygon;
+}
+
+typedef HitPosition = {
+    hitStart: Vector2,
+    hitEnd: Option<Vector2>,
 }
 
 class Collider {
@@ -183,6 +189,9 @@ class Collider {
 
     public function collideBounds(bounds: Bounds): Bool
         return false;
+
+    public function intersectLine(from: Vector2, to: Vector2): Option<HitPosition>
+        return None;
 
     public function collideLine(from: Vector2, to: Vector2): Bool
         return false;

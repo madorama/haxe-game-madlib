@@ -1,6 +1,8 @@
 package madlib.collider;
 
+import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 
 using madlib.extensions.DifferExt;
@@ -64,6 +66,9 @@ class Circle extends Collider {
 
     override function collideBounds(bounds: Bounds): Bool
         return Collide.boundsVsCircle(bounds, absolutePosition, radius);
+
+    override function intersectLine(from: Vector2, to: Vector2): Option<HitPosition>
+        return Collide.intersectCircleVsLine(absolutePosition, radius, from, to);
 
     override function collideLine(from: Vector2, to: Vector2): Bool
         return Collide.circleVsLine(absolutePosition, radius, from, to);

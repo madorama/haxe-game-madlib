@@ -1,6 +1,8 @@
 package madlib.collider;
 
+import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 
 class Hitbox extends Collider {
@@ -87,6 +89,9 @@ class Hitbox extends Collider {
 
     override function collideBounds(bounds: Bounds): Bool
         return absoluteRight > bounds.left && absoluteBottom > bounds.top && absoluteLeft < bounds.right && absoluteTop < bounds.bottom;
+
+    override function intersectLine(from: Vector2, to: Vector2): Option<HitPosition>
+        return Collide.intersectBoundsVsLine(bounds, from, to);
 
     override function collideLine(from: Vector2, to: Vector2): Bool
         return Collide.boundsVsLine(bounds, from, to);

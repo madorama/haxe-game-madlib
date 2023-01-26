@@ -1,7 +1,9 @@
 package madlib.collider;
 
 import h2d.Graphics;
+import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 
 class Polygon extends Collider {
@@ -109,6 +111,9 @@ class Polygon extends Collider {
 
     override function collideBounds(bounds: Bounds): Bool
         return Collide.polyVsRect(absolutePosition, polygon, bounds.x, bounds.y, bounds.width, bounds.height, 0);
+
+    override function intersectLine(from: Vector2, to: Vector2): Option<HitPosition>
+        return Collide.intersectPolyVsLine(absolutePosition, polygon, from, to);
 
     override function collideLine(from: Vector2, to: Vector2): Bool
         return Collide.polyVsLine(absolutePosition, polygon, from, to);
