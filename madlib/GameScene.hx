@@ -72,7 +72,7 @@ class GameScene {
 
     public function onResize() {}
 
-    public inline function dispose() {
+    public function dispose() {
         destroyed = true;
     }
 

@@ -15,6 +15,9 @@ enum abstract LayerId(Int) to Int {
 
     final scenes: Array<GameScene> = [];
 
+    final pushReservedScenes: Array<GameScene> = [];
+    final popReservedScenes: Array<GameScene> = [];
+
     public final uiCamera = new h2d.Camera();
 
     public static var tmod: Float = 1 / 60;
@@ -50,6 +53,17 @@ enum abstract LayerId(Int) to Int {
 
         App.tmod = hxd.Timer.tmod;
 
+        for(s in popReservedScenes) {
+            s.dispose();
+            scenes.remove(s);
+        }
+        popReservedScenes.resize(0);
+
+        for(s in pushReservedScenes) {
+            scenes.push(s);
+        }
+        pushReservedScenes.resize(0);
+
         GamePad.update();
     }
 
@@ -68,13 +82,11 @@ enum abstract LayerId(Int) to Int {
     }
 
     public inline function pushScene(scene: GameScene) {
-        scenes.push(scene);
+        pushReservedScenes.push(scene);
     }
 
     public inline function popScene() {
-        final s = scenes.pop();
-        if(s != null)
-            s.dispose();
+        popReservedScenes.push(scenes[scenes.length - 1 - popReservedScenes.length]);
     }
 
     public inline function clearScenes() {
