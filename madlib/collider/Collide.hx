@@ -96,6 +96,32 @@ class Collide {
         return ret;
     }
 
+    public inline static function intersectEntity(from: Vector2, to: Vector2, a: Entity): Option<HitPosition> {
+        return if(a.collidable) {
+            a.collider.intersectLine(from, to);
+        } else {
+            None;
+        }
+    }
+
+    public inline static function intersectFirstEntity(from: Vector2, to: Vector2, es: Iterable<Entity>): Option<HitPosition> {
+        var minPosition = None;
+        var minLength = Math.FLOAT_MAX;
+        for(e in es) {
+            if(!e.collidable) continue;
+            switch e.collider.intersectLine(from, to) {
+                case None:
+                case Some(hit):
+                    final length = Math.abs(from.length - hit.hitStart.length);
+                    minLength = Math.min(minLength, length);
+                    if(minLength >= length) {
+                        minPosition = Some(hit);
+                    }
+            }
+        }
+        return minPosition;
+    }
+
     public inline static function rayVsRay(a1: Vector2, a2: Vector2, b1: Vector2, b2: Vector2): Bool {
         final aRay = a1.createRayFromVector(a2);
         final bRay = b1.createRayFromVector(b2);
