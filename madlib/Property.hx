@@ -36,4 +36,8 @@ package madlib;
     public inline function setSilently(value: T) {
         internalValue = value;
     }
+
+    public function forceTrigger() {
+        _trigger.trigger(value);
+    }
 }
