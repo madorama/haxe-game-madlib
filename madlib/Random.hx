@@ -55,7 +55,7 @@ class Random {
         final ret = array.copy();
 
         for(i in 0...ret.length) {
-            final j = randomInt(0, ret.length - 1);
+            final j = randomInt(i, ret.length - 1);
             final a = ret[i];
             ret[i] = ret[j];
             ret[j] = a;
