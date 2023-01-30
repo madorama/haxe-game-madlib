@@ -1,11 +1,12 @@
 package madlib.heaps.ui;
 
 import h2d.Font;
+import h2d.RenderContext;
 import haxe.ds.Option;
 
 using madlib.extensions.OptionExt;
 
-class Text {
+class Text extends h2d.Text {
     static var internalDefaultFont: Option<Font> = None;
 
     public static var defaultFont(get, set): Font;
@@ -18,10 +19,30 @@ class Text {
         return v;
     }
 
-    public inline static function create(s: String, ?font: Font, ?parent: h2d.Object): h2d.Text {
-        final font = if(font == null) defaultFont else font;
-        final text = new h2d.Text(font, parent);
-        text.text = s;
-        return text;
+    public var pivotX = 0.;
+    public var pivotY = 0.;
+
+    public function new(text: String, ?font: h2d.Font, ?parent: h2d.Object) {
+        final font = if(font == null) madlib.heaps.ui.Text.defaultFont else font;
+        super(font, parent);
+        this.text = text;
     }
+
+    public inline function setPivot(x: Float, y: Float) {
+        pivotX = x;
+        pivotY = y;
+    }
+
+    override function drawRec(ctx: RenderContext) {
+        final baseX = x;
+        final baseY = y;
+        x = x - this.textWidth * Math.clamp(pivotX, 0, 1);
+        y = y - this.textHeight * Math.clamp(pivotY, 0, 1);
+        super.drawRec(ctx);
+        x = baseX;
+        y = baseY;
+    }
+
+    public static inline function create(text: String, ?font: h2d.Font, ?parent: h2d.Object): Text
+        return new Text(text, font, parent);
 }
