@@ -18,6 +18,7 @@
 -lib castle
 -lib domkit
 -lib ldtk-haxe-api
+-lib deepnightLibs
 
 -D analyzer-optimize
 
