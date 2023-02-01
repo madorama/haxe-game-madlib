@@ -4,6 +4,7 @@ import haxe.Int64;
 import haxe.crypto.Sha1;
 import haxe.exceptions.ArgumentException;
 import haxe.io.Bytes;
+import seedyrng.Xorshift64Plus;
 
 class Random {
     public static final gen = new Random();
@@ -11,7 +12,12 @@ class Random {
     final instance: seedyrng.Random;
 
     public function new(?seed: Int64) {
-        instance = new seedyrng.Random();
+        instance =
+            #if hl
+            new seedyrng.Random(new Xorshift64Plus());
+            #else
+            new seedyrng.Random();
+            #end
         if(seed != null)
             instance.seed = seed;
     }
