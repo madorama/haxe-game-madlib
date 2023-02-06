@@ -22,6 +22,24 @@ class ArrayExt {
             action(x);
     }
 
+    /**
+     * 配列の全ての要素に対して関数fを適用する。
+     *
+     * fの返り値がfalseの場合、すぐにfalseを返す。
+     *
+     * そうでない場合、trueを返す。
+     */
+    public inline static function forEach<T>(self: Array<T>, f: T -> Bool): Bool {
+        var result = true;
+        for(x in self) {
+            if(!f(x)) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
     public inline static function eachi<T>(self: Array<T>, action: Int -> T -> Void) {
         for(i in 0...self.length)
             action(i, self[i]);
