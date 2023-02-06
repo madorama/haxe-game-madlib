@@ -11,6 +11,11 @@ class CdbExt {
         return value.ofValue();
     }
 
+    public static function coerceGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): T {
+        @:nullSafety(Off)
+        return indexId.get(kind);
+    }
+
     #if heaps
     public inline static function getTile(self: cdb.Types.TilePos, ?tile: h2d.Tile): h2d.Tile {
         if(tile == null)
