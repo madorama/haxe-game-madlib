@@ -49,30 +49,14 @@ class Tags {
         return tags.iterator();
 }
 
-class Entity {
-    public var position(default, null) = Vector2.zero;
-    public var x(get, set): Float;
-    public var y(get, set): Float;
-
-    inline function get_x()
-        return position.x;
-
-    function set_x(v: Float)
-        return position.x = v;
-
-    inline function get_y()
-        return position.y;
-
-    function set_y(v: Float)
-        return position.y = v;
-
+class Entity extends h2d.Object {
     public var pivotedX(get, never): Float;
     public var pivotedY(get, never): Float;
 
-    inline function get_pivotedX()
+    function get_pivotedX()
         return x - pivotX * width;
 
-    inline function get_pivotedY()
+    function get_pivotedY()
         return y - pivotY * height;
 
     public var centerX(get, never): Float;
@@ -86,7 +70,6 @@ class Entity {
 
     public var tags(default, null): Tags = new Tags();
 
-    public var visible = true;
     public var active = true;
     public var isStarted = false;
     public var isCreated = false;
@@ -101,6 +84,7 @@ class Entity {
     public var scene: Null<GameScene>;
 
     public function new(?scene: GameScene) {
+        super();
         if(scene != null)
             this.scene = scene;
     }
@@ -143,13 +127,6 @@ class Entity {
     public function fixedUpdate(dt: Float) {}
 
     public function afterUpdate(dt: Float) {}
-
-    public function draw(layers: Layers) {}
-
-    public inline function setPosition(x: Float, y: Float) {
-        this.x = x;
-        this.y = y;
-    }
 
     public inline function addTag(tag: String) {
         tags.add(tag);

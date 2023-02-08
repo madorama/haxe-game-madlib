@@ -102,7 +102,7 @@ class Collider {
     public var absolutePosition(get, never): Vector2;
 
     function get_absolutePosition()
-        return if(entity != null) entity.position + position else position;
+        return if(entity != null) new Vector2(entity.x + position.x, entity.y + position.y) else position;
 
     public var absoluteX(get, never): Float;
     public var absoluteY(get, never): Float;
