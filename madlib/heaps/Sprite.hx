@@ -54,6 +54,15 @@ using thx.Maps;
         pivotY = y;
     }
 
+    public var pivotedX(get, never): Float;
+    public var pivotedY(get, never): Float;
+
+    function get_pivotedX(): Float
+        return x - (width * pivotX);
+
+    function get_pivotedY(): Float
+        return y - (height * pivotY);
+
     public var xFlip = false;
     public var yFlip = false;
 
