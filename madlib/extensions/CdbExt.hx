@@ -21,7 +21,9 @@ class CdbExt {
         if(tile == null)
             tile = hxd.Res.load(self.file).toTile();
         final size = self.size;
-        return tile.sub(self.x * size, self.y * size, size, size);
+        final w = if(self.width != null) self.width else 1;
+        final h = if(self.height != null) self.height else 1;
+        return tile.sub(self.x * size, self.y * size, w * self.size, h * self.size);
     }
 
     public inline static function getTileId(self: cdb.Types.TilePos, tile: h2d.Tile): Int
