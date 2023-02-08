@@ -327,6 +327,16 @@ class ArrayExt {
         final length = Math.min(array1.length, array2.length);
         return [for(i in 0...length) Tuple2.of(array1[i], array2[i])];
     }
+    public inline static function removeBy<T>(self: Array<T>, equal: T -> Bool) {
+        var i = 0;
+        while(i < self.length) {
+            if(equal(self[i])) {
+                self.splice(i, 1);
+                continue;
+            }
+            i += 1;
+        }
+    }
 }
 
 class IntArrayExt {
