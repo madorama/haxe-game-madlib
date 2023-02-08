@@ -327,6 +327,19 @@ class ArrayExt {
         final length = Math.min(array1.length, array2.length);
         return [for(i in 0...length) Tuple2.of(array1[i], array2[i])];
     }
+
+    public inline static function removeAt<T>(self: Array<T>, index: Int): Array<T> {
+        return if(index == 0) {
+            self.drop(1);
+        } else if(index == self.length - 1) {
+            self.take(self.length - 1);
+        } else if(Math.inRange(index, 0, self.length - 1)) {
+            self.take(index).concat(self.drop(index + 1));
+        } else {
+            self.copy();
+        }
+    }
+
     public inline static function removeBy<T>(self: Array<T>, equal: T -> Bool) {
         var i = 0;
         while(i < self.length) {
@@ -362,18 +375,6 @@ class IntArrayExt {
                 result.push(x);
         }
         return result;
-    }
-
-    public inline static function removeAt<T>(self: Array<T>, index: Int): Array<T> {
-        return if(index == 0) {
-            self.drop(1);
-        } else if(index == self.length - 1) {
-            self.take(self.length - 1);
-        } else if(Math.inRange(index, 0, self.length - 1)) {
-            self.take(index).concat(self.drop(index + 1));
-        } else {
-            self.copy();
-        }
     }
 }
 
