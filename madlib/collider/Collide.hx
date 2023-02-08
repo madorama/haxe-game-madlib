@@ -187,6 +187,9 @@ class Collide {
     public inline static function boundsVsPoint(bounds: Bounds, point: Vector2): Bool
         return bounds.contains(point);
 
+    public inline static function boundsVsBounds(bounds1: Bounds, bounds2: Bounds): Bool
+        return bounds1.toRectangle().test(bounds2.toRectangle()) != null;
+
     public inline static function polyVsPoint(pos: Vector2, polygon: differ.shapes.Polygon, p: Vector2) {
         final newPoly = new differ.shapes.Polygon(pos.x, pos.y, polygon.transformedVertices);
         return differ.Collision.pointInPoly(p.x, p.y, newPoly);
