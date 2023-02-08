@@ -3,15 +3,8 @@ package madlib.heaps;
 import hxd.Window;
 import madlib.GameScene;
 
-enum abstract LayerId(Int) to Int {
-    final LayerShared = 0;
-    final LayerUI = 10;
-}
-
 @:tink class App extends hxd.App {
     public var window: Window;
-
-    @:lazy var root = new h2d.Scene();
 
     final scenes: Array<GameScene> = [];
 
@@ -38,11 +31,6 @@ enum abstract LayerId(Int) to Int {
 
     override function init() {
         super.init();
-        s2d.add(root, 0);
-
-        uiCamera.layerVisible = layer -> layer == LayerUI;
-        root.addCamera(uiCamera);
-
         Controller.init();
     }
 
