@@ -18,7 +18,7 @@ class CdbExt {
 
     #if heaps
     public inline static function getTile(self: cdb.Types.TilePos, ?tile: h2d.Tile): h2d.Tile {
-        tile = tile ?? hxd.Res.load(self.tile).toTile();
+        tile = tile ?? hxd.Res.load(self.file).toTile();
         final size = self.size;
         final w = self.width ?? 1;
         final h = self.height ?? 1;
