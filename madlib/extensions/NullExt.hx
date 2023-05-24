@@ -4,10 +4,10 @@ import haxe.ds.Option;
 
 class NullExt {
     public inline static function withDefault<T>(self: Null<T>, value: T): T
-        return if(self == null) value else self;
+        return self ?? value;
 
     public inline static function withDefaultLazy<T>(self: Null<T>, f: () -> T): T
-        return if(self == null) f() else self;
+        return self ?? f();
 
     public inline static function toOption<T>(self: Null<T>): Option<T>
         return if(self == null) None else Some(self);

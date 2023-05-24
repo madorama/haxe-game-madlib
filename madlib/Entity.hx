@@ -85,8 +85,7 @@ class Entity extends h2d.Object {
 
     public function new(?scene: GameScene) {
         super();
-        if(scene != null)
-            this.scene = scene;
+        this.scene = scene;
     }
 
     public function attachScene(scene: GameScene) {
@@ -177,7 +176,7 @@ class Entity extends h2d.Object {
         return Collide.checksAt(this, es, dx, dy);
 
     public function checkType<T: Entity>(type: Class<T>): Bool
-        return if(scene == null) false else scene.findEntities(type).any(e -> Collide.check(this, e));
+        return scene?.findEntities(type) ?.any(e -> Collide.check(this, e)) ?? false;
 
     public inline function checkTypeAt<T: Entity>(type: Class<T>, dx: Float, dy: Float): Bool {
         x += dx;
@@ -189,7 +188,7 @@ class Entity extends h2d.Object {
     }
 
     public function checkTag(tag: String): Bool
-        return if(scene == null) false else scene.getEntitiesInTag(tag, collider.bounds).any(e -> Collide.check(this, e));
+        return scene?.getEntitiesInTag(tag, collider.bounds) ?.any(e -> Collide.check(this, e)) ?? false;
 
     public inline function checkTagAt(tag: String, dx: Float, dy: Float): Bool {
         x += dx;
@@ -213,7 +212,7 @@ class Entity extends h2d.Object {
     }
 
     public function collideTag(tag: String): Option<Entity>
-        return if(scene == null) None else scene.getEntitiesInTag(tag, collider.bounds).findOption(e -> Collide.check(this, e));
+        return scene?.getEntitiesInTag(tag, collider.bounds) ?.findOption(e -> Collide.check(this, e)) ?? None;
 
     public inline function collideTagAt(tag: String, dx: Float, dy: Float): Option<Entity> {
         x += dx;

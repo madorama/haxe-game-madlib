@@ -111,8 +111,8 @@ using thx.Maps;
                 trace('Animation "$name" is not exists');
             case Some(v):
                 anim = Some(v);
-                v.loop = if(loop != null) loop else v.loop;
-                v.currentFrame = if(startFrame != null) startFrame else 0;
+                v.loop = loop ?? v.loop;
+                v.currentFrame = startFrame ?? 0;
                 currentAnimationName = name;
         }
     }
@@ -163,6 +163,6 @@ using thx.Maps;
     }
 
     public function onAnimEnd(?f: () -> Void) {
-        anim.each(anim -> anim.onAnimEnd = if(f != null) f else() -> {});
+        anim.each(anim -> anim.onAnimEnd = f ?? () -> {});
     }
 }

@@ -71,8 +71,8 @@ class GameKey {
     var repeatCount = 0;
 
     public inline function isRepeat(?firstRepeatInterval: Float, ?repeatInterval: Float): Bool {
-        if(firstRepeatInterval == null) firstRepeatInterval = Controller.firstRepeatInterval;
-        if(repeatInterval == null) repeatInterval = Controller.repeatInterval;
+        firstRepeatInterval = firstRepeatInterval ?? Controller.firstRepeatInterval;
+        repeatInterval = repeatInterval ?? Controller.repeatInterval;
         return if(isDown()) {
             final result = if(repeatTimer > 0.) false else true;
             final interval = if(repeatCount == 0) firstRepeatInterval else repeatInterval;
@@ -93,7 +93,7 @@ class GameKey {
     var completeHold = false;
 
     public inline function indicateHoldProgress(?decisionFrame: Float): Float {
-        if(decisionFrame == null) decisionFrame = 30;
+        decisionFrame = decisionFrame ?? 30;
         if(isDown())
             holdTimer = Math.clamp(holdTimer + App.tmod, 0, decisionFrame);
         else

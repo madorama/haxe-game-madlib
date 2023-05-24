@@ -22,7 +22,7 @@ import madlib.GameScene;
 
     public inline function setWindow(?width: Int, ?height: Int, displayMode: DisplayMode = DisplayMode.Windowed) {
         window.displayMode = displayMode;
-        window.resize(width != null ? width : window.width, height != null ? height : window.height);
+        window.resize(width ?? window.width, height ?? window.height);
         #if(hldx || hlsdl)
         @:privateAccess window.window.center();
         #end

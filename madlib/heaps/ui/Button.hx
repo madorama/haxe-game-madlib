@@ -30,7 +30,7 @@ import hxd.Event;
     public function new(inContent: h2d.Object, ?tile: Tile, ?parent: h2d.Object) {
         super(parent);
 
-        final gridTile = if(tile != null) tile else Tile.fromColor(0x404040);
+        final gridTile = tile ?? Tile.fromColor(0x404040);
         scaleGrid = new ScaleGrid(gridTile, 0, 0);
         wrapFlow.layout = Stack;
         wrapFlow.addChild(scaleGrid);

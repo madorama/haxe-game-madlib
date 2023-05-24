@@ -2,6 +2,8 @@ package madlib;
 
 import haxe.ds.Option;
 
+using madlib.extensions.OptionExt;
+
 @:structInit
 class Paginate<T> {
     @:isVar public var items(default, set): Array<T> = [];
@@ -66,6 +68,6 @@ class Paginate<T> {
 
     public inline function getItemInPage(index: Int): Option<T> {
         final item = currentPageItems[index];
-        return if(item != null) Some(item) else None;
+        return item.ofValue();
     }
 }

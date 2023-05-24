@@ -21,6 +21,7 @@
 -lib deepnightLibs
 
 -D analyzer-optimize
+-D message-reporting=pretty
 
 --debug
 -D test

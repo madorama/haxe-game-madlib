@@ -87,7 +87,7 @@ class WalkersAlias<T> {
         if(length == 0)
             return -1;
 
-        final gen = if(randomGenerator == null) Random.gen else randomGenerator;
+        final gen = randomGenerator ?? Random.gen;
         final random = gen.random() * length;
         var index = Math.floor(random);
         final isOutbounds = index >= length;

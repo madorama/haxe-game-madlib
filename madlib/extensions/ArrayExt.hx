@@ -221,10 +221,7 @@ class ArrayExt {
     }
 
     public inline static function sample<T>(self: Array<T>, ?random: Random): T
-        return if(random != null)
-            random.choice(self);
-        else
-            Random.gen.choice(self);
+        return (random ?? Random.gen).choice(self);
 
     public inline static function string<T>(self: Array<T>): String
         return '[${self.map(thx.Dynamics.string).join(", ")}]';
@@ -369,7 +366,7 @@ class IntArrayExt {
         return self.minBy(thx.Ints.order);
 
     public inline static function unique<T>(self: Array<T>): Array<T> {
-        final result = [];
+        final result: Array<T> = [];
         for(x in self) {
             if(result.find((y) -> thx.Dynamics.compare(x, y) == 0) == null)
                 result.push(x);

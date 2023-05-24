@@ -165,7 +165,7 @@ class TestArrayExt extends utest.Test {
     }
 
     function testSample() {
-        Assert.same(0, [0, 1, 2].sample(new Random(Int64.ofInt(42))));
+        Assert.same(0, [0, 1, 2].sample(new Random(42i64)));
     }
 
     function testString() {
@@ -174,7 +174,7 @@ class TestArrayExt extends utest.Test {
     }
 
     function testShuffle() {
-        Assert.same([1, 2, 0], [0, 1, 2].shuffle(new Random(Int64.ofInt(42))));
+        Assert.same([1, 2, 0], [1, 0, 2].shuffle(new Random(42i64)));
     }
 
     function testTake() {

@@ -5,6 +5,7 @@ import parsihax.Parser.*;
 
 using StringTools;
 using madlib.extensions.ArrayExt;
+using madlib.extensions.FunctionExt;
 using parsihax.Parser;
 
 private enum VersionData {
@@ -50,14 +51,7 @@ abstract Version(VersionData) from VersionData to VersionData {
 
     static final dot = ".".string();
     static final hyphen = "-".string();
-    static final number = ~/0|[1-9]\d*/.regexp().map(n -> {
-        final n = Std.parseInt(n);
-        if(n == null) {
-            0;
-        } else {
-            (n: Int);
-        }
-    });
+    static final number = ~/0|[1-9]\d*/.regexp().map(n -> Std.parseInt(n) ?? 0);
 
     static final numsParser = [
         number.skip(dot),
@@ -81,7 +75,7 @@ abstract Version(VersionData) from VersionData to VersionData {
         if(patch < 0)
             throw('$patch is an invalid patch level');
 
-        this = VersionData(major, minor, patch, if(tags == null) [] else tags);
+        this = VersionData(major, minor, patch, tags ?? []);
     }
 
     public inline static function of(str: String): Either<VersionError, Version> {
