@@ -1,5 +1,9 @@
 package madlib;
 
+#if heaps
+import h3d.Vector;
+#end
+
 using madlib.extensions.ArrayExt;
 using madlib.extensions.NullExt;
 
@@ -192,6 +196,11 @@ class Color {
 
     public inline function toIntArgb(): Int
         return ((Std.int(alpha * 255) << 24) | toIntRgb());
+
+    #if heaps
+    public inline function toVector(): Vector
+        return new Vector(red, green, blue, alpha);
+    #end
 
     public inline function equals(color: Color): Bool
         return red == color.red && green == color.green && blue == color.blue && alpha == color.alpha;
