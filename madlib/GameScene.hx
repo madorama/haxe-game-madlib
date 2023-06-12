@@ -91,7 +91,7 @@ class GameScene {
             pause();
     }
 
-    public inline function add(entity: Entity) {
+    public function add(entity: Entity) {
         entity.scene = this;
         entities.append(entity);
         if(!entity.isCreated) {
