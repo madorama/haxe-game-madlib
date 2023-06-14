@@ -25,7 +25,7 @@ enum TweenEvent {
     public var from: Float;
     public var to: Float;
     public var speed: Float;
-    public var delay = 0;
+    public var delay = 0.;
 
     public function new(from: Float, to: Float, speed: Float) {
         this.from = from;
@@ -43,7 +43,7 @@ enum TweenEvent {
         return this;
     }
 
-    public inline function setDelay(delay: Int): Tw {
+    public inline function setDelay(delay: Float): Tw {
         this.delay = delay;
         return this;
     }
@@ -68,8 +68,8 @@ enum TweenEvent {
 
     inline function run(dt: Float): TweenEvent {
         if(delay > 0) {
-            delay -= 1;
-            return Delayed;
+            delay -= dt;
+            return false;
         }
         if(!_onStart.disposed) {
             _onStart.trigger(Noise);
@@ -112,18 +112,18 @@ class Tween {
         }
     }
 
-    public function timer(frames: Float, ?onComplete: Void -> Void): Tw {
+    public function timer(frames: Float, delay = 0., ?onComplete: Void -> Void): Tw {
         final tween = new Tw(0, 1, 1 / frames);
         if(onComplete != null) {
             tween._onComplete.clear();
             tween.onComplete.handle(onComplete);
         }
-
+        tween.setDelay(delay);
         tweens.push(tween);
         return tween;
     }
 
-    public function tween(start: Float, end: Float, frames: Float, delay: Int = 0, ?onUpdate: Float -> Void): Tw {
+    public function tween(start: Float, end: Float, frames: Float, delay = 0., ?onUpdate: Float -> Void): Tw {
         final tween = new Tw(start, end, 1 / frames);
 
         if(onUpdate != null) {
