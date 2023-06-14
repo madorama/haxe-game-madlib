@@ -1,274 +1,357 @@
+/**
+ * Inspired to
+ *
+ * deepnightLibs/Col.hx
+ * MIT LICENSE - https://github.com/deepnight/deepnightLibs/blob/master/LICENSE
+ *
+ * noahzgordon/elm-color-extra
+ * MIT LICENSE - https://github.com/noahzgordon/elm-color-extra/blob/master/LICENSE
+**/
+
 package madlib;
 
 #if heaps
 import h3d.Vector;
 #end
+import haxe.ds.Option;
 
-using madlib.extensions.ArrayExt;
-using madlib.extensions.NullExt;
+abstract Color(Int) from Int to Int {
+    public inline function new(argb: Int): Color {
+        this = argb;
+    }
 
-@:structInit
-class Color {
-    public static final BLACK = fromRgbInt(0x000000);
-    public static final WHITE = fromRgbInt(0xffffff);
+    public inline static function fromInt(c: Int): Color
+        return new Color(c);
 
-    @:isVar public var red(default, set): Float;
+    public inline static function fromRgbaInt(r: Int, g: Int, b: Int, a: Int = 255): Color {
+        return new Color((a << 24) | (r << 16) | (g << 8) | b);
+    }
 
-    inline function set_red(v: Float)
-        return red = Math.clamp(v, 0, 1);
+    public inline static function fromRgba(r: Float, g: Float, b: Float, a: Float = 1): Color {
+        return Color.fromRgbaInt(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255), Math.round(a * 255));
+    }
 
-    @:isVar public var green(default, set): Float;
+    public inline static function fromHsla(h: Float, s: Float, l: Float, a: Float = 1): Color {
+        final m2 = if(l <= 0.5) l * (s + 1) else l + s - l * s;
+        final m1 = l * 2 - m2;
+        final hueToRgb = (h: Float) -> {
+            h = if(h < 0)
+                h + 1
+            else if(h > 1)
+                h - 1
+            else
+                h;
+            return if(h * 6 < 1)
+                m1 + (m2 - m1) * h * 6
+            else if(h * 2 < 1)
+                m2
+            else if(h * 3 < 2)
+                m1 + (m2 - m1) * (2 / 3 - h) * 6
+            else
+                m1;
+        }
+        return fromRgba(hueToRgb(h + 1 / 3), hueToRgb(h), hueToRgb(h - 1 / 3), a);
+    }
 
-    inline function set_green(v: Float)
-        return green = Math.clamp(v, 0, 1);
+    public inline static function fromHsva(h: Float, s: Float, v: Float, a: Float = 1) {
+        return if(s == 0) {
+            Color.gray(v);
+        } else {
+            h = h * 6;
+            final i = Math.floor(h);
+            final c1 = v * (1 - s);
+            final c2 = v * (1 - s * (h - i));
+            final c3 = v * (1 - s * (1 - (h - i)));
 
-    @:isVar public var blue(default, set): Float;
+            if(i == 0 || i == 6) fromRgba(v, c3, c1)
+            else if(i == 1) fromRgba(c2, v, c1)
+            else if(i == 2) fromRgba(c1, v, c3)
+            else if(i == 3) fromRgba(c1, c2, v)
+            else if(i == 4) fromRgba(c3, c1, v)
+            else fromRgba(v, c1, c2);
+        }
+    }
 
-    inline function set_blue(v: Float)
-        return blue = Math.clamp(v, 0, 1);
+    public inline static function gray(v: Float): Color
+        return fromRgba(v, v, v);
 
-    @:isVar public var alpha(default, set): Float;
+    #if heaps
+    public inline function toVector(): Vector {
+        return new Vector(r, g, b, a);
+    }
+    #end
 
-    inline function set_alpha(v: Float)
-        return alpha = Math.clamp(v, 0, 1);
+    static final sharp = "#".charCodeAt(0);
+    static final hexChars = "0123456789ABCDEFabcdef".split("").map(c -> c.charCodeAt(0));
+    static final doubleHexValues = {
+        final m = new Map();
+        for(c in hexChars) {
+            final h = String.fromCharCode(c);
+            m.set(c, Std.parseInt('0x${h}${h}'));
+        }
+        m;
+    }
+    static final tripleHexValues = {
+        final m = new Map();
+        for(c in hexChars) {
+            final h = String.fromCharCode(c);
+            final hh = '${h}${h}';
+            m.set(h, Std.parseInt('0x${hh}${hh}${hh}'));
+        }
+        m;
+    }
 
-    public var redInt(get, set): Int;
+    public inline static function parse(hex: String): Option<Color> {
+        if(hex.length == 0)
+            return None;
 
-    inline function get_redInt()
-        return Math.round(red * 255);
+        final start = if(StringTools.fastCodeAt(hex, 0) == sharp) 1 else 0;
+        final l = hex.length - start;
+        return if(l == 6 || l == 8) {
+            #if js
+            final v: Null<UInt> = Std.parseInt('0x${if(start > 0) hex.substr(start) else hex}');
+            if(v == null) None else Some(cast(v, Int) & 0xffffffff);
+            #else
+            final v = Std.parseInt('0x${if(start > 0) hex.substr(start) else hex}');
+            if(v == null) None else Some(v);
+            #end
+        } else if(l == 3) {
+            Some(fromRgbaInt(doubleHexValues.get(StringTools.fastCodeAt(hex, start)), doubleHexValues.get(StringTools.fastCodeAt(hex, start + 1)),
+                doubleHexValues.get(StringTools.fastCodeAt(hex, start + 2)),));
+        } else if(l == 4) {
+            Some(fromRgbaInt(doubleHexValues.get(StringTools.fastCodeAt(hex, start + 1)), doubleHexValues.get(StringTools.fastCodeAt(hex, start + 2)),
+                doubleHexValues.get(StringTools.fastCodeAt(hex, start + 3)), doubleHexValues.get(StringTools.fastCodeAt(hex, start)),));
+        } else {
+            None;
+        }
+    }
 
-    inline function set_redInt(v: Int) {
-        red = v / 255;
+    public var ri(get, set): Int;
+
+    inline function get_ri(): Int
+        return (this >> 16) & 0xFF;
+
+    inline function set_ri(v: Int): Int {
+        this = fromRgbaInt(v, gi, bi, ai);
         return v;
     }
 
-    public var greenInt(get, set): Int;
+    public var gi(get, set): Int;
 
-    inline function get_greenInt()
-        return Math.round(green * 255);
+    inline function get_gi(): Int
+        return (this >> 8) & 0xFF;
 
-    inline function set_greenInt(v: Int) {
-        green = v / 255;
+    inline function set_gi(v: Int): Int {
+        this = fromRgbaInt(ri, v, bi, ai);
         return v;
     }
 
-    public var blueInt(get, set): Int;
+    public var bi(get, set): Int;
 
-    inline function get_blueInt()
-        return Math.round(blue * 255);
+    inline function get_bi(): Int
+        return this & 0xFF;
 
-    inline function set_blueInt(v: Int) {
-        blue = v / 255;
+    inline function set_bi(v: Int): Int {
+        this = fromRgbaInt(ri, gi, v, ai);
         return v;
     }
 
-    public var alphaInt(get, set): Int;
+    public var ai(get, set): Int;
 
-    inline function get_alphaInt()
-        return Math.round(alpha * 255);
+    inline function get_ai(): Int
+        return (this >> 24) & 0xFF;
 
-    inline function set_alphaInt(v: Int) {
-        alpha = v / 255;
+    inline function set_ai(v: Int): Int {
+        this = fromRgbaInt(ri, gi, bi, v);
         return v;
     }
 
-    public function new(a: Float = 1, r: Float = 1, g: Float = 1, b: Float = 1) {
-        alpha = a;
-        red = r;
-        green = g;
-        blue = b;
+    public var r(get, set): Float;
+
+    inline function get_r(): Float
+        return ri / 255;
+
+    inline function set_r(v: Float): Float {
+        this = fromRgba(v, g, b, a);
+        return v;
     }
 
-    public inline function set(a: Float = 1, r: Float = 1, g: Float = 1, b: Float = 1): Color {
-        alpha = a;
-        red = r;
-        green = g;
-        blue = b;
-        return this;
+    public var g(get, set): Float;
+
+    inline function get_g(): Float
+        return gi / 255;
+
+    inline function set_g(v: Float): Float {
+        this = fromRgba(r, v, b, a);
+        return v;
     }
+
+    public var b(get, set): Float;
+
+    inline function get_b(): Float
+        return bi / 255;
+
+    inline function set_b(v: Float): Float {
+        this = fromRgba(r, g, v, a);
+        return v;
+    }
+
+    public var a(get, set): Float;
+
+    inline function get_a(): Float
+        return ai / 255;
+
+    inline function set_a(v: Float): Float {
+        this = fromRgba(r, g, b, v);
+        return v;
+    }
+
+    var maxColor(get, never): Float;
+
+    inline function get_maxColor(): Float
+        return Math.max(r, Math.max(g, b));
+
+    var minColor(get, never): Float;
+
+    inline function get_minColor(): Float
+        return Math.min(r, Math.min(g, b));
 
     public var hue(get, set): Float;
 
-    inline function get_hue() {
-        final v = Math.atan2(Math.sqrt(3) * (green - blue), 2 * red - green - blue);
-        return if(v != 0) ((Math.RAD_DEG * v) + 360) % 360 else 0;
+    inline function get_hue(): Float {
+        final delta = maxColor - minColor;
+        return if(delta == 0) {
+            0;
+        } else {
+            var h = if(maxColor == r) {
+                ((g - b) / delta) / 6;
+            } else if(maxColor == g) {
+                (2 + (b - r) / delta) / 6;
+            } else {
+                (4 + (r - g) / delta) / 6;
+            }
+            return if(Math.isNaN(h)) {
+                0;
+            } else if(h < 0) {
+                h + 1;
+            } else {
+                h;
+            }
+        }
     }
 
-    inline function set_hue(v: Float) {
-        setHSL(v, saturation, lightness);
+    inline function set_hue(v: Float): Float {
+        this = fromHsla(v, saturation, lightness, a);
         return v;
     }
 
     public var saturation(get, set): Float;
 
-    inline function get_saturation()
-        return (maxColor() - minColor()) / brightness;
+    inline function get_saturation(): Float {
+        return if(minColor == maxColor) {
+            0;
+        } else if(lightness < 0.5) {
+            (maxColor - minColor) / (maxColor + minColor);
+        } else {
+            (maxColor - minColor) / (2 - maxColor - minColor);
+        }
+    }
 
-    inline function set_saturation(v: Float) {
-        setHSL(hue, v, lightness);
+    inline function set_saturation(v: Float): Float {
+        this = fromHsla(hue, v, lightness, a);
         return v;
     }
 
     public var lightness(get, set): Float;
 
-    inline function get_lightness()
-        return (maxColor() + minColor()) / 2;
+    inline function get_lightness(): Float {
+        return (maxColor + minColor) / 2;
+    }
 
-    inline function set_lightness(v: Float) {
-        setHSL(hue, saturation, v);
+    inline function set_lightness(v: Float): Float {
+        this = fromHsla(hue, saturation, v, a);
         return v;
     }
 
     public var brightness(get, set): Float;
 
-    inline function get_brightness()
-        return maxColor();
+    inline function get_brightness(): Float
+        return maxColor;
 
-    inline function set_brightness(v: Float) {
-        setHue(hue);
-        final s = saturation;
-        red = ((red - 1) * s + 1) * v;
-        green = ((green - 1) * s + 1) * v;
-        blue = ((blue - 1) * s + 1) * v;
+    inline function set_brightness(v: Float): Float {
+        this = fromHsva(hue, saturation, v, a);
         return v;
     }
 
-    inline function maxColor(): Float
-        return Math.max(red, Math.max(green, blue));
+    public var fastLuminance(get, never): Float;
 
-    inline function minColor(): Float
-        return Math.min(red, Math.min(green, blue));
+    static final redLumaI = 2126;
+    static final greenLumaI = 7152;
+    static final blueLumaI = 722;
 
-    public inline function setHue(hue: Float): Color {
-        red = Math.abs(hue * 6 - 3) - 1;
-        green = 2 - Math.abs(hue * 6 - 2);
-        blue = 2 - Math.abs(hue * 6 - 4);
-        return this;
+    inline function get_fastLuminance(): Float
+        return (redLumaI * ri + greenLumaI * gi + blueLumaI * bi) / 10000 / 255;
+
+    public var luminance(get, never): Float;
+
+    static final redLuma = 0.2126;
+    static final greenLuma = 0.7152;
+    static final blueLuma = 0.0722;
+
+    inline function get_luminance(): Float
+        return Math.sqrt(redLuma * (ri * ri) + greenLuma * (gi * gi) + blueLuma * (bi * bi)) / 255;
+
+    public inline function getGrayscaleFactor(): Float
+        return luminance;
+
+    public inline function toGraysacle(): Color {
+        final f = getGrayscaleFactor();
+        return fromRgba(f, f, f, a);
     }
 
-    public inline function setHSL(h: Float, s: Float, l: Float): Color {
-        h /= 360;
-        setHue(h);
-        final c = (1 - Math.abs(2 * l - 1)) * s;
-        alpha = alpha - 0.5 * c + l;
-        red = red - 0.5 * c + l;
-        green = green - 0.5 * c + l;
-        blue = blue - 0.5 * c + l;
-        return this;
+    public inline function invert(): Color
+        return fromRgba(1 - r, 1 - g, 1 - b, a);
+
+    public inline function clone(): Color
+        return new Color(this);
+
+    inline function scale(max: Float, scale: Float, value: Float): Float {
+        scale = Math.clamp(scale, -1, 1);
+        value = Math.clamp(value, 0, max);
+        final diff = if(scale > 0) max - value else value;
+        return value + diff * scale;
     }
 
-    public inline static function fromRgbInt(c: Int): Color {
-        final color = new Color();
-        color.redInt = (c >> 16) & 0xff;
-        color.greenInt = (c >> 8) & 0xff;
-        color.blueInt = c & 0xff;
-        return color;
+    public inline function scaleHsl(saturationScale: Float, lightnessScale: Float, alphaScale: Float): Color {
+        final s = scale(1, saturationScale, saturation);
+        final l = scale(1, lightnessScale, lightness);
+        final a = scale(1, alphaScale, a);
+        return fromHsla(hue, s, l, a);
     }
 
-    public inline static function fromArgbInt(c: Int): Color {
-        final color = fromRgbInt(c);
-        color.alphaInt = (c >> 24) & 0xff;
-        return color;
+    public inline function lighten(pct: Float): Color
+        return scaleHsl(0, pct, 0);
+
+    public inline function darken(pct: Float): Color
+        return scaleHsl(0, -pct, 0);
+
+    public inline function interpolate(to: Color, ratio: Float): Color
+        return fromRgbaInt(Math.round(Math.lerp(ri, to.ri, ratio)), Math.round(Math.lerp(gi, to.gi, ratio)), Math.round(Math.lerp(bi, to.bi, ratio)),
+            Math.round(Math.lerp(ai, to.ai, ratio)),);
+
+    public static inline function graduate(min: Color, med: Color, max: Color, ratio: Float)
+        return if(ratio < 0.5) min.interpolate(med, ratio * 2) else med.interpolate(max, (ratio - 0.5) * 2);
+
+    public inline function withoutAlpha(): Color
+        return this & 0xFFFFFF;
+
+    public inline function toHex(withSharp = true): String {
+        final s = StringTools.hex(withoutAlpha(), 6);
+        return if(withSharp) '#${s}' else s;
     }
 
-    public inline static function fromRgbInts(r: Int, g: Int, b: Int): Color {
-        final color = new Color();
-        color.redInt = r;
-        color.greenInt = g;
-        color.blueInt = b;
-        return color;
+    public inline function toArgbHex(withSharp = true): String {
+        final s = StringTools.hex(this, 8);
+        return if(withSharp) '#${s}' else s;
     }
-
-    public inline static function fromArgbInts(a: Int, r: Int, g: Int, b: Int): Color {
-        final color = fromRgbInts(r, g, b);
-        color.alphaInt = a;
-        return color;
-    }
-
-    public inline static function fromRgb(r: Float, g: Float, b: Float): Color
-        return new Color(r, g, b);
-
-    public inline static function fromArgb(a: Float, r: Float, g: Float, b: Float): Color
-        return new Color(r, g, b, a);
-
-    public inline function toIntRgb(): Int
-        return ((redInt << 16) | (greenInt << 8) | blueInt);
-
-    public inline function toIntArgb(): Int
-        return ((Std.int(alpha * 255) << 24) | toIntRgb());
-
-    #if heaps
-    public inline function toVector(): Vector
-        return new Vector(red, green, blue, alpha);
-    #end
-
-    public inline function equals(color: Color): Bool
-        return red == color.red && green == color.green && blue == color.blue && alpha == color.alpha;
-
-    inline static function sharp(includeSharp: Bool = true): String
-        return if(includeSharp) "#" else "";
-
-    inline static function sanitizeHexStr(hex: String, includeSharp: Bool = true): Null<String> {
-        hex = StringTools.trim(hex);
-        final regex = ~/^#*([0-9abcdef]{6})$|^#*([0-9abcdef]{3})$/gi;
-        if(regex.match(hex)) {
-            return sharp(includeSharp) + if(regex.matched(2) != null) {
-                // #?rgbのときは#?rrggbbの形式で返す
-                final c = regex.matched(2);
-                final r = c.charAt(0);
-                final g = c.charAt(1);
-                final b = c.charAt(2);
-                r + r + g + g + b + b;
-            } else {
-                // #?rrggbbのときはそのまま返す
-                regex.matched(1);
-            }
-        }
-        return null;
-    }
-
-    public inline static function isValidHex(hex: String): Bool
-        return sanitizeHexStr(hex) != null;
-
-    public inline static function parse(hex: String): Color
-        return sanitizeHexStr(hex).map(hex -> {
-            final s = hex.substr(1, 99);
-            final r = Std.parseInt('0x${s.substr(0, 2)}').withDefault(0);
-            final g = Std.parseInt('0x${s.substr(2, 2)}').withDefault(0);
-            final b = Std.parseInt('0x${s.substr(4, 2)}').withDefault(0);
-            fromRgbInts(r, g, b);
-        }).withDefault(new Color(1, 0, 0, 0));
-
-    public inline static function hexToInt(hex: String): Int
-        return sanitizeHexStr(hex).map(hex -> Std.parseInt('0x${hex.substr(1, 99)}')).withDefault(0);
-
-    public inline static function hexToInta(hex: String): Int
-        return sanitizeHexStr(hex, false).map(hex -> Std.parseInt('0xff${hex.substr(1, 99)}')).withDefault(0);
-
-    public inline function toRgbHex(includeSharp: Bool = true): String
-        return sharp(includeSharp) + StringTools.hex(toIntRgb(), 6);
-
-    public inline function toArgbHex(includeSharp: Bool = true): String
-        return sharp(includeSharp) + StringTools.hex(toIntArgb(), 8);
-
-    public inline static function lerp(from: Color, to: Color, t: Float): Color {
-        final r = Math.round(Math.lerp(from.red, to.red, t));
-        final g = Math.round(Math.lerp(from.green, to.green, t));
-        final b = Math.round(Math.lerp(from.blue, to.blue, t));
-        return fromRgb(r, g, b);
-    }
-
-    public inline static function lerpRgba(from: Color, to: Color, t: Float): Color {
-        final a = Math.round(Math.lerp(from.alpha, to.alpha, t));
-        final r = Math.round(Math.lerp(from.red, to.red, t));
-        final g = Math.round(Math.lerp(from.green, to.green, t));
-        final b = Math.round(Math.lerp(from.blue, to.blue, t));
-        return fromArgb(a, r, g, b);
-    }
-
-    public inline static function toBlack(color: Color, t: Float): Color
-        return lerp(color, BLACK, t);
-
-    public inline static function toWhite(color: Color, t: Float): Color
-        return lerp(color, WHITE, t);
 }
