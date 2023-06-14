@@ -5,12 +5,6 @@ import tink.core.Signal;
 
 using tweenxcore.Tools;
 
-enum TweenEvent {
-    Delayed;
-    Running;
-    Complete;
-}
-
 @:structInit
 @:allow(madlib.Tween)
 @:tink private class Tw {
@@ -66,7 +60,7 @@ enum TweenEvent {
         return this;
     }
 
-    inline function run(dt: Float): TweenEvent {
+    inline function run(dt: Float): Bool {
         if(delay > 0) {
             delay -= dt;
             return false;
@@ -87,9 +81,9 @@ enum TweenEvent {
 
         if(done) {
             _onComplete.trigger(Noise);
-            return Complete;
+            return true;
         }
-        return Running;
+        return false;
     }
 }
 
@@ -104,7 +98,7 @@ class Tween {
         var i = 0;
         while(i < tweens.length) {
             final tween = tweens[i];
-            if(tween.run(dt) == Complete) {
+            if(tween.run(dt)) {
                 tweens.splice(i, 1);
                 continue;
             }
