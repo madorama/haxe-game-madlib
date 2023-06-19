@@ -92,6 +92,11 @@ class Entity extends h2d.Object {
         this.scene = scene;
     }
 
+    public function detachScene() {
+        if(scene == null) return;
+        scene.remove(this);
+    }
+
     public function created() {}
 
     public function started() {}
