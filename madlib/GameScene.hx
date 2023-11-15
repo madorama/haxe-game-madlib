@@ -148,11 +148,14 @@ class GameScene {
         return ret;
     }
 
-    public function getEntitiesInTag(tag: String, bounds: Bounds): Array<Entity> {
+    public function getEntitiesInTag(tag: String, ?bounds: Bounds): Array<Entity> {
         final ret = [];
         for(e in entities) {
             if(e.existTag(tag))
-                ret.push(e);
+                if(bounds == null)
+                    ret.push(e);
+                else
+                    if(e.collider.collideBounds(bounds)) ret.push(e);
         }
         return ret;
     }
