@@ -2,32 +2,28 @@ package madlib;
 
 import haxe.EnumFlags;
 import haxe.PosInfos;
-import hx.strings.ansi.Ansi;
+import madlib.Ansi;
 
 class Debug {
-    @:nullSafety(Off)
     public inline static function log<T>(value: T, ?pos: PosInfos): T {
         #if debug
-        trace('${Ansi.fg(WHITE)}[Log] ${value}${Ansi.fg(DEFAULT)}');
+        trace('${Ansi.fg(White)}[Log] ${value}${Ansi.fg(Default)}', pos);
         #end
         return value;
     }
 
-    @:nullSafety(Off)
     public inline static function warn<T>(value: T, ?pos: PosInfos): T {
         #if debug
-        trace('${Ansi.fg(YELLOW)}[Warn] ${value}${Ansi.fg(DEFAULT)}');
+        trace('${Ansi.fg(Yellow)}[Warn] ${value}${Ansi.fg(Default)}', pos);
         #end
         return value;
     }
 
-    @:nullSafety(Off)
     public inline static function error<T>(value: T, ?pos: PosInfos): T {
-        trace('${Ansi.fg(RED)}[Error] ${value}${Ansi.fg(DEFAULT)}');
+        trace('${Ansi.fg(Red)}[Error] ${value}${Ansi.fg(Default)}', pos);
         return value;
     }
 
-    @:nullSafety(Off)
     public inline static function errorLog<T>(value: T, ?pos: PosInfos): T {
         #if hl
         hl.UI.dialog("Error log", '${value}\n${pos.fileName}:${pos.lineNumber}', EnumFlags.ofInt(2));

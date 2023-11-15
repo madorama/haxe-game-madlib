@@ -4,7 +4,7 @@
     "license": "MIT",
     "tags": ["Heaps", "game", "package"],
     "description": "",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "releasenote": "",
     "contributors": ["madorama"],
     "dependencies": {

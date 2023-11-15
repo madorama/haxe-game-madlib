@@ -3,13 +3,35 @@ package madlib.heaps;
 import hxd.Window;
 import madlib.GameScene;
 
+@:access(madlib.GameScene)
+@:access(madlib.heaps.Entity)
 @:tink class App extends hxd.App {
     public var window: Window;
 
+    static var destroyedEntities: Array<Entity> = [];
+
     final scenes: Array<GameScene> = [];
+
+    public var currentScene(get, never): GameScene;
+
+    inline function get_currentScene(): GameScene {
+        return scenes[scenes.length - 1];
+    }
 
     final pushReservedScenes: Array<GameScene> = [];
     final popReservedScenes: Array<GameScene> = [];
+
+    public var ftime(default, null): Float = 0;
+
+    public var elapsedFrames(get, never): Int;
+
+    inline function get_elapsedFrames(): Int
+        return Std.int(ftime);
+
+    public var elapsedSeconds(get, never): Float;
+
+    inline function get_elapsedSeconds(): Float
+        return ftime / hxd.Timer.wantedFPS;
 
     public final uiCamera = new h2d.Camera();
 
@@ -41,14 +63,22 @@ import madlib.GameScene;
 
         App.tmod = hxd.Timer.tmod;
 
+        ftime += App.tmod;
+
         for(s in popReservedScenes) {
-            s.dispose();
+            s.destroy();
             scenes.remove(s);
         }
         popReservedScenes.resize(0);
 
+        for(e in destroyedEntities) {
+            if(!e.onDestroyed) e.onDestroy();
+        }
+        destroyedEntities.resize(0);
+
         for(s in pushReservedScenes) {
             scenes.push(s);
+            initScene(s);
         }
         pushReservedScenes.resize(0);
 
@@ -75,6 +105,22 @@ import madlib.GameScene;
 
     public inline function popScene() {
         popReservedScenes.push(scenes[scenes.length - 1 - popReservedScenes.length]);
+    }
+
+    inline function initScene(scene: GameScene) {
+        if(scene.initDone) {
+            scene.init(s2d);
+            scene.initDone = true;
+        }
+    }
+
+    public inline function replaceScene(scene: GameScene) {
+        if(scenes.length == 0) {
+            scenes.push(scene);
+        } else {
+            scenes[scenes.length - 1].destroy();
+            scenes[scenes.length - 1] = scene;
+        }
     }
 
     public inline function clearScenes() {

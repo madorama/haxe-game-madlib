@@ -4,44 +4,47 @@ import madlib.geom.Bounds;
 import polygonal.ds.Dll;
 
 using madlib.extensions.IterableExt;
+using madlib.extensions.NullExt;
 using thx.Maps;
 
-@:allow(madlib.heaps.App)
 class GameScene {
     public static var FIXED_UPDATE_FPS = 30;
+
+    public var ftime(default, null): Float = 0;
+
+    public var elapsedFrames(get, never): Int;
+
+    inline function get_elapsedFrames(): Int
+        return Std.int(ftime);
+
+    public var elapsedSeconds(get, never): Float;
+
+    inline function get_elapsedSeconds(): Float
+        return ftime / getDefaultFrameRate();
 
     public var paused(default, null): Bool = false;
     public var destroyed(default, null): Bool = false;
 
     final tw = new Tween();
 
-    final entities = new Dll<Entity>(16);
+    final entities = new Dll<Entity>(256);
 
     public inline function getDefaultFrameRate(): Float
         return #if heaps hxd.Timer.wantedFPS #else 60 #end;
 
-    public function new() {}
+    public function new(s2d: h2d.Scene) {
+        init(s2d);
+    }
 
     var initDone = false;
 
-    public function initOnceBeforeUpdate() {}
-
-    public function beforeUpdate(dt: Float) {}
+    public function init(s2d: h2d.Scene) {}
 
     public function update(dt: Float) {}
 
     public function fixedUpdate(dt: Float) {}
 
     public function afterUpdate(dt: Float) {}
-
-    inline function entityBeforeUpdate(e: Entity, dt: Float) {
-        if(!e.isStarted) {
-            e.started();
-            e.isStarted = true;
-        }
-        if(e.active && e.isStarted)
-            e.beforeUpdate(dt);
-    }
 
     inline function entityUpdate(e: Entity, dt: Float) {
         if(!e.isStarted) {
@@ -72,8 +75,12 @@ class GameScene {
 
     public function onResize() {}
 
-    public function dispose() {
+    public function destroy() {
         destroyed = true;
+        for(entity in entities) {
+            entity.destroy();
+            gc();
+        }
     }
 
     public inline function pause() {
@@ -109,8 +116,12 @@ class GameScene {
     public inline function remove(entity: Entity) {
         entity.removed();
         entity.isStarted = false;
-
+        entity.active = false;
         entities.remove(entity);
+    }
+
+    public inline function destroyEntity(entity: Entity) {
+        entity.destroy();
     }
 
     public inline function removes(es: Iterable<Entity>) {
@@ -122,8 +133,11 @@ class GameScene {
         entities.clear(true);
     }
 
+    public inline function findEntity<T: Entity>(type: Class<T>): Null<T>
+        return entities.find(e -> Std.isOfType(e, type)).map(x -> cast x);
+
     public inline function findEntities<T: Entity>(type: Class<T>): Array<T>
-        return entities.filter(e -> Std.isOfType(e, type)).map(e -> cast e).toArray();
+        return entities.filter(e -> Std.isOfType(e, type)).map(x -> cast x).toArray();
 
     public function getEntitiesInBounds(bounds: Bounds): Array<Entity> {
         final ret = [];
@@ -143,6 +157,20 @@ class GameScene {
         return ret;
     }
 
+    inline function gc() {
+        var next = entities.head;
+        while(next != null) {
+            final n = next.next;
+            final e = next.val;
+            if(e.destroyed) {
+                if(!e.onDestroyed) e.onDestroy();
+                next.unlink();
+                next.free();
+            }
+            next = n;
+        }
+    }
+
     static inline function canRun(scene: GameScene)
         return !(scene.paused || scene.destroyed);
 
@@ -153,29 +181,13 @@ class GameScene {
             return;
 
         // Remove destroyed entities
-        if(canRun(scene)) {
-            var next = scene.entities.head;
-            while(next != null) {
-                final n = next.next;
-                if(next.val.destroyed) {
-                    next.unlink();
-                    next.free();
-                }
-                next = n;
-            }
-        }
+        if(canRun(scene))
+            scene.gc();
 
-        // Before Update
+        scene.ftime += dt;
+
         if(canRun(scene))
             scene.tw.update(dt);
-
-        if(canRun(scene)) {
-            if(!scene.initDone) {
-                scene.initOnceBeforeUpdate();
-                scene.initDone = true;
-            }
-            scene.beforeUpdate(dt);
-        }
 
         // Update
         if(canRun(scene))

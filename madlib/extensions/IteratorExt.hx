@@ -29,6 +29,17 @@ class IteratorExt {
         return result;
     }
 
+    public inline static function find<T>(self: Iterator<T>, predicate: T -> Bool): Null<T> {
+        var element: Null<T> = null;
+        for(x in self) {
+            if(predicate(x)) {
+                element = x;
+                break;
+            }
+        }
+        return element;
+    }
+
     public inline static function findOption<T>(self: Iterator<T>, predicate: T -> Bool): Option<T> {
         var element = None;
         for(x in self) {
