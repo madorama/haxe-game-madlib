@@ -4,6 +4,33 @@ class FunctionExt {
     public inline static function identity<T>(x: T): T
         return x;
 
+    extern overload public inline static function pipe<A, B>(f1: () -> A, f2: A -> B): B
+        return f2(f1());
+
+    extern overload public inline static function pipe<A, B, C>(f1: () -> A, f2: A -> B, f3: B -> C): C
+        return f3(f2(f1()));
+
+    extern overload public inline static function pipe<A, B, C, D>(f1: () -> A, f2: A -> B, f3: B -> C, f4: C -> D): D
+        return f4(f3(f2(f1())));
+
+    extern overload public inline static function pipe<A, B, C, D, E>(f1: () -> A, f2: A -> B, f3: B -> C, f4: C -> D, f5: D -> E): E
+        return f5(f4(f3(f2(f1()))));
+
+    extern overload public inline static function pipe<A, B, C, D, E, F>(f1: () -> A, f2: A -> B, f3: B -> C, f4: C -> D, f5: D -> E, f6: E -> F): F
+        return f6(f5(f4(f3(f2(f1())))));
+
+    extern overload public inline static function pipe<A, B, C, D, E, F, G>(f1: () -> A, f2: A -> B, f3: B -> C, f4: C -> D, f5: D -> E, f6: E -> F,
+            f7: F -> G): G
+        return f7(f6(f5(f4(f3(f2(f1()))))));
+
+    extern overload public inline static function pipe<A, B, C, D, E, F, G, H>(f1: () -> A, f2: A -> B, f3: B -> C, f4: C -> D, f5: D -> E, f6: E -> F,
+            f7: F -> G, f8: G -> H): H
+        return f8(f7(f6(f5(f4(f3(f2(f1())))))));
+
+    extern overload public inline static function pipe<A, B, C, D, E, F, G, H, I>(f1: () -> A, f2: A -> B, f3: B -> C, f4: C -> D, f5: D -> E, f6: E -> F,
+            f7: F -> G, f8: G -> H, f9: H -> I): I
+        return f9(f8(f7(f6(f5(f4(f3(f2(f1()))))))));
+
     extern overload public inline static function pipe<A, B>(value: A, f1: A -> B): B
         return f1(value);
 
@@ -19,8 +46,7 @@ class FunctionExt {
     extern overload public inline static function pipe<A, B, C, D, E, F>(value: A, f1: A -> B, f2: B -> C, f3: C -> D, f4: D -> E, f5: E -> F): F
         return f5(f4(f3(f2(f1(value)))));
 
-    extern overload public inline static function pipe<A, B, C, D, E, F, G>(value: A, f1: A -> B, f2: B -> C, f3: C -> D, f4: D -> E, f5: E -> F,
-            f6: F -> G): G
+    extern overload public inline static function pipe<A, B, C, D, E, F, G>(value: A, f1: A -> B, f2: B -> C, f3: C -> D, f4: D -> E, f5: E -> F, f6: F -> G): G
         return f6(f5(f4(f3(f2(f1(value))))));
 
     extern overload public inline static function pipe<A, B, C, D, E, F, G, H>(value: A, f1: A -> B, f2: B -> C, f3: C -> D, f4: D -> E, f5: E -> F,
