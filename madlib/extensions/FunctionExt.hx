@@ -109,4 +109,10 @@ class FunctionExt {
         var r: Null<F> = null;
         return () -> if(r == null) r = func(a, b, c, d, e) else r;
     }
+
+    extern overload public inline static function compose<A, B, C>(f: A -> B, g: B -> C): A -> C
+        return a -> g(f(a));
+
+    extern overload public inline static function compose<A, B>(f: () -> A, g: A -> B): () -> B
+        return () -> g(f());
 }
