@@ -70,16 +70,8 @@ class ArrayExt {
         return result;
     }
 
-    public inline static function all<T>(self: Array<T>, predicate: T -> Bool): Bool {
-        var result = true;
-        for(x in self) {
-            if(!predicate(x)) {
-                result = false;
-                break;
-            }
-        }
-        return result;
-    }
+    public inline static function all<T>(self: Array<T>, predicate: T -> Bool): Bool
+        return forEach(self, predicate);
 
     public inline static function reduce<T, Acc>(self: Array<T>, init: Acc, f: Acc -> T -> Acc) {
         for(x in self)
