@@ -52,6 +52,9 @@ class LdtkExt {
                 renderY: y * gridSize,
                 flips: tile.flipBits,
                 tileId: tile.tileId,
+                coordId: 0,
+                ruleId: 0,
+                alpha: self.opacity,
             });
         }
     }
