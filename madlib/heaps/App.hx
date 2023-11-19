@@ -54,7 +54,26 @@ import madlib.GameScene;
     override function init() {
         super.init();
         Controller.init();
+        window.addEventTarget(onWindowEvent);
     }
+
+    function onWindowEvent(e: hxd.Event) {
+        switch e.kind {
+            case EOver: onMouseEnter();
+            case EOut: onMouseLeave();
+            case EFocus: onFocus();
+            case EFocusLost: onBlur();
+            default:
+        }
+    }
+
+    function onFocus() {}
+
+    function onBlur() {}
+
+    function onMouseEnter() {}
+
+    function onMouseLeave() {}
 
     override function update(dt: Float) {
         super.update(dt);
