@@ -83,11 +83,11 @@ class GameScene {
         }
     }
 
-    public inline function pause() {
+    public function pause() {
         paused = true;
     }
 
-    public inline function resume() {
+    public function resume() {
         paused = false;
     }
 
