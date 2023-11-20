@@ -1,6 +1,6 @@
 package tests;
 
-import haxe.ds.Option;
+import madlib.Option;
 import madlib.extensions.AssertExt;
 import utest.Assert;
 

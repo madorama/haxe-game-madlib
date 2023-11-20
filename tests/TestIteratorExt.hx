@@ -1,7 +1,7 @@
 package tests;
 
-import haxe.ds.Option;
 import madlib.Math;
+import madlib.Option;
 import madlib.Tuple;
 import madlib.extensions.AssertExt;
 import utest.Assert;

@@ -1,8 +1,8 @@
 package tests;
 
 import haxe.Int64;
-import haxe.ds.Option;
 import madlib.Math;
+import madlib.Option;
 import madlib.Random;
 import madlib.Tuple.Tuple2;
 import madlib.extensions.AssertExt;

@@ -1,10 +1,8 @@
 package tests;
 
-import haxe.ds.Option;
+import madlib.Option;
 import madlib.extensions.AssertExt;
 import utest.Assert;
-
-using madlib.extensions.OptionExt;
 
 @:noCompletion
 class TestOptionExt extends utest.Test {
@@ -74,8 +72,8 @@ class TestOptionExt extends utest.Test {
     }
 
     function testOfValue() {
-        Assert.same(None, Std.parseInt("foobar").ofValue());
-        Assert.same(Some(42), Std.parseInt("42").ofValue());
+        Assert.same(None, OptionExt.ofValue(Std.parseInt("foobar")));
+        Assert.same(Some(42), OptionExt.ofValue(Std.parseInt("42")));
     }
 
     function testToArray() {
