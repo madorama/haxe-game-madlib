@@ -103,8 +103,11 @@ class FunctionExt {
     extern overload public inline static function toEffect<A, B, C, D, E, F>(func: A -> B -> C -> D -> E -> F): A -> B -> C -> D -> E -> Void
         return (a, b, c, d, e) -> func(a, b, c, d, e);
 
-    public inline static function flip<A, B, C>(f: A -> (B -> C)): B -> (A -> C)
+    extern overload public inline static function flip<A, B, C>(f: A -> (B -> C)): B -> (A -> C)
         return a -> b -> f(b)(a);
+
+    extern overload public inline static function flip<A, B, C>(f: A -> B -> C): B -> A -> C
+        return (a, b) -> f(b, a);
 
     @:nullSafety(Off)
     extern overload public inline static function lazy<A, B>(func: A -> B, a: A): Void -> B {
