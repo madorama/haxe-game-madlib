@@ -1,9 +1,8 @@
 package madlib.heaps;
 
-import haxe.ds.Option;
+import madlib.Option;
 
 using madlib.extensions.NullExt;
-using madlib.extensions.OptionExt;
 
 enum abstract PadKey(Int) from Int to Int {
     final A;

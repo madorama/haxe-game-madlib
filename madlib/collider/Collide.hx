@@ -1,10 +1,9 @@
 package madlib.collider;
 
 import differ.Collision;
-import differ.data.RayCollision.RayCollisionHelper;
 import differ.data.RayCollision;
-import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.Option;
 import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 

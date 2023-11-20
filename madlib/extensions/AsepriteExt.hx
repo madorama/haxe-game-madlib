@@ -3,7 +3,7 @@ package madlib.extensions;
 import aseprite.AseAnim;
 import aseprite.Aseprite;
 import h2d.Bitmap;
-import haxe.ds.Option;
+import madlib.Option;
 import madlib.geom.Bounds;
 
 using madlib.extensions.ArrayExt;

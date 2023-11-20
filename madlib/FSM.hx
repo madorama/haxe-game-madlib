@@ -1,9 +1,6 @@
 package madlib;
 
-import haxe.ds.Option;
-
 using madlib.extensions.ArrayExt;
-using madlib.extensions.OptionExt;
 using thx.Maps;
 
 abstract class StateBase<T> {

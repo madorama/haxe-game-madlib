@@ -1,9 +1,5 @@
 package madlib;
 
-import haxe.ds.Option;
-
-using madlib.extensions.OptionExt;
-
 @:structInit
 class Paginate<T> {
     @:isVar public var items(default, set): Array<T> = [];

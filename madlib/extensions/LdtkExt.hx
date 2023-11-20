@@ -1,6 +1,5 @@
 package madlib.extensions;
 
-import haxe.ds.Option;
 import ldtk.Layer_AutoLayer;
 import ldtk.Layer_IntGrid;
 import ldtk.Layer_Tiles;
@@ -8,7 +7,6 @@ import ldtk.Layer_Tiles;
 using madlib.extensions.ArrayExt;
 using madlib.extensions.LdtkExt;
 using madlib.extensions.NullExt;
-using madlib.extensions.OptionExt;
 
 class LdtkExt {
     public inline static function getEnumValue<T>(self: Layer_IntGrid, cx: Int, cy: Int, t: Enum<T>): Option<T>

@@ -1,6 +1,10 @@
-package madlib.extensions;
+package madlib;
 
-import haxe.ds.Option;
+@:using(Option.OptionExt)
+enum Option<T> {
+    Some(value: T);
+    None;
+}
 
 class OptionExt {
     public inline static function withDefault<T>(self: Option<T>, defaultValue: T): T

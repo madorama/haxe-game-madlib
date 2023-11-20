@@ -3,14 +3,13 @@ package madlib.heaps;
 import aseprite.Aseprite;
 import h2d.Layers;
 import h2d.TileGroup;
-import haxe.ds.Option;
 import ldtk.Layer_AutoLayer;
 import madlib.GameScene;
+import madlib.Option;
 import madlib.geom.Bounds;
 
 using madlib.extensions.ArrayExt;
 using madlib.extensions.LdtkExt;
-using madlib.extensions.OptionExt;
 
 private typedef RenderableLayer = {
     function render(?target: h2d.TileGroup): Null<h2d.Object>;

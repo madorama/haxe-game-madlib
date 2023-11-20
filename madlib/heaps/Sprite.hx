@@ -5,11 +5,9 @@ import aseprite.Aseprite;
 import h2d.Object;
 import h2d.RenderContext;
 import h2d.col.Bounds;
-import haxe.ds.Option;
-import tink.core.Noise;
+import madlib.Option;
 
 using madlib.extensions.AsepriteExt;
-using madlib.extensions.OptionExt;
 using thx.Maps;
 
 @:tink class Sprite extends h2d.Drawable {

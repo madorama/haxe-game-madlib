@@ -1,9 +1,8 @@
 package madlib.extensions;
 
-import haxe.ds.Option;
+import madlib.Option;
 import madlib.Tuple.Tuple2;
 import thx.Ord;
-import thx.Set;
 
 using madlib.extensions.ArrayExt;
 

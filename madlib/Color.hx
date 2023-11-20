@@ -13,7 +13,6 @@ package madlib;
 #if heaps
 import h3d.Vector;
 #end
-import haxe.ds.Option;
 
 abstract Color(Int) from Int to Int {
     public inline function new(argb: Int): Color {

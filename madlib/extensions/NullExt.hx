@@ -1,6 +1,6 @@
 package madlib.extensions;
 
-import haxe.ds.Option;
+import madlib.Option;
 
 class NullExt {
     public inline static function withDefault<T>(self: Null<T>, value: T): T

@@ -1,9 +1,8 @@
 package madlib.collider;
 
-import haxe.ds.Option;
 import hxmath.math.Vector2;
+import madlib.Option;
 import madlib.geom.Bounds;
-import thx.error.NotImplemented;
 
 enum ColliderType {
     Circle;

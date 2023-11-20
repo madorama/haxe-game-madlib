@@ -1,6 +1,6 @@
 package madlib.extensions;
 
-import haxe.ds.Option;
+import madlib.Option;
 import madlib.Tuple;
 
 class IteratorExt {

@@ -3,7 +3,7 @@ package madlib.extensions;
 #if test
 import buddy.Should;
 import haxe.PosInfos;
-import haxe.ds.Option;
+import madlib.Option;
 import utest.Assert;
 
 class ShouldExt {}

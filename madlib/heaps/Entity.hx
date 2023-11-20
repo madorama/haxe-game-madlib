@@ -1,15 +1,10 @@
 package madlib.heaps;
 
-import haxe.ds.Option;
-import hxmath.math.Vector2;
 import madlib.GameScene;
+import madlib.Option;
 import madlib.collider.Collide;
 import madlib.collider.Collider;
-import madlib.collider.Hitbox;
-import madlib.draw.Layers;
-import madlib.geom.Bounds;
 import thx.Set;
-import util.Helper.downcast;
 
 using madlib.extensions.IterableExt;
 

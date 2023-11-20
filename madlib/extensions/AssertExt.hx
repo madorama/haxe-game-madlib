@@ -1,6 +1,6 @@
 package madlib.extensions;
 
-import haxe.ds.Option;
+import madlib.Option;
 #if test
 import haxe.PosInfos;
 import utest.Assert;

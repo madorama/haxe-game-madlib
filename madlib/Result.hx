@@ -1,7 +1,5 @@
 package madlib;
 
-import haxe.ds.Option;
-
 @:using(Result.ResultExt)
 enum Result<E, T> {
     Ok(value: T);

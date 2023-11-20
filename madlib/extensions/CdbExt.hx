@@ -1,14 +1,13 @@
 package madlib.extensions;
 
-import haxe.ds.Option;
+import madlib.Option;
 
 using madlib.extensions.CdbExt;
-using madlib.extensions.OptionExt;
 
 class CdbExt {
     public static function safeGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): Option<T> {
         final value = indexId.get(kind);
-        return value.ofValue();
+        return if(value != null) Some(value) else None;
     }
 
     public static function coerceGet<T, Kind>(indexId: cdb.Types.IndexId<T, Kind>, kind: Kind): T {

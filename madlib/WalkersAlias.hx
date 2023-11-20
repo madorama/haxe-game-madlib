@@ -1,6 +1,5 @@
 package madlib;
 
-import haxe.ds.Option;
 import haxe.exceptions.ArgumentException;
 
 using madlib.extensions.ArrayExt;

@@ -2,9 +2,7 @@ package madlib.heaps.ui;
 
 import h2d.Font;
 import h2d.RenderContext;
-import haxe.ds.Option;
-
-using madlib.extensions.OptionExt;
+import madlib.Option;
 
 class Text extends h2d.Text {
     static var internalDefaultFont: Option<Font> = None;
