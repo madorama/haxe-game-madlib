@@ -10,17 +10,6 @@ import madlib.GameScene;
 
     static var destroyedEntities: Array<Entity> = [];
 
-    final scenes: Array<GameScene> = [];
-
-    public var currentScene(get, never): GameScene;
-
-    inline function get_currentScene(): GameScene {
-        return scenes[scenes.length - 1];
-    }
-
-    final pushReservedScenes: Array<GameScene> = [];
-    final popReservedScenes: Array<GameScene> = [];
-
     public var ftime(default, null): Float = 0;
 
     public var elapsedFrames(get, never): Int;
@@ -84,66 +73,11 @@ import madlib.GameScene;
 
         ftime += App.tmod;
 
-        for(s in popReservedScenes) {
-            s.destroy();
-            scenes.remove(s);
-        }
-        popReservedScenes.resize(0);
-
         for(e in destroyedEntities) {
             if(!e.onDestroyed) e.onDestroy();
         }
         destroyedEntities.resize(0);
 
-        for(s in pushReservedScenes) {
-            scenes.push(s);
-            initScene(s);
-        }
-        pushReservedScenes.resize(0);
-
         GamePad.update();
-    }
-
-    inline function gc() {
-        for(scene in scenes) {
-            if(scene.destroyed)
-                scenes.remove(scene);
-        }
-    }
-
-    override inline function onResize() {
-        super.onResize();
-
-        for(scene in scenes)
-            scene.onResize();
-    }
-
-    public inline function pushScene(scene: GameScene) {
-        pushReservedScenes.push(scene);
-    }
-
-    public inline function popScene() {
-        popReservedScenes.push(scenes[scenes.length - 1 - popReservedScenes.length]);
-    }
-
-    inline function initScene(scene: GameScene) {
-        if(scene.initDone) {
-            scene.init(s2d);
-            scene.initDone = true;
-        }
-    }
-
-    public inline function replaceScene(scene: GameScene) {
-        if(scenes.length == 0) {
-            scenes.push(scene);
-        } else {
-            scenes[scenes.length - 1].destroy();
-            scenes[scenes.length - 1] = scene;
-        }
-    }
-
-    public inline function clearScenes() {
-        while(scenes.length > 0)
-            popScene();
     }
 }
