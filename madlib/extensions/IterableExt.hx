@@ -14,7 +14,7 @@ class IterableExt {
         return IteratorExt.any(self.iterator(), predicate);
 
     public inline static function find<T>(self: Iterable<T>, predicate: T -> Bool): Null<T>
-        return IteratorExt.find(self.iterator(), predicate);
+        return @:nullSafety(Off) IteratorExt.find(self.iterator(), predicate);
 
     public inline static function findOption<T>(self: Iterable<T>, predicate: T -> Bool): Option<T>
         return IteratorExt.findOption(self.iterator(), predicate);

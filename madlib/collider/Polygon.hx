@@ -36,6 +36,8 @@ class Polygon extends Collider {
             if(v.x >= maxX) maxX = v.x;
             if(v.y >= maxY) maxY = v.y;
         }
+
+        polygon = new differ.shapes.Polygon(0, 0, []);
         width = maxX - minX;
         height = maxY - minY;
 

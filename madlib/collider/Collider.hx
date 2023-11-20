@@ -24,7 +24,7 @@ class Collider {
 
     var type = Circle;
 
-    @:isVar public var rotation(get, set): Float;
+    @:isVar public var rotation(get, set): Float = 0;
 
     inline function get_rotation(): Float
         return rotation;

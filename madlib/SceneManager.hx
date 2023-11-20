@@ -24,8 +24,10 @@ class SceneManager {
     }
 
     public inline function pop() {
-        if(scenes.length > 0)
-            popReservedScenes.push(scenes.pop());
+        if(scenes.length > 0) {
+            final scene = scenes.pop();
+            if(scene != null) popReservedScenes.push(scene);
+        }
     }
 
     inline function init(scene: GameScene, s2d: h2d.Scene) {

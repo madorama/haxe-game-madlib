@@ -29,15 +29,22 @@ import madlib.GameScene;
     public function new() {
         super();
         window = Window.getInstance();
+        centerWindow();
+    }
+
+    public inline function centerWindow() {
+        #if(hldx || hlsdl)
+        @:privateAccess window.window.center();
+        #end
     }
 
     public inline function setWindow(?width: Int, ?height: Int, displayMode: DisplayMode = DisplayMode.Windowed) {
         window.displayMode = displayMode;
-        window.resize(width ?? window.width, height ?? window.height);
-        #if(hldx || hlsdl)
-        @:privateAccess window.window.center();
-        #end
-        h3d.Engine.getCurrent().resize(width, height);
+        centerWindow();
+        if(width != null && height != null) {
+            window.resize(width ?? window.width, height ?? window.height);
+            h3d.Engine.getCurrent().resize(width ?? 1280, height ?? 720);
+        }
     }
 
     override function init() {
