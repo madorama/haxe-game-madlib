@@ -1,6 +1,5 @@
 package madlib;
 
-import tink.core.Noise;
 import tink.core.Signal;
 
 using tweenxcore.Tools;
@@ -13,9 +12,9 @@ using tweenxcore.Tools;
     var factor = 0.;
     var easeFunction = tweenxcore.Tools.Easing.linear;
 
-    @:signal public var onStart: Noise;
+    @:signal public var onStart: Unit;
     @:signal public var onUpdate: Float;
-    @:signal public var onComplete: Noise;
+    @:signal public var onComplete: Unit;
     public var from: Float;
     public var to: Float;
     public var speed: Float;
@@ -66,7 +65,7 @@ using tweenxcore.Tools;
             return false;
         }
         if(!_onStart.disposed) {
-            _onStart.trigger(Noise);
+            _onStart.trigger(Unit);
             _onStart.dispose();
         }
 
@@ -80,7 +79,7 @@ using tweenxcore.Tools;
         _onUpdate.trigger(rate);
 
         if(done) {
-            _onComplete.trigger(Noise);
+            _onComplete.trigger(Unit);
             return true;
         }
         return false;
@@ -136,7 +135,7 @@ class Tween {
                 continue;
 
             if(withComplete)
-                t._onComplete.trigger(Noise);
+                t._onComplete.trigger(Unit);
             tweens.remove(t);
         }
     }
