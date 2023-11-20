@@ -64,6 +64,6 @@ class Paginate<T> {
 
     public inline function getItemInPage(index: Int): Option<T> {
         final item = currentPageItems[index];
-        return item.ofValue();
+        return if(item != null) Some(item) else None;
     }
 }
