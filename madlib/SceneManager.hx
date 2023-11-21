@@ -48,7 +48,7 @@ class SceneManager {
             pop();
     }
 
-    public function update(doUpdate: GameScene -> Void, s2d: h2d.Scene) {
+    public function update(s2d: h2d.Scene, dt: Float) {
         if(popReservedScenes.length > 0) {
             for(s in popReservedScenes) {
                 s.destroy();
@@ -66,7 +66,17 @@ class SceneManager {
         }
 
         for(scene in scenes)
-            doUpdate(scene);
+            GameScene.doUpdate(scene, dt);
+    }
+
+    public function fixedUpdate(dt: Float) {
+        for(scene in scenes)
+            GameScene.doFixedUpdate(scene, dt);
+    }
+
+    public function afterUpdate(dt: Float) {
+        for(scene in scenes)
+            GameScene.doAfterUpdate(scene, dt);
     }
 
     public function gc() {

@@ -8,8 +8,6 @@ using madlib.extensions.NullExt;
 using thx.Maps;
 
 class GameScene {
-    public static var FIXED_UPDATE_FPS = 30;
-
     public var ftime(default, null): Float = 0;
 
     public var elapsedFrames(get, never): Int;
@@ -177,37 +175,24 @@ class GameScene {
     static inline function canRun(scene: GameScene)
         return !(scene.paused || scene.destroyed);
 
-    var fixedUpdateAccum = 0.;
-
     static inline function doUpdate(scene: GameScene, dt: Float) {
-        if(!canRun(scene))
-            return;
-
-        // Remove destroyed entities
-        if(canRun(scene))
-            scene.gc();
-
+        if(!canRun(scene)) return;
+        scene.gc();
         scene.ftime += dt;
+        if(!canRun(scene)) return;
+        scene.tw.update(dt);
 
-        if(canRun(scene))
-            scene.tw.update(dt);
+        if(!canRun(scene)) return;
+        scene.update(dt);
+    }
 
-        // Update
-        if(canRun(scene))
-            scene.update(dt);
+    static inline function doFixedUpdate(scene: GameScene, dt: Float) {
+        if(!canRun(scene)) return;
+        scene.fixedUpdate(dt);
+    }
 
-        // FixedUpdate
-        if(canRun(scene)) {
-            scene.fixedUpdateAccum += dt;
-            while(scene.fixedUpdateAccum >= scene.getDefaultFrameRate() / FIXED_UPDATE_FPS) {
-                scene.fixedUpdateAccum -= scene.getDefaultFrameRate() / FIXED_UPDATE_FPS;
-
-                scene.fixedUpdate(dt);
-            }
-        }
-
-        // AfterUpdate
-        if(canRun(scene))
-            scene.afterUpdate(dt);
+    static inline function doAfterUpdate(scene: GameScene, dt: Float) {
+        if(!canRun(scene)) return;
+        scene.afterUpdate(dt);
     }
 }

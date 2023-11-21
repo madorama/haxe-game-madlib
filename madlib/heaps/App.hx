@@ -26,6 +26,11 @@ import madlib.GameScene;
 
     public static var tmod: Float = 1 / 60;
 
+    public static var FIXED_UPDATE_FPS = 30;
+
+    public inline function getDefaultFrameRate(): Float
+        return #if heaps hxd.Timer.wantedFPS #else 60 #end;
+
     public function new() {
         super();
         window = Window.getInstance();
@@ -78,13 +83,45 @@ import madlib.GameScene;
 
         App.tmod = hxd.Timer.tmod;
 
-        ftime += App.tmod;
-
         for(e in destroyedEntities) {
             if(!e.onDestroyed) e.onDestroy();
         }
         destroyedEntities.resize(0);
 
         GamePad.update();
+    }
+
+    function innerUpdate(dt: Float) {}
+
+    function innerFixedUpdate(dt: Float) {}
+
+    function innerAfterUpdate(dt: Float) {}
+
+    function runUpdate(dt: Float) {
+        innerUpdate(dt);
+    }
+
+    function runFixedUpdate(dt: Float) {
+        innerFixedUpdate(dt);
+    }
+
+    function runAfterUpdate(dt: Float) {
+        innerAfterUpdate(dt);
+    }
+
+    var fixedUpdateAccum = 0.;
+
+    function doUpdate(dt: Float) {
+        ftime += App.tmod;
+
+        runUpdate(dt);
+
+        fixedUpdateAccum += dt;
+        while(fixedUpdateAccum >= getDefaultFrameRate() / FIXED_UPDATE_FPS) {
+            fixedUpdateAccum -= getDefaultFrameRate() / FIXED_UPDATE_FPS;
+            runFixedUpdate(dt);
+        }
+
+        runAfterUpdate(dt);
     }
 }
