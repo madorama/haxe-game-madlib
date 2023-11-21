@@ -1,20 +1,21 @@
 package madlib;
 
-import tink.core.Signal;
+import madlib.Event.Events;
 
 using tweenxcore.Tools;
 
 @:structInit
 @:allow(madlib.Tween)
-@:tink private class Tw {
+final class Tw {
     var done = false;
     var name = "";
     var factor = 0.;
     var easeFunction = tweenxcore.Tools.Easing.linear;
 
-    @:signal public var onStart: Unit;
-    @:signal public var onUpdate: Float;
-    @:signal public var onComplete: Unit;
+    final onStart: Events<Unit> = new Events();
+    final onUpdate: Events<Float> = new Events();
+    final onComplete: Events<Unit> = new Events();
+
     public var from: Float;
     public var to: Float;
     public var speed: Float;
@@ -41,22 +42,31 @@ using tweenxcore.Tools;
         return this;
     }
 
-    public inline function start(cb: Void -> Void): Tw {
-        this._onStart.clear();
-        this.onStart.handle(cb);
-        return this;
+    public inline function addOnStart(cb: Unit -> Void): () -> Void {
+        final e = new Event(cb);
+        onStart.add(e);
+        return () -> e.dispose();
     }
 
-    public inline function update(cb: Float -> Void): Tw {
-        this._onUpdate.clear();
-        this.onUpdate.handle(cb);
-        return this;
+    public inline function addOnUpdate(cb: Float -> Void): () -> Void {
+        final e = new Event(cb);
+        onUpdate.add(e);
+        return () -> e.dispose();
     }
 
-    public inline function complete(cb: Void -> Void): Tw {
-        this._onComplete.clear();
-        this.onComplete.handle(cb);
-        return this;
+    public inline function addOnComplete(cb: Unit -> Void): () -> Void {
+        final e = new Event(cb);
+        onComplete.add(e);
+        return () -> e.dispose();
+    }
+
+    inline function complete() {
+        if(onComplete.disposed) return;
+        onComplete.invoke(Unit);
+
+        onStart.dispose();
+        onUpdate.dispose();
+        onComplete.dispose();
     }
 
     inline function run(dt: Float): Bool {
@@ -64,9 +74,9 @@ using tweenxcore.Tools;
             delay -= dt;
             return false;
         }
-        if(!_onStart.disposed) {
-            _onStart.trigger(Unit);
-            _onStart.dispose();
+        if(!onStart.disposed) {
+            onStart.invoke(Unit);
+            onStart.dispose();
         }
 
         factor += speed * dt;
@@ -76,10 +86,10 @@ using tweenxcore.Tools;
         }
 
         final rate = easeFunction(factor).lerp(from, to);
-        _onUpdate.trigger(rate);
+        onUpdate.invoke(rate);
 
         if(done) {
-            _onComplete.trigger(Unit);
+            complete();
             return true;
         }
         return false;
@@ -108,8 +118,7 @@ class Tween {
     public function timer(frames: Float, delay = 0., ?onComplete: Void -> Void): Tw {
         final tween = new Tw(0, 1, 1 / frames);
         if(onComplete != null) {
-            tween._onComplete.clear();
-            tween.onComplete.handle(onComplete);
+            tween.addOnComplete(_ -> onComplete());
         }
         tween.setDelay(delay);
         tweens.push(tween);
@@ -120,8 +129,7 @@ class Tween {
         final tween = new Tw(start, end, 1 / frames);
 
         if(onUpdate != null) {
-            tween._onUpdate.clear();
-            tween.onUpdate.handle(onUpdate);
+            tween.addOnUpdate(onUpdate);
         }
 
         tween.setDelay(delay);
@@ -135,7 +143,7 @@ class Tween {
                 continue;
 
             if(withComplete)
-                t._onComplete.trigger(Unit);
+                t.complete();
             tweens.remove(t);
         }
     }
