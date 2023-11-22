@@ -141,6 +141,7 @@ class Entity extends h2d.Object {
 
     public function onDestroy() {
         onDestroyed = true;
+        remove();
         for(child in children) {
             if(child is Entity) {
                 cast(child, Entity).onDestroy();
