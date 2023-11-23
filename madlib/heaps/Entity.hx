@@ -53,19 +53,29 @@ class Entity extends h2d.Object {
     public var pivotedY(get, never): Float;
 
     function get_pivotedX()
-        return x - pivotX * width;
+        return x - pivotX * scaledWidth;
 
     function get_pivotedY()
-        return y - pivotY * height;
+        return y - pivotY * scaledHeight;
 
     public var centerX(get, never): Float;
     public var centerY(get, never): Float;
 
     function get_centerX()
-        return pivotedX + width * .5;
+        return pivotedX + scaledWidth * .5;
 
     function get_centerY()
-        return pivotedY + height * .5;
+        return pivotedY + scaledHeight * .5;
+
+    public var scaledWidth(get, never): Float;
+
+    public var scaledHeight(get, never): Float;
+
+    function get_scaledWidth(): Float
+        return width * scaleX;
+
+    function get_scaledHeight(): Float
+        return height * scaleY;
 
     public var tags(default, null): Tags = new Tags();
 
@@ -252,7 +262,7 @@ class Entity extends h2d.Object {
         return tags.existTags(names);
 
     // Collider
-    public var collider(default, null) = new Collider();
+    public var collider(default, null): Collider = Collider.empty;
 
     public inline function setCollider(collider: Collider) {
         this.collider = collider;
