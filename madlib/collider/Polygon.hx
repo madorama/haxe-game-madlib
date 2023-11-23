@@ -21,8 +21,8 @@ class Polygon extends Collider {
         return v;
     }
 
-    public function new(x: Float, y: Float, vertices: Array<Vector2>) {
-        super();
+    public function new(x: Float, y: Float, vertices: Array<Vector2>, ?entity: Entity) {
+        super(entity);
         this.vertices = vertices.map(v -> new differ.math.Vector(v.x, v.y));
 
         // Get width and height

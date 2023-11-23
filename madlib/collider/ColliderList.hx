@@ -11,8 +11,8 @@ using madlib.extensions.ArrayExt;
 class ColliderList extends Collider {
     final colliders: Array<Collider>;
 
-    public function new(colliders: Array<Collider>) {
-        super();
+    public function new(colliders: Array<Collider>, ?entity: Entity) {
+        super(entity);
         this.colliders = colliders;
         type = List;
     }

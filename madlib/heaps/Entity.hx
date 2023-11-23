@@ -47,6 +47,8 @@ class Tags {
 
 @:allow(madlib.GameScene)
 class Entity extends h2d.Object {
+    public static final empty = new Entity();
+
     public var pivotedX(get, never): Float;
     public var pivotedY(get, never): Float;
 

@@ -6,8 +6,8 @@ import madlib.collider.Collider.HitPosition;
 import madlib.geom.Bounds;
 
 class Hitbox extends Collider {
-    public function new(width: Float, height: Float, x: Float, y: Float) {
-        super();
+    public function new(width: Float, height: Float, x: Float, y: Float, ?entity: Entity) {
+        super(entity);
         this.width = width;
         this.height = height;
         position.set(x, y);
@@ -46,7 +46,7 @@ class Hitbox extends Collider {
         return absoluteRight > x && absoluteBottom > y && absoluteLeft < x + width && absoluteTop < y + height;
 
     override function clone(): Collider
-        return new Hitbox(width, height, position.x, position.y);
+        return new Hitbox(width, height, position.x, position.y, entity);
 
     public function setFromBounds(bounds: Bounds) {
         position.set(bounds.left, bounds.top);

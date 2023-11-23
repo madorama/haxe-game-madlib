@@ -18,7 +18,7 @@ typedef HitPosition = {
 }
 
 class Collider {
-    public var entity(default, null): Null<Entity> = null;
+    public var entity(default, null): Entity = Entity.empty;
     public var position = Vector2.zero;
 
     var type = Circle;
@@ -101,7 +101,7 @@ class Collider {
     public var absolutePosition(get, never): Vector2;
 
     function get_absolutePosition()
-        return if(entity != null) new Vector2(entity.x + position.x, entity.y + position.y) else position;
+        return new Vector2(absoluteX, absoluteY);
 
     public var absoluteX(get, never): Float;
     public var absoluteY(get, never): Float;
@@ -113,28 +113,28 @@ class Collider {
     public var absoluteRight(get, never): Float;
 
     function get_absoluteX()
-        return if(entity != null) entity.pivotedX + position.x else position.x;
+        return entity.pivotedX + position.x;
 
     function get_absoluteY()
-        return if(entity != null) entity.pivotedY + position.y else position.y;
+        return entity.pivotedY + position.y;
 
     function get_absoluteCenterX()
-        return if(entity != null) absoluteX + width * .5 else position.x;
+        return absoluteX + width * .5;
 
     function get_absoluteCenterY()
-        return if(entity != null) absoluteY + height * .5 else position.y;
+        return absoluteY + height * .5;
 
     function get_absoluteTop()
-        return if(entity != null) entity.pivotedY + top else top;
+        return entity.pivotedY + top;
 
     function get_absoluteBottom()
-        return if(entity != null) entity.pivotedY + bottom else bottom;
+        return entity.pivotedY + bottom;
 
     function get_absoluteLeft()
-        return if(entity != null) entity.pivotedX + left else left;
+        return entity.pivotedX + left;
 
     function get_absoluteRight()
-        return if(entity != null) entity.pivotedX + right else right;
+        return entity.pivotedX + right;
 
     var innerBounds = new Bounds(0, 0, 0, 0);
 
@@ -148,7 +148,9 @@ class Collider {
         return innerBounds;
     }
 
-    public function new() {}
+    public function new(?entity: Entity) {
+        if(entity != null) this.entity = entity;
+    }
 
     public inline function center() {
         position.x = -width * 0.5;
@@ -211,5 +213,5 @@ class Collider {
         return false;
 
     public function clone(): Collider
-        return new Collider();
+        return new Collider(entity);
 }

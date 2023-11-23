@@ -23,8 +23,8 @@ class Grid extends Collider {
     function get_cellsHeight()
         return data.length;
 
-    public function new(cellsWidth: Int, cellsHeight: Int, cellWidth: Float, cellHeight: Float) {
-        super();
+    public function new(cellsWidth: Int, cellsHeight: Int, cellWidth: Float, cellHeight: Float, ?entity: Entity) {
+        super(entity);
         for(iy in 0...cellsHeight) {
             data[iy] = [];
             for(_ in 0...cellsWidth)
@@ -35,8 +35,8 @@ class Grid extends Collider {
         type = Grid;
     }
 
-    public static function create(cellWidth: Float, cellHeight: Float, data: Array<Array<Bool>>): Grid {
-        final grid = new Grid(data.length, data[0].length, cellWidth, cellHeight);
+    public static function create(cellWidth: Float, cellHeight: Float, data: Array<Array<Bool>>, ?entity: Entity): Grid {
+        final grid = new Grid(data.length, data[0].length, cellWidth, cellHeight, entity);
         for(iy in 0...data.length) {
             for(ix in 0...data[iy].length)
                 grid.set(ix, iy, data[iy][ix]);
@@ -143,7 +143,7 @@ class Grid extends Collider {
         return position.y = v - height;
 
     override function clone(): Collider
-        return Grid.create(cellWidth, cellHeight, data.copy());
+        return Grid.create(cellWidth, cellHeight, data.copy(), entity);
 
     #if heaps
     override function debugDraw(graphics: h2d.Graphics) {

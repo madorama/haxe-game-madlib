@@ -10,8 +10,8 @@ using madlib.extensions.DifferExt;
 class Circle extends Collider {
     public var radius: Float;
 
-    public function new(radius: Float, x: Float = 0, y: Float = 0) {
-        super();
+    public function new(radius: Float, x: Float = 0, y: Float = 0, ?entity: Entity) {
+        super(entity);
         this.radius = radius;
         position.set(x, y);
     }
