@@ -27,11 +27,13 @@ class ColliderList extends Collider {
 
             colliders.push(c);
         }
+        calcCache();
     }
 
     public function remove(removes: Array<Collider>) {
         for(c in removes)
             colliders.remove(c);
+        calcCache();
     }
 
     override function added(entity: Entity) {
@@ -52,67 +54,70 @@ class ColliderList extends Collider {
     override function set_height(v: Float): Float
         throw new NotImplemented();
 
-    override function get_left(): Float {
-        var left = colliders[0].left;
+    var _left: Float = 0;
+    var _right: Float = 0;
+    var _top: Float = 0;
+    var _bottom: Float = 0;
+
+    inline function calcCache() {
+        _left = colliders[0].left;
+        _right = colliders[0].right;
+        _top = colliders[0].top;
+        _bottom = colliders[0].bottom;
+
         for(c in colliders) {
-            if(c.left < left)
-                left = c.left;
+            if(c.left < _left)
+                _left = c.left;
+            if(c.right > _right)
+                _right = c.right;
+            if(c.top < _top)
+                _top = c.top;
+            if(c.bottom > _bottom)
+                _bottom = c.bottom;
         }
-        return left;
     }
+
+    override function get_left(): Float
+        return _left;
 
     override function set_left(v: Float): Float {
         final changeX = v - left;
-        for(_ in colliders)
-            position.x += changeX;
+        for(c in colliders)
+            c.left += changeX;
+        position.x += changeX;
         return left;
     }
 
-    override function get_right(): Float {
-        var right = colliders[0].right;
-        for(c in colliders) {
-            if(c.right > right)
-                right = c.right;
-        }
-        return right;
-    }
+    override function get_right(): Float
+        return _right;
 
     override function set_right(v: Float): Float {
         final changeX = v - right;
-        for(_ in colliders)
-            position.x += changeX;
+        for(c in colliders)
+            c.right += changeX;
+        position.x += changeX;
         return right;
     }
 
-    override function get_top(): Float {
-        var top = colliders[0].top;
-        for(c in colliders) {
-            if(c.top < top)
-                top = c.top;
-        }
-        return top;
-    }
+    override function get_top(): Float
+        return _top;
 
     override function set_top(v: Float): Float {
         final changeY = v - top;
-        for(_ in colliders)
-            position.y += changeY;
+        for(c in colliders)
+            c.top += changeY;
+        position.y += changeY;
         return top;
     }
 
-    override function get_bottom(): Float {
-        var bottom = colliders[0].bottom;
-        for(c in colliders) {
-            if(c.bottom > bottom)
-                bottom = c.bottom;
-        }
-        return bottom;
-    }
+    override function get_bottom(): Float
+        return _bottom;
 
     override function set_bottom(v: Float): Float {
         final changeY = v - bottom;
-        for(_ in colliders)
-            position.y += changeY;
+        for(c in colliders)
+            c.bottom += changeY;
+        position.y += changeY;
         return bottom;
     }
 

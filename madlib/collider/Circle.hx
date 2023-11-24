@@ -16,6 +16,11 @@ class Circle extends Collider {
         position.set(x, y);
     }
 
+    public var scaledRadius(get, never): Float;
+
+    function get_scaledRadius(): Float
+        return radius * Math.max(entity.scaleX, entity.scaleY);
+
     override function get_width(): Float
         return radius * 2;
 
@@ -57,25 +62,25 @@ class Circle extends Collider {
 
     #if heaps
     override function debugDraw(graphics: h2d.Graphics) {
-        graphics.drawCircle(absolutePosition.x, absolutePosition.y, radius);
+        graphics.drawCircle(absolutePosition.x, absolutePosition.y, scaledRadius);
     }
     #end
 
     override function collidePoint(p: Vector2): Bool
-        return Collide.circleVsPoint(absolutePosition, radius, p);
+        return Collide.circleVsPoint(absolutePosition, scaledRadius, p);
 
     override function collideBounds(bounds: Bounds): Bool
-        return Collide.boundsVsCircle(bounds, absolutePosition, radius);
+        return Collide.boundsVsCircle(bounds, absolutePosition, scaledRadius);
 
     override function intersectLine(from: Vector2, to: Vector2): Option<HitPosition>
-        return Collide.intersectCircleVsLine(absolutePosition, radius, from, to);
+        return Collide.intersectCircleVsLine(absolutePosition, scaledRadius, from, to);
 
     override function collideLine(from: Vector2, to: Vector2): Bool
-        return Collide.circleVsLine(absolutePosition, radius, from, to);
+        return Collide.circleVsLine(absolutePosition, scaledRadius, from, to);
 
     override function collideCircle(circle: Circle): Bool
         return Math.distanceSquared(absolutePosition.x, absolutePosition.y, circle.absolutePosition.x,
-            circle.absolutePosition.y) < (radius + circle.radius) * (radius + circle.radius);
+            circle.absolutePosition.y) < (scaledRadius + circle.scaledRadius) * (scaledRadius + circle.scaledRadius);
 
     override function collideHitbox(hitbox: Hitbox): Bool
         return hitbox.collideCircle(this);

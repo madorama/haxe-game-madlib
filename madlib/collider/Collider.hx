@@ -18,6 +18,8 @@ typedef HitPosition = {
 }
 
 class Collider {
+    public static final empty = new Collider();
+
     public var entity(default, null): Entity = Entity.empty;
     public var position = Vector2.zero;
 
@@ -111,6 +113,8 @@ class Collider {
     public var absoluteBottom(get, never): Float;
     public var absoluteLeft(get, never): Float;
     public var absoluteRight(get, never): Float;
+    public var absoluteWidth(get, never): Float;
+    public var absoluteHeight(get, never): Float;
 
     function get_absoluteX()
         return entity.pivotedX + position.x;
@@ -125,36 +129,37 @@ class Collider {
         return absoluteY + height * .5;
 
     function get_absoluteTop()
-        return entity.pivotedY + top;
+        return entity.pivotedY + top * entity.scaleY;
 
     function get_absoluteBottom()
-        return entity.pivotedY + bottom;
+        return entity.pivotedY + bottom * entity.scaleY;
 
     function get_absoluteLeft()
-        return entity.pivotedX + left;
+        return entity.pivotedX + left * entity.scaleX;
 
     function get_absoluteRight()
-        return entity.pivotedX + right;
+        return entity.pivotedX + right * entity.scaleX;
+
+    function get_absoluteWidth()
+        return width * entity.scaleX;
+
+    function get_absoluteHeight()
+        return height * entity.scaleY;
 
     var innerBounds = new Bounds(0, 0, 0, 0);
 
     public var bounds(get, never): Bounds;
 
-    inline function get_bounds() {
+    function get_bounds() {
         innerBounds.x = absoluteLeft;
         innerBounds.y = absoluteTop;
-        innerBounds.width = absoluteRight - absoluteLeft;
-        innerBounds.height = absoluteBottom - absoluteTop;
+        innerBounds.width = absoluteWidth;
+        innerBounds.height = absoluteHeight;
         return innerBounds;
     }
 
     public function new(?entity: Entity) {
         if(entity != null) this.entity = entity;
-    }
-
-    public inline function center() {
-        position.x = -width * 0.5;
-        position.y = -height * 0.5;
     }
 
     public function added(entity: Entity) {
@@ -164,7 +169,7 @@ class Collider {
     #if heaps
     public function debugDraw(graphics: h2d.Graphics) {
         final b = bounds;
-        graphics.drawRect(b.left, b.top, b.width, b.height);
+        graphics.drawRect(b.left, b.top, b.width, b.height - 1);
     }
     #end
 

@@ -1,5 +1,6 @@
 package madlib.collider;
 
+import differ.math.Vector;
 import h2d.Graphics;
 import hxmath.math.Vector2;
 import madlib.Option;
@@ -23,7 +24,7 @@ class Polygon extends Collider {
 
     public function new(x: Float, y: Float, vertices: Array<Vector2>, ?entity: Entity) {
         super(entity);
-        this.vertices = vertices.map(v -> new differ.math.Vector(v.x, v.y));
+        this.vertices = vertices.map(v -> new Vector(v.x, v.y));
 
         // Get width and height
         minX = Math.DOUBLE_MAX;
@@ -49,9 +50,9 @@ class Polygon extends Collider {
     }
 
     function calcBounds() {
-        final dx = if(entity != null) entity.pivotX * width else 0;
-        final dy = if(entity != null) entity.pivotY * height else 0;
-        final vs = vertices.map(v -> new differ.math.Vector(v.x - dx, v.y - dy));
+        final dx = entity.pivotX * width;
+        final dy = entity.pivotY * height;
+        final vs = vertices.map(v -> new Vector(v.x - dx, v.y - dy));
         polygon = new differ.shapes.Polygon(dx, dy, vs);
         polygon.rotation = rotation;
 
@@ -66,6 +67,38 @@ class Polygon extends Collider {
             if(v.y >= maxY) maxY = v.y;
         }
     }
+
+    function getAbsoluteVertices(): Array<Vector> {
+        final oldX = polygon.x;
+        final oldY = polygon.y;
+        polygon.scaleX = entity.scaleX;
+        polygon.scaleY = entity.scaleY;
+        final vs = polygon.transformedVertices.copy();
+        final vs = polygon.transformedVertices.map(v -> {
+            v.x = (position.x * (entity.scaleX - 1)) + v.x;
+            v.y = (position.y * (entity.scaleY - 1)) + v.y;
+            return v;
+        });
+        polygon.scaleX = 1;
+        polygon.scaleY = 1;
+        polygon.x = oldX;
+        polygon.y = oldY;
+        return vs;
+    }
+
+    override function get_bounds(): Bounds {
+        innerBounds.x = absoluteX + minX;
+        innerBounds.y = absoluteY + minY;
+        innerBounds.width = maxX - minX;
+        innerBounds.height = maxY - minY;
+        return innerBounds;
+    }
+
+    override function get_width(): Float
+        return maxX - minX;
+
+    override function get_height(): Float
+        return maxY - minY;
 
     override function get_left(): Float
         return position.x + minX;
@@ -93,12 +126,10 @@ class Polygon extends Collider {
 
     #if heaps
     override function debugDraw(graphics: Graphics) {
-        super.debugDraw(graphics);
-        final vs = polygon.transformedVertices;
+        final vs = getAbsoluteVertices();
         for(v in vs.concat([vs[0]])) {
             graphics.lineTo(absoluteX + v.x, absoluteY + v.y);
         }
-        graphics.endFill();
     }
     #end
 
