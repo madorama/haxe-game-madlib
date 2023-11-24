@@ -69,20 +69,11 @@ class Polygon extends Collider {
     }
 
     function getAbsoluteVertices(): Array<Vector> {
-        final oldX = polygon.x;
-        final oldY = polygon.y;
         polygon.scaleX = entity.scaleX;
         polygon.scaleY = entity.scaleY;
-        final vs = polygon.transformedVertices.copy();
-        final vs = polygon.transformedVertices.map(v -> {
-            v.x = (position.x * (entity.scaleX - 1)) + v.x;
-            v.y = (position.y * (entity.scaleY - 1)) + v.y;
-            return v;
-        });
+        final vs = polygon.transformedVertices.map(v -> new Vector(v.x + position.x * (entity.scaleX - 1), v.y + position.y * (entity.scaleY - 1)));
         polygon.scaleX = 1;
         polygon.scaleY = 1;
-        polygon.x = oldX;
-        polygon.y = oldY;
         return vs;
     }
 
