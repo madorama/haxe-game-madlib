@@ -30,19 +30,16 @@ using thx.Maps;
     inline function get_currentAnimationFrame()
         return anim.map(anim -> anim.currentFrame).withDefault(0);
 
-    public var timeScale = 1.;
+    @:isVar public var timeScale(default, set): Float = 1.;
+
+    inline function set_timeScale(v: Float): Float {
+        isDirty = true;
+        return timeScale = v;
+    }
 
     public var pixelPerfect = false;
 
-    var oldAnim: Option<AseAnim> = None;
-    var oldPivotX = Math.NaN;
-    var oldPivotY = Math.NaN;
-    var oldTimeScale = Math.NaN;
-    var oldXFlip = false;
-    var oldYFlip = false;
-
-    inline function isChange()
-        return posChanged || pivotX != oldPivotX || pivotY != oldPivotY || timeScale != oldTimeScale || xFlip != oldXFlip || yFlip != oldYFlip;
+    var isDirty = true;
 
     public var pivotX = 0.;
     public var pivotY = 0.;
@@ -50,6 +47,7 @@ using thx.Maps;
     public inline function setPivot(x: Float, y: Float) {
         pivotX = x;
         pivotY = y;
+        isDirty = true;
     }
 
     public var pivotedX(get, never): Float;
@@ -67,6 +65,7 @@ using thx.Maps;
     public inline function setFlip(xFlip: Bool, yFlip: Bool) {
         this.xFlip = xFlip;
         this.yFlip = yFlip;
+        isDirty = true;
     }
 
     public var pause(get, set): Bool;
@@ -108,10 +107,13 @@ using thx.Maps;
             case None:
                 trace('Animation "$name" is not exists');
             case Some(v):
+                anim.each(anim -> anim.remove());
+                addChild(v);
                 anim = Some(v);
                 v.loop = loop ?? v.loop;
                 v.currentFrame = startFrame ?? 0;
                 currentAnimationName = name;
+                isDirty = true;
         }
     }
 
@@ -120,25 +122,15 @@ using thx.Maps;
         anim.each(anim -> anim.getBoundsRec(relativeTo, out, forSize));
     }
 
-    function syncAnimations(ctx: RenderContext) {
-        for(anim in animations) {
-            if(posChanged)
-                anim.calcAbsPos();
-
+    inline function syncAnimation() {
+        anim.each(anim -> {
             anim.timeScale = timeScale;
             for(frame in anim.frames) {
                 frame.tile.xFlip = xFlip;
                 frame.tile.yFlip = yFlip;
                 frame.tile.setCenterRatio(pivotX, pivotY);
             }
-            anim.sync(ctx);
-        }
-
-        oldPivotX = pivotX;
-        oldPivotY = pivotY;
-        oldTimeScale = timeScale;
-        oldXFlip = xFlip;
-        oldYFlip = yFlip;
+        });
     }
 
     override function sync(ctx: RenderContext) {
@@ -150,14 +142,10 @@ using thx.Maps;
             setPosition(x, y);
         }
 
-        if(isChange())
-            syncAnimations(ctx);
-        else
-            anim.each(anim -> anim.sync(ctx));
-    }
-
-    override function draw(ctx: RenderContext) {
-        anim.each(anim -> anim.draw(ctx));
+        if(isDirty) {
+            syncAnimation();
+            isDirty = false;
+        }
     }
 
     public function onAnimEnd(?f: () -> Void) {
