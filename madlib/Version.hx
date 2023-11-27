@@ -1,6 +1,7 @@
 package madlib;
 
 import haxe.ds.Either;
+import madlib.extensions.StringExt;
 import parsihax.Parser.*;
 
 using StringTools;
@@ -102,8 +103,8 @@ abstract Version(VersionData) from VersionData to VersionData {
         if(patch < other.patch)
             return -10;
 
-        final tags1 = tags.sorted(thx.Strings.compare);
-        final tags2 = other.tags.sorted(thx.Strings.compare);
+        final tags1 = tags.sorted(StringExt.compare);
+        final tags2 = other.tags.sorted(StringExt.compare);
 
         return tags1.compare(tags2);
     }

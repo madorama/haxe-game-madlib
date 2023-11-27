@@ -4,8 +4,8 @@ import h2d.Graphics;
 import hxmath.math.Vector2;
 import madlib.Option;
 import madlib.collider.Collider.HitPosition;
+import madlib.error.NotImplemented;
 import madlib.geom.Bounds;
-import thx.error.NotImplemented;
 
 using madlib.extensions.ArrayExt;
 

@@ -161,7 +161,7 @@ class IteratorExt {
         var index = -1;
         var pos = 0;
         for(v in self) {
-            if(thx.Dynamics.equals(v, element)) {
+            if(DynamicExt.equals(v, element)) {
                 index = pos;
                 break;
             }
@@ -222,4 +222,13 @@ class IteratorExt {
 
     public inline static function toArray<T>(self: Iterator<T>): Array<T>
         return [for(x in self) x];
+
+    public inline static function isIterator(v: Dynamic): Bool {
+        final fields = if(TypeExt.isAnonymousObject(v)) Reflect.fields(v) else Type.getInstanceFields(Type.getClass(v));
+        return if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) {
+            false;
+        } else {
+            Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package madlib;
 
+import haxe.Exception;
+
 using madlib.extensions.ArrayExt;
 
 @:access(madlib.GameScene)
@@ -10,7 +12,7 @@ class SceneManager {
 
     inline function get_currentScene(): GameScene {
         if(scenes.length == 0)
-            throw new thx.Error("empty scenes");
+            throw new Exception("empty scenes");
         return scenes[scenes.length - 1];
     }
 

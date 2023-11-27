@@ -6,6 +6,7 @@ import madlib.Option;
 import madlib.Random;
 import madlib.Tuple.Tuple2;
 import madlib.extensions.AssertExt;
+import madlib.extensions.IntExt;
 import utest.Assert;
 
 using madlib.extensions.ArrayExt;
@@ -207,7 +208,7 @@ class TestArrayExt extends utest.Test {
         final sortedObjects = [
             objects[0], objects[2], objects[4], objects[5], objects[1], objects[3],
         ];
-        Assert.same(sortedObjects, objects.sorted((x, y) -> thx.Ints.compare(x.price, y.price)));
+        Assert.same(sortedObjects, objects.sorted((x, y) -> IntExt.compare(x.price, y.price)));
         AssertExt.notSame(sortedObjects, objects);
     }
 
@@ -254,11 +255,11 @@ class TestArrayExt extends utest.Test {
     }
 
     function testMaxBy() {
-        Assert.same(Some(4), [0, 1, 2, 3, 4].maxBy(thx.Ints.order));
+        Assert.same(Some(4), [0, 1, 2, 3, 4].maxBy(IntExt.order));
     }
 
     function testMinBy() {
-        Assert.same(Some(0), [0, 1, 2, 3, 4].minBy(thx.Ints.order));
+        Assert.same(Some(0), [0, 1, 2, 3, 4].minBy(IntExt.order));
     }
 
     function testUnzip() {

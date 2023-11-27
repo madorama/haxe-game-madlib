@@ -1,7 +1,7 @@
 package madlib;
 
 using madlib.extensions.ArrayExt;
-using thx.Maps;
+using madlib.extensions.MapExt;
 
 abstract class StateBase<T> {
     public function new() {}

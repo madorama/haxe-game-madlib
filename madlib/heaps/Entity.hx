@@ -2,9 +2,9 @@ package madlib.heaps;
 
 import madlib.GameScene;
 import madlib.Option;
+import madlib.Set;
 import madlib.collider.Collide;
 import madlib.collider.Collider;
-import thx.Set;
 
 using madlib.extensions.IterableExt;
 

@@ -77,4 +77,13 @@ class IterableExt {
 
     public inline static function toArray<T>(self: Iterable<T>): Array<T>
         return IteratorExt.toArray(self.iterator());
+
+    public inline static function isIterable(v: Dynamic) {
+        final fields = if(TypeExt.isAnonymousObject(v)) Reflect.fields(v) else Type.getInstanceFields(Type.getClass(v));
+        return if(!Lambda.has(fields, "iterator")) {
+            false;
+        } else {
+            Reflect.isFunction(Reflect.field(v, "iterator"));
+        }
+    }
 }

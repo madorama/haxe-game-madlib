@@ -8,7 +8,7 @@ import h2d.col.Bounds;
 import madlib.Option;
 
 using madlib.extensions.AsepriteExt;
-using thx.Maps;
+using madlib.extensions.MapExt;
 
 @:tink class Sprite extends h2d.Drawable {
     public var currentAnimationName(default, null) = "";

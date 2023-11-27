@@ -4,8 +4,8 @@ import madlib.geom.Bounds;
 import polygonal.ds.Dll;
 
 using madlib.extensions.IterableExt;
+using madlib.extensions.MapExt;
 using madlib.extensions.NullExt;
-using thx.Maps;
 
 class GameScene {
     public var ftime(default, null): Float = 0;

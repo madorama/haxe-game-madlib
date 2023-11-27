@@ -3,7 +3,7 @@ package madlib;
 import haxe.exceptions.ArgumentException;
 
 using madlib.extensions.ArrayExt;
-using thx.Maps;
+using madlib.extensions.MapExt;
 
 typedef WalkersAliasItem<T> = {
     final item: T;

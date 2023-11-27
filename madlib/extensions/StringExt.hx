@@ -107,4 +107,16 @@ class StringExt {
             result;
         }
     }
+
+    public inline static function compare(x: String, y: String): Int
+        return if(x < y) -1 else if(x > y) 1 else 0;
+
+    public inline static function quote(s: String)
+        return if(s.indexOf('"') < 0) {
+            '"${s}"';
+        } else if(s.indexOf("'") < 0) {
+            '\'${s}\'';
+        } else {
+            '"${StringTools.replace(s, '"', '\\"')}"';
+        }
 }

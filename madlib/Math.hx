@@ -1,5 +1,6 @@
 package madlib;
 
+import haxe.Exception;
 import haxe.macro.Expr;
 import hxmath.math.Vector3;
 
@@ -52,7 +53,7 @@ class Math {
 
     public inline static function percent(v: Float, min: Float, max: Float): Float {
         if(max - min == 0)
-            throw new thx.Error("divide by zero");
+            throw new Exception("divide by zero");
         return (v - min) / (max - min);
     }
 
@@ -306,7 +307,7 @@ class Math {
 
     public inline static function makeBitsFromArray(bools: Array<Bool>): Int {
         if(bools.length > 32)
-            throw new thx.Error("Too many values (32bits max)");
+            throw new Exception("Too many values (32bits max)");
 
         var v = 0;
         for(i in 0...bools.length) {
@@ -342,7 +343,7 @@ class Math {
         return !isNaN(v) && isFinite(v);
 
     public inline static function parseInt(str: String, defaultValue: Int): Int {
-        return if(thx.Strings.isEmpty(str)) {
+        return if(str == "") {
             defaultValue;
         } else {
             final v = Std.parseInt(str);

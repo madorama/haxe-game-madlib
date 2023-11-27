@@ -2,7 +2,7 @@ package madlib;
 
 import haxe.ds.Either;
 
-using thx.Maps;
+using madlib.extensions.MapExt;
 
 enum AchievementError<T> {
     NotExistingId(id: T);

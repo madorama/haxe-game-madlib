@@ -2,7 +2,7 @@ package madlib.extensions;
 
 import madlib.Option;
 import madlib.Tuple.Tuple2;
-import thx.Ord;
+import madlib.extensions.IntExt;
 
 using madlib.extensions.ArrayExt;
 
@@ -129,9 +129,9 @@ class ArrayExt {
 
     public inline static function compare<T>(self: Array<T>, other: Array<T>): Int {
         var v = 0;
-        if((v = inline thx.Ints.compare(self.length, other.length)) == 0) {
+        if((v = IntExt.compare(self.length, other.length)) == 0) {
             for(i in 0...self.length) {
-                if((v = inline thx.Dynamics.compare(self[i], other[i])) != 0)
+                if((v = DynamicExt.compare(self[i], other[i])) != 0)
                     break;
             }
         }
@@ -215,7 +215,7 @@ class ArrayExt {
         return (random ?? Random.gen).choice(self);
 
     public inline static function string<T>(self: Array<T>): String
-        return '[${self.map(thx.Dynamics.string).join(", ")}]';
+        return '[${self.map(DynamicExt.string).join(", ")}]';
 
     public inline static function shuffle<T>(self: Array<T>, ?random: Random): Array<T>
         return if(random != null)
@@ -262,7 +262,7 @@ class ArrayExt {
     }
 
     inline static function scoreSort<T: {score: Float}>(self: Array<T>, isAscend: Bool = true): Array<T>
-        return self.sorted((x, y) -> if(isAscend) thx.Floats.compare(x.score, y.score) else thx.Floats.compare(y.score, x.score));
+        return self.sorted((x, y) -> if(isAscend) FloatExt.compare(x.score, y.score) else FloatExt.compare(y.score, x.score));
 
     inline static function toScoredArray<T>(self: Array<T>, scoreElement: T -> Float): Array<{item: T, score: Float}>
         return self.map(x -> {
@@ -351,15 +351,15 @@ class IntArrayExt {
             sum(self) / self.length;
 
     public inline static function max(self: Array<Int>): Option<Int>
-        return self.maxBy(thx.Ints.order);
+        return self.maxBy(IntExt.order);
 
     public inline static function min(self: Array<Int>): Option<Int>
-        return self.minBy(thx.Ints.order);
+        return self.minBy(IntExt.order);
 
     public inline static function unique<T>(self: Array<T>): Array<T> {
         final result: Array<T> = [];
         for(x in self) {
-            if(result.find((y) -> thx.Dynamics.compare(x, y) == 0) == null)
+            if(result.find((y) -> DynamicExt.compare(x, y) == 0) == null)
                 result.push(x);
         }
         return result;
@@ -377,10 +377,10 @@ class FloatArrayExt {
             sum(self) / self.length;
 
     public inline static function max(self: Array<Float>): Option<Float>
-        return self.maxBy(thx.Floats.order);
+        return self.maxBy(FloatExt.order);
 
     public inline static function min(self: Array<Float>): Option<Float>
-        return self.minBy(thx.Floats.order);
+        return self.minBy(FloatExt.order);
 }
 
 class GroupByExt {

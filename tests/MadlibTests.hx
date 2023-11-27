@@ -20,6 +20,9 @@ class MadlibTests {
             new TestArrayExt(),
             new TestFunctionExt(),
             new TestStringExt(),
+            new TestTypeExt(),
+            new TestMapExt(),
+            new TestIntExt(),
         ];
         final runner = new Runner();
         for(test in tests)

@@ -1,12 +1,14 @@
 package madlib;
 
+import madlib.extensions.DynamicExt;
+
 @:tink class Property<T> {
     var internalValue: T;
 
     public var value(get, set): T;
 
     @:signal private var trigger: T;
-    var equalityComparer: T -> T -> Int = thx.Dynamics.compare;
+    var equalityComparer: T -> T -> Int = DynamicExt.compare;
 
     public inline function setEqualityComparer(comparer: T -> T -> Int) {
         equalityComparer = comparer;
