@@ -45,11 +45,11 @@ import madlib.GameScene;
 
     public inline function setWindow(?width: Int, ?height: Int, displayMode: DisplayMode = DisplayMode.Windowed) {
         window.displayMode = displayMode;
-        centerWindow();
         if(width != null && height != null) {
             window.resize(width ?? window.width, height ?? window.height);
             h3d.Engine.getCurrent().resize(width ?? 1280, height ?? 720);
         }
+        centerWindow();
     }
 
     override function init() {
