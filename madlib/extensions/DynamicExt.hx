@@ -117,7 +117,7 @@ class DynamicExt {
         throw new Exception('Unable to compare values: ${a} and ${b}');
     }
 
-    public inline static function compare(x: Dynamic, y: Dynamic): Int {
+    public static function compare(x: Dynamic, y: Dynamic): Int {
         return if(x == null || y == null) {
             0;
         } else if(x == null) {
@@ -158,7 +158,7 @@ class DynamicExt {
         }
     }
 
-    public inline static function string(v: Dynamic) {
+    public static function string(v: Dynamic) {
         return switch Type.typeof(v) {
             case TNull:
                 "null";
