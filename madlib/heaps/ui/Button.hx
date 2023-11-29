@@ -6,7 +6,7 @@ import h2d.RenderContext;
 import h2d.ScaleGrid;
 import h2d.Tile;
 
-class Button extends h2d.Drawable {
+class Button extends Entity {
     final wrapFlow = new Flow();
     final scaleGrid: ScaleGrid;
 
@@ -16,8 +16,8 @@ class Button extends h2d.Drawable {
 
     public var autoResize = true;
 
-    public function new(inContent: h2d.Object, ?tile: Tile, ?parent: h2d.Object) {
-        super(parent);
+    public function new(inContent: h2d.Object, ?tile: Tile) {
+        super();
 
         final gridTile = tile ?? Tile.fromColor(0x404040);
         scaleGrid = new ScaleGrid(gridTile, 0, 0);
@@ -39,10 +39,12 @@ class Button extends h2d.Drawable {
     }
 
     override function sync(ctx: RenderContext) {
+        super.sync(ctx);
+        width = wrapFlow.outerWidth;
+        height = wrapFlow.outerHeight;
         if(autoResize) {
             scaleGrid.width = wrapFlow.outerWidth;
             scaleGrid.height = wrapFlow.outerHeight;
         }
-        super.sync(ctx);
     }
 }

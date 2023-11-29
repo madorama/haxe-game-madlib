@@ -2,9 +2,10 @@ package madlib.heaps.ui;
 
 import h2d.Font;
 import h2d.RenderContext;
+import h2d.Text.Align;
 import madlib.Option;
 
-class Text extends h2d.Text {
+class Text extends Entity {
     static var internalDefaultFont: Option<Font> = None;
 
     public static var defaultFont(get, set): Font;
@@ -17,28 +18,26 @@ class Text extends h2d.Text {
         return v;
     }
 
-    public var pivotX = 0.;
-    public var pivotY = 0.;
+    var _text: h2d.Text;
+
+    public var text(get, set): String;
+
+    inline function get_text(): String
+        return _text.text;
+
+    inline function set_text(v: String): String {
+        _text.text = v;
+        width = _text.textWidth;
+        height = _text.textHeight;
+        return v;
+    }
 
     public function new(text: String, ?font: h2d.Font, ?parent: h2d.Object) {
-        final font = if(font == null) madlib.heaps.ui.Text.defaultFont else font;
-        super(font, parent);
+        super();
+        final font = font ?? madlib.heaps.ui.Text.defaultFont;
+        _text = new h2d.Text(font, parent);
         this.text = text;
-    }
-
-    public inline function setPivot(x: Float, y: Float) {
-        pivotX = x;
-        pivotY = y;
-    }
-
-    override function drawRec(ctx: RenderContext) {
-        final baseX = x;
-        final baseY = y;
-        x = x - this.textWidth * Math.clamp(pivotX, 0, 1);
-        y = y - this.textHeight * Math.clamp(pivotY, 0, 1);
-        super.drawRec(ctx);
-        x = baseX;
-        y = baseY;
+        addChild(_text);
     }
 
     public static inline function create(text: String, ?font: h2d.Font, ?parent: h2d.Object): Text
