@@ -1,5 +1,6 @@
 package madlib.heaps;
 
+import h2d.RenderContext;
 import madlib.GameScene;
 import madlib.Option;
 import madlib.Set;
@@ -332,4 +333,14 @@ class Entity extends h2d.Object {
     public function onCollideX(hit: Entity) {}
 
     public function onCollideY(hit: Entity) {}
+
+    override function drawRec(ctx: RenderContext) {
+        final baseX = x;
+        final baseY = y;
+        x = pivotedX;
+        y = pivotedY;
+        super.drawRec(ctx);
+        x = baseX;
+        y = baseY;
+    }
 }
