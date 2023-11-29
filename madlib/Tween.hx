@@ -2,6 +2,7 @@ package madlib;
 
 import madlib.Event.Events;
 
+using madlib.extensions.ArrayExt;
 using tweenxcore.Tools;
 
 @:structInit
@@ -137,14 +138,15 @@ class Tween {
         return tween;
     }
 
-    public function stop(name: String, withComplete: Bool = false) {
-        for(t in tweens) {
-            if(t.name != name)
-                continue;
+    public inline function kill(tw: Tw) {
+        tweens.remove(tw);
+    }
 
-            if(withComplete)
-                t.complete();
-            tweens.remove(t);
-        }
+    public function stop(name: String, withComplete: Bool = false) {
+        tweens.removeBy(t -> {
+            final r = t.name == name;
+            if(r && withComplete) t.complete();
+            return r;
+        });
     }
 }
