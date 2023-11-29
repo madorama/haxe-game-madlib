@@ -13,9 +13,9 @@ final class Tw {
     var factor = 0.;
     var easeFunction = tweenxcore.Tools.Easing.linear;
 
-    final onStart: Events<Unit> = new Events();
-    final onUpdate: Events<Float> = new Events();
-    final onComplete: Events<Unit> = new Events();
+    public final onStart = new Events<Unit>();
+    public final onUpdate = new Events<Float>();
+    public final onComplete = new Events<Unit>();
 
     public var from: Float;
     public var to: Float;
@@ -41,24 +41,6 @@ final class Tw {
     public inline function setDelay(delay: Float): Tw {
         this.delay = delay;
         return this;
-    }
-
-    public inline function addOnStart(cb: Unit -> Void): () -> Void {
-        final e = new Event(cb);
-        onStart.add(e);
-        return () -> e.dispose();
-    }
-
-    public inline function addOnUpdate(cb: Float -> Void): () -> Void {
-        final e = new Event(cb);
-        onUpdate.add(e);
-        return () -> e.dispose();
-    }
-
-    public inline function addOnComplete(cb: Unit -> Void): () -> Void {
-        final e = new Event(cb);
-        onComplete.add(e);
-        return () -> e.dispose();
     }
 
     inline function complete() {
@@ -119,7 +101,7 @@ class Tween {
     public function timer(frames: Float, delay = 0., ?onComplete: Void -> Void): Tw {
         final tween = new Tw(0, 1, 1 / frames);
         if(onComplete != null) {
-            tween.addOnComplete(_ -> onComplete());
+            tween.onComplete.add(_ -> onComplete());
         }
         tween.setDelay(delay);
         tweens.push(tween);
@@ -130,7 +112,7 @@ class Tween {
         final tween = new Tw(start, end, 1 / frames);
 
         if(onUpdate != null) {
-            tween.addOnUpdate(onUpdate);
+            tween.onUpdate.add(onUpdate);
         }
 
         tween.setDelay(delay);
