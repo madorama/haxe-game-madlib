@@ -110,6 +110,11 @@ class Entity extends h2d.Object {
         scene.remove(this);
     }
 
+    public inline function setPivot(px: Float, py: Float) {
+        pivotX = px;
+        pivotY = py;
+    }
+
     public function created() {
         for(child in children) {
             if(child is Entity) {
