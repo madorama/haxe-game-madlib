@@ -41,13 +41,23 @@ using madlib.extensions.MapExt;
 
     var isDirty = true;
 
-    public var pivotX = 0.;
-    public var pivotY = 0.;
+    @:isVar public var pivotX(default, set) = 0.;
+
+    inline function set_pivotX(v: Float): Float {
+        isDirty = true;
+        return pivotX = v;
+    }
+
+    @:isVar public var pivotY(default, set) = 0.;
+
+    inline function set_pivotY(v: Float): Float {
+        isDirty = true;
+        return pivotY = v;
+    }
 
     public inline function setPivot(x: Float, y: Float) {
         pivotX = x;
         pivotY = y;
-        isDirty = true;
     }
 
     public var pivotedX(get, never): Float;
@@ -59,13 +69,23 @@ using madlib.extensions.MapExt;
     function get_pivotedY(): Float
         return y - (height * pivotY);
 
-    public var xFlip = false;
-    public var yFlip = false;
+    @:isVar public var xFlip(default, set) = false;
+
+    inline function set_xFlip(v: Bool): Bool {
+        isDirty = true;
+        return xFlip = v;
+    }
+
+    @:isVar public var yFlip(default, set) = false;
+
+    inline function set_yFlip(v: Bool): Bool {
+        isDirty = true;
+        return yFlip = v;
+    }
 
     public inline function setFlip(xFlip: Bool, yFlip: Bool) {
         this.xFlip = xFlip;
         this.yFlip = yFlip;
-        isDirty = true;
     }
 
     public var pause(get, set): Bool;
