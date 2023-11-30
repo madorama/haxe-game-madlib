@@ -142,11 +142,6 @@ class Sprite extends h2d.Drawable {
         }
     }
 
-    override function getBoundsRec(relativeTo: Object, out: Bounds, forSize: Bool) {
-        super.getBoundsRec(relativeTo, out, forSize);
-        anim.each(anim -> anim.getBoundsRec(relativeTo, out, forSize));
-    }
-
     inline function syncAnimation() {
         anim.each(anim -> {
             anim.timeScale = timeScale;
