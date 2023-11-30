@@ -1,17 +1,16 @@
 package madlib;
 
-import polygonal.ds.Sll;
+import polygonal.ds.Dll;
+import polygonal.ds.DllNode;
 
 @:structInit
 class Event<T> {
     var disposed(default, null): Bool;
     var onDisposeAction: Null<() -> Void> = null;
     final action: T -> Void;
-    final id: Int;
 
-    public inline function new(action: T -> Void, id: Int) {
+    public inline function new(action: T -> Void) {
         this.action = action;
-        this.id = id;
     }
 
     public inline function invoke(value: T) {
@@ -34,16 +33,13 @@ class Event<T> {
 class Events<T> {
     public var disposed(default, null): Bool;
 
-    final events: Map<Int, Event<T>> = [];
-
-    var id = 0;
+    final events = new Dll<Event<T>>();
 
     public function new(?events: Array<Event<T>>) {}
 
-    public inline function add(action: T -> Void): Event<T> {
-        final e = new Event(action, id++);
-        events.set(e.id, e);
-        return e;
+    public inline function add(action: T -> Void): DllNode<Event<T>> {
+        final e = new Event(action);
+        return events.append(e);
     }
 
     public inline function invoke(value: T) {
@@ -60,8 +56,23 @@ class Events<T> {
         disposed = true;
     }
 
-    public inline function remove(e: Event<T>) {
-        events.remove(e.id);
+    extern overload public inline function remove(node: DllNode<Event<T>>) {
+        node.val.dispose();
+        node.unlink();
+        node.free();
+    }
+
+    extern overload public inline function remove(e: Event<T>) {
         e.dispose();
+        events.remove(e);
+    }
+
+    public inline function clear() {
+        var node = events.head;
+        while(node != null) {
+            final next = node.next;
+            remove(node);
+            node = next;
+        }
     }
 }
