@@ -5,7 +5,7 @@ import madlib.GameScene;
 
 @:access(madlib.GameScene)
 @:access(madlib.heaps.Entity)
-@:tink class App extends hxd.App {
+class App extends hxd.App {
     public var window: Window;
 
     static var destroyedEntities: Array<Entity> = [];

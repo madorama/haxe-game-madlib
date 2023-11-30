@@ -10,7 +10,7 @@ import madlib.Option;
 using madlib.extensions.AsepriteExt;
 using madlib.extensions.MapExt;
 
-@:tink class Sprite extends h2d.Drawable {
+class Sprite extends h2d.Drawable {
     public var currentAnimationName(default, null) = "";
 
     var anim: Option<AseAnim> = None;

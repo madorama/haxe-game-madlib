@@ -1,13 +1,16 @@
 package madlib;
 
+import madlib.Event.Events;
 import madlib.extensions.DynamicExt;
+import polygonal.ds.DllNode;
 
-@:tink class Property<T> {
+class Property<T> {
     var internalValue: T;
 
     public var value(get, set): T;
 
-    @:signal private var trigger: T;
+    public final onValueChange = new Events<T>();
+
     var equalityComparer: T -> T -> Int = DynamicExt.compare;
 
     public inline function setEqualityComparer(comparer: T -> T -> Int) {
@@ -19,7 +22,7 @@ import madlib.extensions.DynamicExt;
 
     function set_value(value: T): T {
         return if(equalityComparer(internalValue, value) != 0) {
-            _trigger.trigger(value);
+            events.invoke(value);
             internalValue = value;
         } else {
             value;
@@ -30,16 +33,11 @@ import madlib.extensions.DynamicExt;
         internalValue = value;
     }
 
-    public inline function onValueChange(action: T -> Void) {
-        _trigger.clear();
-        trigger.handle(action);
-    }
-
     public inline function setSilently(value: T) {
         internalValue = value;
     }
 
-    public function forceTrigger() {
-        _trigger.trigger(value);
+    public inline function forceNotify() {
+        onValueChange.invoke(value);
     }
 }
