@@ -101,8 +101,8 @@ class Interactive {
     inline function set_shapeY(v: Float): Float
         return interactive.shapeY = v;
 
-    public final _onStartCapture = new Events<hxd.Event>();
-    public final _onCancelCapture = new Events<Unit>();
+    public final onStartCapture = new Events<hxd.Event>();
+    public final onCancelCapture = new Events<Unit>();
     public final onOver = new Events<hxd.Event>();
     public final onOut = new Events<hxd.Event>();
     public final onPush = new Events<hxd.Event>();
@@ -142,7 +142,7 @@ class Interactive {
 
     public inline function startCapture() {
         if(interactive.getScene() != null) {
-            interactive.startCapture(_onStartCapture.invoke, () -> _onCancelCapture.invoke(Unit));
+            interactive.startCapture(onStartCapture.invoke, () -> onCancelCapture.invoke(Unit));
         }
     }
 
