@@ -110,9 +110,14 @@ class Sprite extends h2d.Drawable {
         super(parent);
     }
 
-    public inline function addAnim(name: String, newAnim: AseAnim) {
-        newAnim.parent = this;
-        animations.set(name, newAnim);
+    public inline function addAnim(name: String, aseAnim: AseAnim) {
+        animations.set(name, aseAnim);
+        if(anim.isNone()) {
+            addChild(aseAnim);
+            anim = Some(aseAnim);
+            currentAnimationName = name;
+            isDirty = true;
+        }
     }
 
     public inline function addAnimWithAseprite(ase: Aseprite, name: String, loop = false) {
