@@ -13,8 +13,8 @@ enum ColliderType {
 }
 
 typedef HitPosition = {
-    hitStart: Vector2,
-    hitEnd: Option<Vector2>,
+    start: Vector2,
+    end: Option<Vector2>,
 }
 
 class Collider {

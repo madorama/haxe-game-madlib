@@ -158,7 +158,7 @@ class ColliderList extends Collider {
             switch c.intersectLine(from, to) {
                 case None:
                 case Some(hit):
-                    final length = Math.abs(from.length - hit.hitStart.length);
+                    final length = Math.abs(from.length - hit.start.length);
                     minLength = Math.min(minLength, length);
                     if(minLength >= length) {
                         minPosition = Some(hit);

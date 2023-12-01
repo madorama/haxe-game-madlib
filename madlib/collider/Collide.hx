@@ -103,7 +103,7 @@ class Collide {
         }
     }
 
-    public inline static function intersectFirstEntity(from: Vector2, to: Vector2, es: Iterable<Entity>): Option<HitPosition> {
+    public inline static function intersectFirstEntity(from: Vector2, to: Vector2, es: Iterable<Entity>): Option<{entity: Entity, hitPosition: HitPosition}> {
         var minPosition = None;
         var minLength = Math.FLOAT_MAX;
         for(e in es) {
@@ -111,10 +111,10 @@ class Collide {
             switch e.collider.intersectLine(from, to) {
                 case None:
                 case Some(hit):
-                    final length = Math.abs(from.length - hit.hitStart.length);
+                    final length = Math.abs(from.length - hit.start.length);
                     minLength = Math.min(minLength, length);
                     if(minLength >= length) {
-                        minPosition = Some(hit);
+                        minPosition = Some({ entity: e, hitPosition: hit });
                     }
             }
         }
@@ -146,7 +146,7 @@ class Collide {
             } else {
                 None;
             }
-            Some({ hitStart: new Vector2(sx, sy), hitEnd: hitEnd });
+            Some({ start: new Vector2(sx, sy), end: hitEnd });
         } else {
             None;
         }
