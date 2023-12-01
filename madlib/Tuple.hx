@@ -46,9 +46,15 @@ abstract Tuple1<T0>(AbsTuple1<T0>) from AbsTuple1<T0> {
         this._1 = _1;
     }
 
-    @:calculated inline var left = _0;
+    public var left(get, never): T0;
 
-    @:calculated inline var right = _1;
+    inline function get_left(): T0
+        return _0;
+
+    public var right(get, never): T1;
+
+    inline function get_right(): T1
+        return _1;
 }
 
 @:forward(_0, _1, left, right)
