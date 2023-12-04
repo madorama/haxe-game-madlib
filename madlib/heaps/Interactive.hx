@@ -163,4 +163,8 @@ class Interactive {
 
     public inline function hasFocus(): Bool
         return interactive.hasFocus();
+
+    public inline function remove() {
+        interactive.remove();
+    }
 }
