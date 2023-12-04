@@ -116,73 +116,112 @@ class Entity extends h2d.Object {
     }
 
     public function created() {
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).created();
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).created();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     public function started() {
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).started();
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).started();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     public function added() {
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).added();
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).added();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     public function removed() {
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).removed();
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).removed();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
-    public inline function destroy() {
+    public final function destroy() {
+        if(destroyed) return;
+
         @:privateAccess App.destroyedEntities.push(this);
         destroyed = true;
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).destroy();
+
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).destroy();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     public function onDestroy() {
+        if(onDestroyed) return;
+
         onDestroyed = true;
         remove();
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).onDestroy();
+
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).onDestroy();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     public function pause() {
         active = false;
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).pause();
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).pause();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     public function resume() {
         active = true;
-        for(child in children) {
-            if(child is Entity) {
-                cast(child, Entity).resume();
+
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity)
+                    cast(child, Entity).resume();
+                else
+                    go(child.children);
             }
         }
+        go(children);
     }
 
     final public inline function togglePause() {
@@ -193,50 +232,66 @@ class Entity extends h2d.Object {
     }
 
     public function update(dt: Float) {
-        for(child in children) {
-            if(child is Entity) {
-                final e = cast(child, Entity);
-                if(e.destroyed) {
-                    e.onDestroy();
-                    e.remove();
-                    continue;
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity) {
+                    final e = cast(child, Entity);
+                    if(e.destroyed) {
+                        e.onDestroy();
+                        e.remove();
+                        continue;
+                    }
+                    if(!e.isStarted) {
+                        e.started();
+                        e.isStarted = true;
+                    }
+                    if(e.active && e.isStarted)
+                        e.update(dt);
+                } else {
+                    go(child.children);
                 }
-                if(!e.isStarted) {
-                    e.started();
-                    e.isStarted = true;
-                }
-                if(e.active && e.isStarted)
-                    e.update(dt);
             }
         }
+        go(children);
     }
 
     public function fixedUpdate(dt: Float) {
-        for(child in children) {
-            if(child is Entity) {
-                final e = cast(child, Entity);
-                if(!e.isStarted) {
-                    e.started();
-                    e.isStarted = true;
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity) {
+                    final e = cast(child, Entity);
+                    if(!e.isStarted) {
+                        e.started();
+                        e.isStarted = true;
+                    }
+                    if(e.active && e.isStarted)
+                        e.fixedUpdate(dt);
+                } else {
+                    go(child.children);
                 }
-                if(e.active && e.isStarted)
-                    e.fixedUpdate(dt);
             }
         }
+
+        go(children);
     }
 
     public function afterUpdate(dt: Float) {
-        for(child in children) {
-            if(child is Entity) {
-                final e = cast(child, Entity);
-                if(!e.isStarted) {
-                    e.started();
-                    e.isStarted = true;
+        function go(cs: Array<h2d.Object>) {
+            for(child in cs) {
+                if(child is Entity) {
+                    final e = cast(child, Entity);
+                    if(!e.isStarted) {
+                        e.started();
+                        e.isStarted = true;
+                    }
+                    if(e.active && e.isStarted)
+                        e.afterUpdate(dt);
+                } else {
+                    go(child.children);
                 }
-                if(e.active && e.isStarted)
-                    e.afterUpdate(dt);
             }
         }
+        go(children);
     }
 
     public inline function addTag(tag: String) {
