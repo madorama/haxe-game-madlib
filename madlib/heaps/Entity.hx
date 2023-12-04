@@ -339,6 +339,16 @@ class Entity extends h2d.Object {
 
     public function onCollideY(hit: Entity) {}
 
+    override function getBoundsRec(relativeTo: h2d.Object, out: h2d.col.Bounds, forSize: Bool) {
+        final baseX = x;
+        final baseY = y;
+        x = pivotedX;
+        y = pivotedY;
+        super.getBoundsRec(relativeTo, out, forSize);
+        x = baseX;
+        y = baseY;
+    }
+
     override function drawRec(ctx: RenderContext) {
         final baseX = x;
         final baseY = y;
