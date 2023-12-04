@@ -10,16 +10,18 @@
 
 package madlib;
 
-#if heaps
-import h3d.Vector;
-#end
-
 abstract Color(Int) from Int to Int {
+    public static var White = fromRgba(1, 1, 1);
+    public static var Black = fromRgba(0, 0, 0);
+
     public inline function new(argb: Int): Color {
         this = argb;
     }
 
     public inline static function fromInt(c: Int): Color
+        return new Color(c | 0xFF000000);
+
+    public inline static function fromIntWithAlpha(c: Int): Color
         return new Color(c);
 
     public inline static function fromRgbaInt(r: Int, g: Int, b: Int, a: Int = 255): Color {
@@ -75,9 +77,11 @@ abstract Color(Int) from Int to Int {
         return fromRgba(v, v, v);
 
     #if heaps
-    public inline function toVector(): Vector {
-        return new Vector(r, g, b, a);
-    }
+    public inline static function fromVector(v: h3d.Vector): Color
+        return fromRgba(v.r, v.g, v.b, v.a);
+
+    public inline function toVector(): h3d.Vector
+        return new h3d.Vector(r, g, b, a);
     #end
 
     static final sharp = "#".charCodeAt(0);
@@ -100,12 +104,12 @@ abstract Color(Int) from Int to Int {
         m;
     }
 
-    public inline static function parse(hex: String): Option<Color> {
-        if(hex.length == 0)
-            return None;
+    extern overload public inline static function parse(hex: String): Option<Color> {
+        if(hex.length == 0) return None;
 
         final start = if(StringTools.fastCodeAt(hex, 0) == sharp) 1 else 0;
         final l = hex.length - start;
+        @:nullSafety(Off)
         return if(l == 6 || l == 8) {
             #if js
             final v: Null<UInt> = Std.parseInt('0x${if(start > 0) hex.substr(start) else hex}');
@@ -119,11 +123,14 @@ abstract Color(Int) from Int to Int {
                 doubleHexValues.get(StringTools.fastCodeAt(hex, start + 2)),));
         } else if(l == 4) {
             Some(fromRgbaInt(doubleHexValues.get(StringTools.fastCodeAt(hex, start + 1)), doubleHexValues.get(StringTools.fastCodeAt(hex, start + 2)),
-                doubleHexValues.get(StringTools.fastCodeAt(hex, start + 3)), doubleHexValues.get(StringTools.fastCodeAt(hex, start)),));
+                doubleHexValues.get(StringTools.fastCodeAt(hex, start + 3)), doubleHexValues.get(StringTools.fastCodeAt(hex, start))));
         } else {
             None;
         }
     }
+
+    extern overload public inline static function parse(hex: String, defaultColor: Color): Color
+        return parse(hex).withDefault(defaultColor);
 
     public var ri(get, set): Int;
 
