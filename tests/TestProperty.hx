@@ -9,7 +9,7 @@ class TestProperty extends utest.Test {
     var mul2 = 0;
 
     function setupClass() {
-        property.onValueChange(n -> {
+        property.onValueChange.add(n -> {
             mul2 = n * 2;
         });
     }

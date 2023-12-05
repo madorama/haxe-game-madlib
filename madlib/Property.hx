@@ -22,7 +22,7 @@ class Property<T> {
 
     function set_value(value: T): T {
         return if(equalityComparer(internalValue, value) != 0) {
-            events.invoke(value);
+            onValueChange.invoke(value);
             internalValue = value;
         } else {
             value;

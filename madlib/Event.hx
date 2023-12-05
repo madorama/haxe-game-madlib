@@ -5,7 +5,7 @@ import polygonal.ds.DllNode;
 
 @:structInit
 class Event<T> {
-    var disposed(default, null): Bool;
+    var disposed(default, null): Bool = false;
     var onDisposeAction: Null<() -> Void> = null;
     final action: T -> Void;
 
@@ -31,7 +31,7 @@ class Event<T> {
 
 @:access(madlib.Event)
 class Events<T> {
-    public var disposed(default, null): Bool;
+    public var disposed(default, null): Bool = false;
 
     final events = new Dll<Event<T>>();
 
