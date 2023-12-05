@@ -45,6 +45,10 @@ abstract Set<T>(Map<T, Bool>) {
         return l;
     }
 
+    public inline function clear() {
+        this.clear();
+    }
+
     public inline function push(v: T)
         this.set(v, true);
 
