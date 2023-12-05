@@ -128,6 +128,8 @@ class Entity extends h2d.Object {
     }
 
     public function started() {
+        if(isStarted) return;
+        isStarted = true;
         function go(cs: Array<h2d.Object>) {
             for(child in cs) {
                 if(child is Entity)
