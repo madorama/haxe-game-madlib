@@ -186,6 +186,18 @@ class GamePad {
     public inline function getValue(k: PadKey, simplified: Bool = false, overrideDeadZone: Float = -1): Float
         return if(isEnabled()) getControlValue(mapping[k], simplified, overrideDeadZone) else 0;
 
+    public inline function getAxis(k: PadKey, simplified: Bool = false, overrideDeadZone: Float = -1): Float {
+        final v = getValue(k, simplified, overrideDeadZone);
+        return switch k {
+            case AXIS_LEFT_X_NEG, AXIS_LEFT_Y_NEG, AXIS_RIGHT_X_NEG, AXIS_RIGHT_Y_NEG:
+                if(v < 0) Math.abs(v) else 0;
+            case AXIS_LEFT_X_POS, AXIS_LEFT_Y_POS, AXIS_RIGHT_X_POS, AXIS_RIGHT_Y_POS:
+                if(v > 0) v else 0;
+            default:
+                v;
+        }
+    }
+
     public inline function checkDownStatus(k: PadKey): Bool
         return switch k {
             case AXIS_LEFT_X_NEG, AXIS_LEFT_Y_NEG, AXIS_RIGHT_X_NEG, AXIS_RIGHT_Y_NEG:
