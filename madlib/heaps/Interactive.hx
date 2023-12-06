@@ -21,6 +21,22 @@ class Interactive {
     inline function set_allowMultiClick(v: Bool): Bool
         return interactive.allowMultiClick = v;
 
+    public var x(get, set): Float;
+
+    inline function get_x(): Float
+        return interactive.x;
+
+    inline function set_x(v: Float): Float
+        return interactive.x = v;
+
+    public var y(get, set): Float;
+
+    inline function get_y(): Float
+        return interactive.y;
+
+    inline function set_y(v: Float): Float
+        return interactive.y = v;
+
     public var width(get, set): Float;
 
     inline function get_width(): Float
