@@ -7,20 +7,20 @@ import madlib.Ansi;
 class Debug {
     public inline static function log<T>(value: T, ?pos: PosInfos): T {
         #if debug
-        trace('${Ansi.fg(White)}[Log] ${value}${Ansi.fg(Default)}', pos);
+        haxe.Log.trace('${Ansi.fg(White)}[Log] ${value}${Ansi.fg(Default)}', pos);
         #end
         return value;
     }
 
     public inline static function warn<T>(value: T, ?pos: PosInfos): T {
         #if debug
-        trace('${Ansi.fg(Yellow)}[Warn] ${value}${Ansi.fg(Default)}', pos);
+        haxe.Log.trace('${Ansi.fg(Yellow)}[Warn] ${value}${Ansi.fg(Default)}', pos);
         #end
         return value;
     }
 
     public inline static function error<T>(value: T, ?pos: PosInfos): T {
-        trace('${Ansi.fg(Red)}[Error] ${value}${Ansi.fg(Default)}', pos);
+        haxe.Log.trace('${Ansi.fg(Red)}[Error] ${value}${Ansi.fg(Default)}', pos);
         return value;
     }
 
