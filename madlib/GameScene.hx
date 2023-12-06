@@ -1,7 +1,7 @@
 package madlib;
 
-import madlib.geom.Bounds;
 import polygonal.ds.Dll;
+import madlib.geom.Bounds;
 
 using madlib.extensions.IterableExt;
 using madlib.extensions.MapExt;
@@ -137,6 +137,18 @@ class GameScene {
     public inline function findEntities<T: Entity>(type: Class<T>): Array<T>
         return entities.filter(e -> Std.isOfType(e, type)).map(x -> cast x).toArray();
 
+    public inline function findEntityWithTag(tags: Array<String>): Null<Entity>
+        return entities.find(e -> e.existTags(tags));
+
+    public inline function findEntitiesWithTag(tags: Array<String>): Array<Entity>
+        return entities.filter(e -> e.existTags(tags)).toArray();
+
+    public inline function findEntityWithAnyTag(tags: Array<String>): Null<Entity>
+        return entities.find(e -> e.existAnyTag(tags));
+
+    public inline function findEntitiesWithAnyTag(tags: Array<String>): Array<Entity>
+        return entities.filter(e -> e.existAnyTag(tags)).toArray();
+
     public function getEntitiesInBounds(bounds: Bounds): Array<Entity> {
         final ret = [];
         for(e in entities) {
@@ -146,14 +158,28 @@ class GameScene {
         return ret;
     }
 
-    public function getEntitiesInTag(tag: String, ?bounds: Bounds): Array<Entity> {
+    public function getEntitiesWithTag(tags: Array<String>, ?bounds: Bounds): Array<Entity> {
         final ret = [];
         for(e in entities) {
-            if(e.existTag(tag))
-                if(bounds == null)
-                    ret.push(e);
-                else
-                    if(e.collider.collideBounds(bounds)) ret.push(e);
+            if(bounds == null) {
+                if(e.existTags(tags)) ret.push(e);
+            } else {
+                if(e.collider.collideBounds(bounds))
+                    if(e.existTags(tags)) ret.push(e);
+            }
+        }
+        return ret;
+    }
+
+    public function getEntitiesWithAnyTag(tags: Array<String>, ?bounds: Bounds): Array<Entity> {
+        final ret = [];
+        for(e in entities) {
+            if(bounds == null) {
+                if(e.existAnyTag(tags)) ret.push(e);
+            } else {
+                if(e.collider.collideBounds(bounds))
+                    if(e.existAnyTag(tags)) ret.push(e);
+            }
         }
         return ret;
     }

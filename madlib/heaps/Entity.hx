@@ -17,14 +17,17 @@ class Tags {
     public inline function existTag(name: String): Bool
         return tags.exists(name);
 
-    public inline function existTags(names: Iterable<String>): Bool
+    public inline function existTags(names: Array<String>): Bool
         return names.all(existTag);
+
+    public inline function existAnyTag(names: Array<String>): Bool
+        return names.any(existTag);
 
     public inline function add(name: String) {
         tags.add(name);
     }
 
-    public inline function adds(names: Iterable<String>) {
+    public inline function adds(names: Array<String>) {
         for(name in names)
             tags.add(name);
     }
@@ -33,7 +36,7 @@ class Tags {
         tags.remove(name);
     }
 
-    public inline function removes(names: Iterable<String>) {
+    public inline function removes(names: Array<String>) {
         for(name in names)
             tags.remove(name);
     }
@@ -321,8 +324,11 @@ class Entity extends h2d.Object {
     public inline function existTag(name: String): Bool
         return tags.existTag(name);
 
-    public inline function existTags(names: Iterable<String>): Bool
+    public inline function existTags(names: Array<String>): Bool
         return tags.existTags(names);
+
+    public inline function existAnyTag(names: Array<String>): Bool
+        return tags.existAnyTag(names);
 
     // Collider
     public var collider(default, null): Collider = Collider.empty;
@@ -356,13 +362,13 @@ class Entity extends h2d.Object {
         return ret;
     }
 
-    public function checkTag(tag: String): Bool
-        return scene?.getEntitiesInTag(tag, collider.bounds)?.any(e -> Collide.check(this, e)) ?? false;
+    public function checkTag(tags: Array<String>): Bool
+        return scene?.getEntitiesWithTag(tags, collider.bounds)?.any(e -> Collide.check(this, e)) ?? false;
 
-    public inline function checkTagAt(tag: String, dx: Float, dy: Float): Bool {
+    public inline function checkTagAt(tags: Array<String>, dx: Float, dy: Float): Bool {
         x += dx;
         y += dy;
-        final ret = checkTag(tag);
+        final ret = checkTag(tags);
         x -= dx;
         y -= dy;
         return ret;
@@ -380,13 +386,39 @@ class Entity extends h2d.Object {
         return ret;
     }
 
-    public function collideTag(tag: String): Option<Entity>
-        return scene?.getEntitiesInTag(tag, collider.bounds)?.findOption(e -> Collide.check(this, e)) ?? None;
+    public function collideTag(tags: Array<String>): Option<Entity>
+        return scene?.getEntitiesWithTag(tags, collider.bounds)?.findOption(e -> Collide.check(this, e)) ?? None;
 
-    public inline function collideTagAt(tag: String, dx: Float, dy: Float): Option<Entity> {
+    public inline function collideTagAt(tags: Array<String>, dx: Float, dy: Float): Option<Entity> {
         x += dx;
         y += dy;
-        final ret = collideTag(tag);
+        final ret = collideTag(tags);
+        x -= dx;
+        y -= dy;
+        return ret;
+    }
+
+    public function checkAnyTag(tags: Array<String>): Bool {
+        return scene?.getEntitiesWithTag(tags, collider.bounds)?.any(e -> Collide.check(this, e)) ?? false;
+    }
+
+    public inline function checkAnyTagAt(tags: Array<String>, dx: Float, dy: Float): Bool {
+        x += dx;
+        y += dy;
+        final ret = checkAnyTag(tags);
+        x -= dx;
+        y -= dy;
+        return ret;
+    }
+
+    public inline function collideAnyTag(tags: Array<String>): Option<Entity> {
+        return scene?.getEntitiesWithAnyTag(tags, collider.bounds)?.findOption(e -> Collide.check(this, e)) ?? None;
+    }
+
+    public inline function collideAnyTagAt(tags: Array<String>, dx: Float, dy: Float): Option<Entity> {
+        x += dx;
+        y += dy;
+        final ret = collideAnyTag(tags);
         x -= dx;
         y -= dy;
         return ret;
