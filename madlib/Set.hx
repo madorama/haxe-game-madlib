@@ -74,7 +74,7 @@ abstract Set<T>(Map<T, Bool>) {
 
     public inline function difference(other: Set<T>): Set<T> {
         final result = copy();
-        for(item in result)
+        for(item in other)
             result.remove(item);
         return result;
     }
@@ -100,7 +100,7 @@ abstract Set<T>(Map<T, Bool>) {
     public inline function intersection(other: Set<T>): Set<T> {
         final result = empty();
         for(item in iterator())
-            if(result.exists(item))
+            if(other.exists(item))
                 result.push(item);
         return result;
     }
