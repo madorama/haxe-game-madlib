@@ -72,6 +72,7 @@ abstract Set<T>(Map<T, Bool>) {
         return inst;
     }
 
+    @:op(A - B)
     public inline function difference(other: Set<T>): Set<T> {
         final result = copy();
         for(item in other)
@@ -97,6 +98,7 @@ abstract Set<T>(Map<T, Bool>) {
     public inline function remove(v: T): Bool
         return this.remove(v);
 
+    @:op(A & B)
     public inline function intersection(other: Set<T>): Set<T> {
         final result = empty();
         for(item in iterator())
@@ -119,6 +121,7 @@ abstract Set<T>(Map<T, Bool>) {
         return init;
     }
 
+    @:op(A + B)
     public inline function union(other: Set<T>): Set<T> {
         final newSet = copy();
         newSet.pushMany(other);
