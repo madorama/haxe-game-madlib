@@ -69,6 +69,8 @@ class GamePad {
     var device: Option<hxd.Pad> = None;
     var stats: Array<PadKeyStatus> = [];
 
+    public final index: Int;
+
     public var deadZone = 0.2;
     public var axisAsButtonDeadZone = 0.7;
     public var lastActivity(default, null): Float = 0;
@@ -106,6 +108,7 @@ class GamePad {
 
     public function new(?deadZone: Float, ?onEnable: GamePad -> Void) {
         allGamepads.push(this);
+        index = allGamepads.length - 1;
 
         deadZone.each(x -> this.deadZone = x);
 
