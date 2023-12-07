@@ -11,7 +11,7 @@ using madlib.extensions.DifferExt;
 using madlib.extensions.IterableExt;
 
 class Collide {
-    public inline static function check(a: Entity, b: Entity): Bool
+    public static function check(a: Entity, b: Entity): Bool
         return a != b && b.collidable && a.collider.collideEntity(b);
 
     public inline static function checkAt(a: Entity, b: Entity, dx: Float, dy: Float): Bool {
