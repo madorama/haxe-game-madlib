@@ -5,6 +5,7 @@ import aseprite.Aseprite;
 import h2d.Object;
 import h2d.RenderContext;
 import h2d.col.Bounds;
+import madlib.Event.Events;
 import madlib.Option;
 
 using madlib.extensions.AsepriteExt;
@@ -106,18 +107,15 @@ class Sprite extends h2d.Drawable {
                 anim.pause = v;
         }
 
+    public final onAnimEnd = new Events<Unit>();
+
     public function new(?parent: h2d.Object) {
         super(parent);
     }
 
     public inline function addAnim(name: String, aseAnim: AseAnim) {
         animations.set(name, aseAnim);
-        if(anim.isNone()) {
-            addChild(aseAnim);
-            anim = Some(aseAnim);
-            currentAnimationName = name;
-            isDirty = true;
-        }
+        if(anim.isNone()) setCurrentAnimation(aseAnim, name);
     }
 
     public inline function addAnimWithAseprite(ase: Aseprite, name: String, loop = false) {
@@ -132,14 +130,22 @@ class Sprite extends h2d.Drawable {
             case None:
                 trace('Animation "$name" is not exists');
             case Some(v):
-                anim.each(anim -> anim.remove());
-                addChild(v);
-                anim = Some(v);
-                v.loop = loop ?? v.loop;
-                v.currentFrame = startFrame ?? 0;
-                currentAnimationName = name;
-                isDirty = true;
+                anim.each(anim -> {
+                    anim.remove();
+                    anim.onAnimEnd = null;
+                });
+                setCurrentAnimation(v, name, loop, startFrame);
         }
+    }
+
+    inline function setCurrentAnimation(aseAnim: AseAnim, name: String, ?loop: Bool, ?startFrame: Int) {
+        anim = Some(aseAnim);
+        addChild(aseAnim);
+        aseAnim.loop = loop ?? aseAnim.loop;
+        aseAnim.currentFrame = startFrame ?? 0;
+        aseAnim.onAnimEnd = () -> onAnimEnd.invoke(Unit);
+        currentAnimationName = name;
+        isDirty = true;
     }
 
     inline function syncAnimation() {
@@ -166,9 +172,5 @@ class Sprite extends h2d.Drawable {
             syncAnimation();
             isDirty = false;
         }
-    }
-
-    public function onAnimEnd(?f: () -> Void) {
-        anim.each(anim -> anim.onAnimEnd = f ?? () -> {});
     }
 }
