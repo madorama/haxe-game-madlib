@@ -47,6 +47,9 @@ class Tags {
 
     public inline function iterator(): Iterator<String>
         return tags.iterator();
+
+    public inline function toString(): String
+        return tags.toString();
 }
 
 @:allow(madlib.GameScene)
