@@ -1,6 +1,6 @@
 package madlib.heaps;
 
-import madlib.Event.Events;
+import madlib.Event;
 
 class Interactive {
     final interactive: h2d.Interactive;
@@ -133,23 +133,72 @@ class Interactive {
     public final onKeyDown = new Events<hxd.Event>();
     public final onCheck = new Events<hxd.Event>();
     public final onTextInput = new Events<hxd.Event>();
+    public var disabled(default, set): Bool = false;
+
+    inline function set_disabled(v: Bool): Bool {
+        cancelEvents = v;
+        disabled = v;
+        return v;
+    }
 
     public function new(interactive: h2d.Interactive) {
         this.interactive = interactive;
-        interactive.onOver = onOver.invoke;
-        interactive.onOut = onOut.invoke;
-        interactive.onPush = onPush.invoke;
-        interactive.onRelease = onRelease.invoke;
-        interactive.onReleaseOutside = onReleaseOutside.invoke;
-        interactive.onClick = onClick.invoke;
-        interactive.onMove = onMove.invoke;
-        interactive.onWheel = onWheel.invoke;
-        interactive.onFocus = onFocus.invoke;
-        interactive.onFocusLost = onFocusLost.invoke;
-        interactive.onKeyUp = onKeyUp.invoke;
-        interactive.onKeyDown = onKeyDown.invoke;
-        interactive.onCheck = onCheck.invoke;
-        interactive.onTextInput = onTextInput.invoke;
+        interactive.onOver = e -> {
+            if(disabled) return;
+            onOver.invoke(e);
+        }
+        interactive.onOut = e -> {
+            if(disabled) return;
+            onOut.invoke(e);
+        }
+        interactive.onPush = e -> {
+            if(disabled) return;
+            onPush.invoke(e);
+        }
+        interactive.onRelease = e -> {
+            if(disabled) return;
+            onRelease.invoke(e);
+        }
+        interactive.onReleaseOutside = e -> {
+            if(disabled) return;
+            onReleaseOutside.invoke(e);
+        }
+        interactive.onClick = e -> {
+            if(disabled) return;
+            onClick.invoke(e);
+        }
+        interactive.onMove = e -> {
+            if(disabled) return;
+            onMove.invoke(e);
+        }
+        interactive.onWheel = e -> {
+            if(disabled) return;
+            onWheel.invoke(e);
+        }
+        interactive.onFocus = e -> {
+            if(disabled) return;
+            onFocus.invoke(e);
+        }
+        interactive.onFocusLost = e -> {
+            if(disabled) return;
+            onFocusLost.invoke(e);
+        }
+        interactive.onKeyUp = e -> {
+            if(disabled) return;
+            onKeyUp.invoke(e);
+        }
+        interactive.onKeyDown = e -> {
+            if(disabled) return;
+            onKeyDown.invoke(e);
+        }
+        interactive.onCheck = e -> {
+            if(disabled) return;
+            onCheck.invoke(e);
+        }
+        interactive.onTextInput = e -> {
+            if(disabled) return;
+            onTextInput.invoke(e);
+        }
     }
 
     public inline function preventClick() {
