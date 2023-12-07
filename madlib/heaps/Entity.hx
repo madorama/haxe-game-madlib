@@ -478,6 +478,16 @@ class Entity extends h2d.Object {
         y = baseY;
     }
 
+    override function syncPos() {
+        final baseX = x;
+        final baseY = y;
+        x = pivotedX;
+        y = pivotedY;
+        super.syncPos();
+        x = baseX;
+        y = baseY;
+    }
+
     override function drawRec(ctx: RenderContext) {
         final baseX = x;
         final baseY = y;
