@@ -184,17 +184,16 @@ class GameScene {
         return ret;
     }
 
-    inline function gc() {
-        var next = entities.head;
-        while(next != null) {
-            final n = next.next;
-            final e = next.val;
+    function gc() {
+        var node = entities.head;
+        while(node != null) {
+            final n = node.next;
+            final e = node.val;
             if(e.destroyed) {
                 if(!e.onDestroyed) e.onDestroy();
-                next.unlink();
-                next.free();
+                entities.unlink(node);
             }
-            next = n;
+            node = n;
         }
     }
 
