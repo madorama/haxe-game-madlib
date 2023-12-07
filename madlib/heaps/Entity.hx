@@ -353,7 +353,58 @@ class Entity extends h2d.Object {
     public inline function checksAt(es: Iterable<Entity>, dx: Float, dy: Float): Bool
         return Collide.checksAt(this, es, dx, dy);
 
-    public function checkType<T: Entity>(type: Class<T>): Bool
+    public inline function collides(es: Iterable<Entity>): Array<Entity>
+        return Collide.all(this, es);
+
+    public inline function collidesAt(es: Iterable<Entity>, dx: Float, dy: Float): Array<Entity>
+        return Collide.allAt(this, es, dx, dy);
+
+    public inline function collide(es: Iterable<Entity>): Option<Entity>
+        return Collide.first(this, es);
+
+    public inline function collideAt(es: Iterable<Entity>, dx: Float, dy: Float): Option<Entity>
+        return Collide.firstAt(this, es, dx, dy);
+
+    public inline function overlapEntities(): Array<Entity> {
+        return scene?.getEntitiesInBounds(collider.bounds) ?? [];
+    }
+
+    public inline function overlapEntitiesAt(dx: Float, dy: Float) {
+        x += dx;
+        y += dy;
+        final ret = overlapEntities();
+        x -= dx;
+        y -= dy;
+        return ret;
+    }
+
+    public inline function overlapEntitiesWithTag(tags: Array<String>): Array<Entity> {
+        return scene?.getEntitiesWithTag(tags, collider.bounds) ?? [];
+    }
+
+    public inline function overlapEntitiesWithTagAt(tags: Array<String>, dx: Float, dy: Float): Array<Entity> {
+        x += dx;
+        y += dy;
+        final ret = overlapEntitiesWithTag(tags);
+        x -= dx;
+        y -= dy;
+        return ret;
+    }
+
+    public inline function overlapEntitiesWithAnyTag(tags: Array<String>): Array<Entity> {
+        return scene?.getEntitiesWithAnyTag(tags, collider.bounds) ?? [];
+    }
+
+    public inline function overlapEntitiesWithAnyTagAt(tags: Array<String>, dx: Float, dy: Float): Array<Entity> {
+        x += dx;
+        y += dy;
+        final ret = overlapEntitiesWithAnyTag(tags);
+        x -= dx;
+        y -= dy;
+        return ret;
+    }
+
+    public inline function checkType<T: Entity>(type: Class<T>): Bool
         return scene?.findEntities(type)?.any(e -> Collide.check(this, e)) ?? false;
 
     public inline function checkTypeAt<T: Entity>(type: Class<T>, dx: Float, dy: Float): Bool {
@@ -365,8 +416,8 @@ class Entity extends h2d.Object {
         return ret;
     }
 
-    public function checkTag(tags: Array<String>): Bool
-        return scene?.getEntitiesWithTag(tags, collider.bounds)?.any(e -> Collide.check(this, e)) ?? false;
+    public inline function checkTag(tags: Array<String>): Bool
+        return overlapEntitiesWithTag(tags).any(e -> Collide.check(this, e));
 
     public inline function checkTagAt(tags: Array<String>, dx: Float, dy: Float): Bool {
         x += dx;
@@ -377,20 +428,8 @@ class Entity extends h2d.Object {
         return ret;
     }
 
-    public function collides(es: Iterable<Entity>): Option<Entity>
-        return if(scene == null) None else es.findOption(e -> Collide.check(this, e));
-
-    public inline function collidesAt(es: Iterable<Entity>, dx: Float, dy: Float): Option<Entity> {
-        x += dx;
-        y += dy;
-        final ret = collides(es);
-        x -= dx;
-        y -= dy;
-        return ret;
-    }
-
-    public function collideTag(tags: Array<String>): Option<Entity>
-        return scene?.getEntitiesWithTag(tags, collider.bounds)?.findOption(e -> Collide.check(this, e)) ?? None;
+    public inline function collideTag(tags: Array<String>): Option<Entity>
+        return overlapEntitiesWithTag(tags).findOption(e -> Collide.check(this, e)) ?? None;
 
     public inline function collideTagAt(tags: Array<String>, dx: Float, dy: Float): Option<Entity> {
         x += dx;
@@ -401,9 +440,8 @@ class Entity extends h2d.Object {
         return ret;
     }
 
-    public function checkAnyTag(tags: Array<String>): Bool {
-        return scene?.getEntitiesWithTag(tags, collider.bounds)?.any(e -> Collide.check(this, e)) ?? false;
-    }
+    public inline function checkAnyTag(tags: Array<String>): Bool
+        return overlapEntitiesWithAnyTag(tags).any(e -> Collide.check(this, e));
 
     public inline function checkAnyTagAt(tags: Array<String>, dx: Float, dy: Float): Bool {
         x += dx;
@@ -414,9 +452,8 @@ class Entity extends h2d.Object {
         return ret;
     }
 
-    public inline function collideAnyTag(tags: Array<String>): Option<Entity> {
-        return scene?.getEntitiesWithAnyTag(tags, collider.bounds)?.findOption(e -> Collide.check(this, e)) ?? None;
-    }
+    public inline function collideAnyTag(tags: Array<String>): Option<Entity>
+        return overlapEntitiesWithAnyTag(tags).findOption(e -> Collide.check(this, e));
 
     public inline function collideAnyTagAt(tags: Array<String>, dx: Float, dy: Float): Option<Entity> {
         x += dx;
