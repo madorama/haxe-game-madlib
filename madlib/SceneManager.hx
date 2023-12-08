@@ -5,6 +5,9 @@ import haxe.Exception;
 using madlib.extensions.ArrayExt;
 
 @:access(madlib.GameScene)
+#if heaps
+@:allow(madlib.heaps.App)
+#end
 class SceneManager {
     final scenes: Array<GameScene> = [];
 
@@ -50,7 +53,7 @@ class SceneManager {
             pop();
     }
 
-    public function update(s2d: h2d.Scene, dt: Float) {
+    function update(s2d: h2d.Scene, dt: Float) {
         if(popReservedScenes.length > 0) {
             for(s in popReservedScenes) {
                 s.destroy();
@@ -71,17 +74,17 @@ class SceneManager {
             GameScene.doUpdate(scene, dt);
     }
 
-    public function fixedUpdate(dt: Float) {
+    function fixedUpdate(dt: Float) {
         for(scene in scenes)
             GameScene.doFixedUpdate(scene, dt);
     }
 
-    public function afterUpdate(dt: Float) {
+    function afterUpdate(dt: Float) {
         for(scene in scenes)
             GameScene.doAfterUpdate(scene, dt);
     }
 
-    public function gc() {
+    function gc() {
         for(scene in scenes) {
             if(scene.destroyed)
                 scenes.remove(scene);
@@ -103,11 +106,11 @@ class SceneManager {
         scene?.resume();
     }
 
-    public function doCurrentScene(action: GameScene -> Void) {
+    function doCurrentScene(action: GameScene -> Void) {
         action(currentScene);
     }
 
-    public function doAllScene(action: GameScene -> Void) {
+    function doAllScene(action: GameScene -> Void) {
         for(scene in scenes)
             action(scene);
     }
