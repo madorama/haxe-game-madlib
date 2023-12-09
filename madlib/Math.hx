@@ -39,6 +39,7 @@ class Math {
     public static inline final PI_HALF = 1.5707963267948966;
     public static inline final PI = 3.14159265358979323;
     public static inline final PI2 = 6.283185307179586;
+    public static inline final TAU = PI2;
     public static inline final RAD_DEG = 180 / PI;
     public static inline final DEG_RAD = PI / 180;
     public static inline final LN2 = 0.6931471805599453;
