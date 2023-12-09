@@ -412,24 +412,9 @@ class FloatArrayExt {
 }
 
 class GroupByExt {
-    public inline static function groupBy<K: {}, V>(self: Array<V>, f: V -> K): Map<K, Array<V>> {
+    @:generic
+    public inline static function groupBy<K, V>(self: Array<V>, f: V -> K): Map<K, Array<V>> {
         final map = new Map<K, Array<V>>();
-        for(x in self) {
-            final key = f(x);
-            final value = map.get(key);
-            if(value != null) {
-                value.push(x);
-            } else {
-                map.set(key, [x]);
-            }
-        }
-        return map;
-    }
-}
-
-class GroupByIntExt {
-    public inline static function groupBy<V>(self: Array<V>, f: V -> Int): Map<Int, Array<V>> {
-        final map = new Map<Int, Array<V>>();
         for(x in self) {
             final key = f(x);
             final value = map.get(key);

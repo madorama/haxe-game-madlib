@@ -311,4 +311,9 @@ class TestArrayExt extends utest.Test {
         Assert.same(Some(0.1), [0.1, 1.2, 2.3, 3.4].min());
         AssertExt.isNone([].min());
     }
+
+    function testGroupBy() {
+        Assert.same([0 => [2, 4], 1 => [1, 3, 5]], [1, 2, 3, 4, 5].groupBy(x -> x % 2));
+        Assert.same(["odd" => [1, 3, 5], "even" => [2, 4]], [1, 2, 3, 4, 5].groupBy(x -> x % 2 == 0 ? "even" : "odd"));
+    }
 }
