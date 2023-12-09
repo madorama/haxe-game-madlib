@@ -301,6 +301,34 @@ class ArrayExt {
     public inline static function minBy<T>(self: Array<T>, ord: Ord<T>): Option<T>
         return if(self.length == 0) None else Some(reduce(self, self[0], ord.min));
 
+    extern overload public inline static function maxValue<T, R: Float>(self: Array<T>, mapper: T -> R): Option<T>
+        return if(self.length == 0) {
+            None;
+        } else {
+            Some(self.reduce(self[0], (acc, x) -> if(mapper(x) > mapper(acc)) x else acc));
+        }
+
+    extern overload public inline static function maxValue<T>(self: Array<T>, mapper: T -> String): Option<T>
+        return if(self.length == 0) {
+            None;
+        } else {
+            Some(self.reduce(self[0], (acc, x) -> if(mapper(x) > mapper(acc)) x else acc));
+        }
+
+    extern overload public inline static function minValue<T, R: Float>(self: Array<T>, mapper: T -> R): Option<T>
+        return if(self.length == 0) {
+            None;
+        } else {
+            Some(self.reduce(self[0], (acc, x) -> if(mapper(x) < mapper(acc)) x else acc));
+        }
+
+    extern overload public inline static function minValue<T>(self: Array<T>, mapper: T -> String): Option<T>
+        return if(self.length == 0) {
+            None;
+        } else {
+            Some(self.reduce(self[0], (acc, x) -> if(mapper(x) < mapper(acc)) x else acc));
+        }
+
     public inline static function unzip<T1, T2>(self: Array<Tuple2<T1, T2>>): Tuple2<Array<T1>, Array<T2>> {
         final r1 = [];
         final r2 = [];
@@ -351,10 +379,10 @@ class IntArrayExt {
             sum(self) / self.length;
 
     public inline static function max(self: Array<Int>): Option<Int>
-        return self.maxBy(IntExt.order);
+        return self.maxValue(x -> x);
 
     public inline static function min(self: Array<Int>): Option<Int>
-        return self.minBy(IntExt.order);
+        return self.minValue(x -> x);
 
     public inline static function unique<T>(self: Array<T>): Array<T> {
         final result: Array<T> = [];
@@ -377,10 +405,10 @@ class FloatArrayExt {
             sum(self) / self.length;
 
     public inline static function max(self: Array<Float>): Option<Float>
-        return self.maxBy(FloatExt.order);
+        return self.maxValue(x -> x);
 
     public inline static function min(self: Array<Float>): Option<Float>
-        return self.minBy(FloatExt.order);
+        return self.minValue(x -> x);
 }
 
 class GroupByExt {
