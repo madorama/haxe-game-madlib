@@ -134,15 +134,15 @@ class AutoTile {
             for(i in 0...4) {
                 final dx = i % 2 * halfSize;
                 final dy = Math.floor(i / 2) * halfSize;
-                final sx = fixedArray[i] * size + dx;
-                final sy = dy + animFrame * size;
+                final sx = dx + animFrame * size;
+                final sy = dy + fixedArray[i] * size;
                 p.blit(dx, dy, pixels, sx, sy, halfSize, halfSize);
             }
 
             return p;
         }
 
-        animNum = Math.floor(tile.height / size);
+        animNum = Math.floor(tile.width / size);
         autotiles = [for(i in 0...animNum) [for(p in patterns) Tile.fromPixels(combinePixels(p, i))]];
     }
 
