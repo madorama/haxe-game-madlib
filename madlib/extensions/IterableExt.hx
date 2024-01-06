@@ -79,11 +79,16 @@ class IterableExt {
         return IteratorExt.toArray(self.iterator());
 
     public inline static function isIterable(v: Dynamic) {
-        final fields = if(TypeExt.isAnonymousObject(v)) Reflect.fields(v) else Type.getInstanceFields(Type.getClass(v));
-        return if(!Lambda.has(fields, "iterator")) {
+        final c = Type.getClass(v);
+        return if(c == null) {
             false;
         } else {
-            Reflect.isFunction(Reflect.field(v, "iterator"));
+            final fields = if(TypeExt.isAnonymousObject(v)) Reflect.fields(v) else Type.getInstanceFields(c);
+            return if(!Lambda.has(fields, "iterator")) {
+                false;
+            } else {
+                Reflect.isFunction(Reflect.field(v, "iterator"));
+            }
         }
     }
 }

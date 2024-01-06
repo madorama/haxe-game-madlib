@@ -224,11 +224,16 @@ class IteratorExt {
         return [for(x in self) x];
 
     public inline static function isIterator(v: Dynamic): Bool {
-        final fields = if(TypeExt.isAnonymousObject(v)) Reflect.fields(v) else Type.getInstanceFields(Type.getClass(v));
-        return if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) {
+        final c = Type.getClass(v);
+        return if(c == null) {
             false;
         } else {
-            Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
+            final fields = if(TypeExt.isAnonymousObject(v)) Reflect.fields(v) else Type.getInstanceFields(c);
+            return if(!Lambda.has(fields, "next") || !Lambda.has(fields, "hasNext")) {
+                false;
+            } else {
+                Reflect.isFunction(Reflect.field(v, "next")) && Reflect.isFunction(Reflect.field(v, "hasNext"));
+            }
         }
     }
 }

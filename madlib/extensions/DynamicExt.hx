@@ -19,7 +19,9 @@ class DynamicExt {
                 return Reflect.compareMethods(a, b);
             case TClass(c):
                 final ca = Type.getClassName(c);
-                final cb = Type.getClassName(Type.getClass(b));
+                final c = Type.getClass(b);
+                if(c == null) return false;
+                final cb = Type.getClassName(c);
                 if(ca != cb) return false;
 
                 if(Std.isOfType(a, String)) return false;
@@ -63,7 +65,9 @@ class DynamicExt {
                 if(Reflect.hasField(a, 'equals') && Reflect.isFunction(f = Reflect.field(a, 'equals')))
                     return Reflect.callMethod(a, f, [b]);
 
-                final fields = Type.getInstanceFields(Type.getClass(a));
+                final c = Type.getClass(a);
+                if(c == null) return false;
+                final fields = Type.getInstanceFields(c);
                 for(field in fields) {
                     final va = Reflect.field(a, field);
                     if(Reflect.isFunction(va)) continue;
