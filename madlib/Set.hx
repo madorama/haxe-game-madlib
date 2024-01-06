@@ -60,7 +60,7 @@ abstract Set<T>(Map<T, Bool>) {
             true;
         }
 
-    public inline function empty(): Set<T> {
+    public function empty(): Set<T> {
         final inst: Map<T, Bool> = Type.createInstance(Type.getClass(this), []);
         return new Set(inst);
     }
