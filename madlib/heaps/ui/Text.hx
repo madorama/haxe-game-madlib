@@ -38,7 +38,7 @@ class Text extends Entity {
         return Color.fromVector(_text.color);
 
     inline function set_color(v: Color): Color {
-        _text.color = v.toVector();
+        _text.color = v.toVector4();
         return v;
     }
 

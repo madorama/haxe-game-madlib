@@ -77,11 +77,11 @@ abstract Color(Int) from Int to Int {
         return fromRgba(v, v, v);
 
     #if heaps
-    public inline static function fromVector(v: h3d.Vector): Color
+    public inline static function fromVector(v: h3d.Vector4): Color
         return fromRgba(v.r, v.g, v.b, v.a);
 
-    public inline function toVector(): h3d.Vector
-        return new h3d.Vector(r, g, b, a);
+    public inline function toVector4(): h3d.Vector4
+        return new h3d.Vector4(r, g, b, a);
     #end
 
     static final sharp = "#".charCodeAt(0);
